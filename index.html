@@ -1521,7 +1521,7 @@ function closeGenModal(){
 }
 
 let _scrollY=0;
-function _lockScroll(){_scrollY=window.scrollY;document.body.style.top='-'+_scrollY+'px';_lockScroll();}
+function _lockScroll(){if(document.body.classList.contains('modal-open'))return;_scrollY=window.scrollY;document.body.style.top='-'+_scrollY+'px';document.body.classList.add('modal-open');}
 function _unlockScroll(){document.body.classList.remove('modal-open');document.body.style.top='';window.scrollTo(0,_scrollY);}
 function _resetModalScroll(id){const m=document.getElementById(id);if(m){const box=m.querySelector('.modal,.modal-box,.picker-modal');if(box)box.scrollTop=0;}}
 function closeModal(id){
