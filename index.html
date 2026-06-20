@@ -701,8 +701,7 @@ const DIARY_DAY_NAMES=['Vr','Za','Zo','Ma','Di','Wo','Do','Vr','Za'];
 function hav(lat1,lng1,lat2,lng2){const R=6371,dL=(lat2-lat1)*Math.PI/180,dN=(lng2-lng1)*Math.PI/180;const a=Math.sin(dL/2)**2+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dN/2)**2;return+(R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a))).toFixed(1);}
 function addDist(arr){return arr.map(x=>({...x,dist:x.lat?hav(CHALET.lat,CHALET.lng,x.lat,x.lng):999})).sort((a,b)=>a.dist-b.dist);}
 function getFavs(type){try{return JSON.parse(localStorage.getItem('cf_'+type)||'[]');}catch{return[];}}
-function toggleFav(type,id,e){e.stopPropagation();const f=getFavs(type);const i=f.indexOf(id);if(i>-1)f.splice(i,1);else f.push(id);localStorage.setItem('cf_'+type,JSON.stringify(f));loadCustomItems();
-  renderAll();}
+function toggleFav(type,id,e){e.stopPropagation();const f=getFavs(type);const i=f.indexOf(id);if(i>-1)f.splice(i,1);else f.push(id);localStorage.setItem('cf_'+type,JSON.stringify(f));renderAll();}
 function isFav(type,id){return getFavs(type).includes(id);}
 function sortWithFavs(arr,type){const favs=getFavs(type);return [...arr.filter(x=>favs.includes(x.id||x.name)),...arr.filter(x=>!favs.includes(x.id||x.name))];}
 function supaHeaders(){return{'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Content-Type':'application/json'};}
@@ -759,8 +758,8 @@ const activities_raw=[
   {id:5,cat:'hiking',e:'⛰️',ico:'ico-hike',title:'Col des Aravis + Tête du Danay',addr:'Col des Aravis, D909, 74220 La Clusaz',parking:'🅿️ Parking Col des Aravis — gratis, naast het wegrestaurant',sub:'1100 hm · 6u · Vlakbij chalet',diff:'medium',dl:'Gemiddeld',rtype:'hike',
    stats:[{i:'⏱️',l:'5–7u'},{i:'📏',l:'16 km'},{i:'🔼',l:'1100 hm'}],
    desc:"Klim via Col des Aravis (1486m) naar de Tête du Danay voor 360° panorama op Mont Blanc en Aravis. De bekendste route vanuit Saint-Jean-de-Sixt.",
-   lat:45.9078,lng:6.5175,
-   wp:[{lat:45.9203,lng:6.4154,l:'🏠 Chalet'},{lat:45.9078,lng:6.5175,l:'🅿️ Parking Col des Aravis'}],
+   lat:45.8724,lng:6.4649,
+   wp:[{lat:45.9203,lng:6.4154,l:'🏠 Chalet'},{lat:45.8724,lng:6.4649,l:'🅿️ Parking Col des Aravis'}],
    prak:['Rij 5 min naar Col des Aravis parking','Vertrek 8u30 aangeraden'],
    tips:['Marmotten spotten','Col van Kwiatkowski in Dauphiné'],
    links:[{u:'https://www.alltrails.com/trail/france/haute-savoie/col-des-aravis-et-tete-du-danay',l:'🗺️ AllTrails',c:'btn-green'},{u:'https://ridewithgps.com/routes/44987221',l:'🚴 Ride with GPS',c:'btn-purple'}]},
@@ -783,8 +782,8 @@ const activities_raw=[
   {id:8,cat:'ferrata',e:'🧗',ico:'ico-ferrata',title:'Via Ferrata Pollet-Villard',addr:'Col des Aravis, D909, 74220 La Clusaz',parking:'🅿️ Parking Col des Aravis — 5 min van chalet, gratis',sub:'5 min van chalet · Col des Aravis · C-niveau',diff:'medium',dl:'Gemiddeld',rtype:'hike',
    stats:[{i:'⏱️',l:'3–4u'},{i:'🔼',l:'400 hm'},{i:'🧗',l:'C-niveau'}],
    desc:"Aan de Col des Aravis — 5 min van het chalet. Ideaal voor eerste via ferrata.",
-   lat:45.9078,lng:6.5175,
-   wp:[{lat:45.9203,lng:6.4154,l:'🏠 Chalet'},{lat:45.9078,lng:6.5175,l:'🅿️ Parking Col des Aravis'}],
+   lat:45.8724,lng:6.4649,
+   wp:[{lat:45.9203,lng:6.4154,l:'🏠 Chalet'},{lat:45.8724,lng:6.4649,l:'🅿️ Parking Col des Aravis'}],
    prak:['Park aan Col des Aravis (5 min)','30 min aanloopwandeling'],
    tips:['Begin vroeg (8u30)'],
    links:[{u:'https://www.directmountain.com/en/activities/317-via-ferrata-aravis-pass-la-clusaz-haute-savoie/',l:'📍 Info',c:'btn-green'}]},
@@ -807,8 +806,8 @@ const activities_raw=[
   {id:11,cat:'water',e:'🌊',ico:'ico-canyon',title:'Canyoning Morette — Beginnersvriendelijk',addr:'Gorges de Morette, 74230 Thônes',parking:'🅿️ Parking langs D16 bij ingang gorges, gratis',sub:'45m waterval · Dichterbij',diff:'easy',dl:'Beginner',rtype:'drive',
    stats:[{i:'⏱️',l:'3–4u'},{i:'💦',l:'45m waterval'},{i:'🟢',l:'Beginner OK'}],
    desc:"Ideaal voor eerste canyoners. 45m repel onvergetelijk.",
-   lat:45.8781,lng:6.3642,
-   wp:[{lat:45.9203,lng:6.4154,l:'🏠 Chalet'},{lat:45.8781,lng:6.3642,l:'🅿️ Parking Gorges de Morette (Thônes)'}],
+   lat:45.8810,lng:6.3085,
+   wp:[{lat:45.9203,lng:6.4154,l:'🏠 Chalet'},{lat:45.8810,lng:6.3085,l:'🅿️ Parking Gorges de Morette (naast zaagmolen, Thônes)'}],
    prak:['Rij naar Thônes (25 min)'],
    tips:['Combineer met kaas in Thônes'],links:[]},
   {id:12,cat:'water',e:'🏖️',ico:'ico-lake',title:"Lac d'Annecy — Zwemdag + Stad",addr:'Plage de Talloires, 74290 Talloires-Montmin',parking:'🅿️ Parking Plage de Talloires (€2-4/u) · Stad: Parking Bonlieu of P+R Courier',sub:"Zuiverste meer Europa · Talloires",diff:'easy',dl:'Makkelijk',rtype:'drive',
@@ -829,8 +828,8 @@ const activities_raw=[
   {id:14,cat:'water',e:'💧',ico:'ico-river',title:"Fier rivier — wilde pools Thônes",addr:'Pont Saint-Clair, D16, 74230 Thônes',parking:'🅿️ Klein parkeerterrein bij brug Saint-Clair — gratis',sub:'Rotsige pools · 20 min',diff:'easy',dl:'Makkelijk',rtype:'drive',
    stats:[{i:'🚗',l:'20 min'},{i:'🌡️',l:'~15°C'},{i:'🏞️',l:'Rotsig'}],
    desc:"Spectaculaire rotsige pools bij Thônes. Populair bij locals. Beste plek bij de brug Saint-Clair.",
-   lat:45.8580,lng:6.3150,
-   wp:[{lat:45.9203,lng:6.4154,l:'🏠 Chalet'},{lat:45.8580,lng:6.3150,l:'🅿️ Parking brug Saint-Clair (Thônes)'}],
+   lat:45.8978,lng:6.2630,
+   wp:[{lat:45.9203,lng:6.4154,l:'🏠 Chalet'},{lat:45.8978,lng:6.2630,l:'🅿️ Parking Pont Saint-Clair — Dingy-Saint-Clair (Fier gorge)'}],
    prak:['Rij richting Thônes (20 min)','Brug Saint-Clair parking'],
    tips:['Rotsige bodem: strandschoentjes','Kaas in Thônes combineren'],links:[]}
 ];
@@ -2896,6 +2895,7 @@ function initApp(){
   renderAll();
   initPlanning();
   loadCustomActivities();
+  loadCustomItems();
   setTimeout(()=>initTabMap('activities'),250);
 }
 
@@ -2932,7 +2932,7 @@ function openCustomItemModal(type) {
   
   const titles = {activity:'🎿 Activiteit toevoegen',restaurant:'🍽️ Restaurant toevoegen',bar:'🍸 Bar / Uitgaan toevoegen',event:'🎪 Event toevoegen',shop:'🛍️ Winkel toevoegen',rental:'🚲 Verhuur toevoegen'};
   document.getElementById('ci-modal-title').textContent = titles[_ciType] || 'Item toevoegen';
-  document.getElementById('ci-modal').classList.add('active');
+  document.getElementById('ci-modal').classList.add('open');
 }
 
 function ciTypeChange() {
