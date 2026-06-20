@@ -683,7 +683,7 @@ const activities_raw=[
    stats:[{i:'⏱️',l:'4–6u'},{i:'🎿',l:'6 tracks'},{i:'🔼',l:'Lift'}],
    desc:"La Clusaz heeft een van de beste bike parks van de Franse Alpen. 6 downhill trails + 5 enduro tracks met 3 stoeltjesliften. Open dagelijks 1 jul–30 aug.",
    lat:45.9031,lng:6.4239,
-   wp:[{lat:45.9388,lng:6.4143,l:'🏠 Chalet'},{lat:45.9031,lng:6.4239,l:'🎯 La Clusaz Bike Park'}],
+   wp:[{lat:45.9388,lng:6.4143,l:'🏠 Chalet'},{lat:45.9035,lng:6.4255,l:'🅿️ La Clusaz Bike Park (parking)'}],
    prak:['Rij via D909 richting La Clusaz (10 min)','Dagpass: ca. €35-40/persoon','Huurbike DH: ca. €55-70/dag','Bescherming aangeraden'],
    tips:['Ga vroeg (9u) voor de drukte','Probeer Spider (rood), La Combe (zwart)','Lunch in het dorp na de ochtend'],
    links:[{u:'https://www.laclusaz.com/en/mountain-bike/bikepark/',l:'🌐 La Clusaz Bike Park',c:'btn-primary'}]},
@@ -691,7 +691,7 @@ const activities_raw=[
    stats:[{i:'⏱️',l:'4–6u'},{i:'🎿',l:'10 tracks'},{i:'🔼',l:'Lift'}],
    desc:"Le Grand-Bornand heeft 10 downhill trails, iets minder toeristisch dan La Clusaz. Prachtig uitzicht op de Aravis.",
    lat:45.9437,lng:6.4826,
-   wp:[{lat:45.9388,lng:6.4143,l:'🏠 Chalet'},{lat:45.9437,lng:6.4826,l:'🎯 Grand-Bornand Bike Park'}],
+   wp:[{lat:45.9388,lng:6.4143,l:'🏠 Chalet'},{lat:45.9420,lng:6.4850,l:'🅿️ Grand-Bornand Bike Park (parking)'}],
    prak:['Rij richting Le Grand-Bornand (15 min, D4)','Dagpass: ca. €32/persoon'],
    tips:['Rustiger dan La Clusaz','Ideaal voor beginners DH'],
    links:[{u:'https://en.legrandbornand.com/mountain-biking-trails.html',l:'🌐 Grand-Bornand MTB',c:'btn-primary'}]},
@@ -1158,7 +1158,7 @@ function openActModal(id){
     modalMapObj=L.map(el,{scrollWheelZoom:false}).setView([a.lat,a.lng],12);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OSM',maxZoom:18}).addTo(modalMapObj);
     const isH=a.rtype==='hike';
-    if(isH) L.tileLayer('https://tile.waymarkedtrails.org/hiking/{z}/{x}/{y}.png',{opacity:.7,maxZoom:18}).addTo(modalMapObj);
+    // Waymarked trails overlay removed — too much visual noise
     a.wp.forEach((w,i)=>{
       const bg=i===0?'#2dd4bf':i===a.wp.length-1?'#f97316':'#6366f1';
       const lbl=i===0?'🏠':i===a.wp.length-1?'🎯':'⚡';
@@ -1173,7 +1173,8 @@ function openActModal(id){
       if(route){
         L.geoJSON(route.geometry,{style:{color:isH?'#22c55e':'#f97316',weight:4,opacity:.85}}).addTo(modalMapObj);
         const km=(route.distance/1000).toFixed(1);
-        document.getElementById('am-route').innerHTML=`<span class="route-chip">📏 ${km} km</span><span class="route-chip">⏱️ ${fmtDuration(route.duration,prof)}</span><span class="route-chip">${isH?'🥾 Wandelroute':'🚗 Autoroute'}</span>`;
+        const legend=isH?'<span style="font-size:.68rem;color:var(--muted);margin-left:.4rem">🟢 Huis → 🔢 Tussenstop → 🏁 Eindpunt</span>':'<span style="font-size:.68rem;color:var(--muted);margin-left:.4rem">🟢 Huis → 🔢 Stop → 🏁 Bestemming</span>';
+        document.getElementById('am-route').innerHTML=`<span class="route-chip">📏 ${km} km</span><span class="route-chip">⏱️ ${fmtDuration(route.duration,prof)}</span><span class="route-chip">${isH?'🥾 Wandelroute':'🚗 Autoroute'}</span>${legend}`;
         const pts=route.geometry.coordinates.map(c=>[c[1],c[0]]);
         modalMapObj.fitBounds(L.polyline(pts).getBounds(),{padding:[30,30]});
       } else {
@@ -1586,8 +1587,9 @@ async function calcGroupRoute(date,gi){
   if(route){
     planRouteLayer=L.geoJSON(route.geometry,{style:{color:col,weight:4,opacity:.85}}).addTo(planMap);
     stops.forEach((s,i)=>{
-      const bg=i===0||i===stops.length-1?'#2dd4bf':col;
-      const lbl=i===0?'🏠':i===stops.length-1?'🏠':(s.e||'📍');
+      const isStartP=i===0, isEndP=i===stops.length-1;
+      const bg=isStartP||isEndP?'#2dd4bf':col;
+      const lbl=isStartP?'🏠':isEndP?'🏁':(s.e||'📍');
       const ic=makeIco(`<div style="background:${bg};border:2.5px solid #fff;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:13px;box-shadow:0 2px 6px rgba(0,0,0,.3)">${lbl}</div>`,28);
       const m=L.marker([s.lat,s.lng],{icon:ic}).addTo(planMap);
       if(s.title) m.bindPopup(`<b>${g.emoji} ${s.e} ${s.title}</b>`);
