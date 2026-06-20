@@ -591,81 +591,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
   </div><!-- .main -->
 </div><!-- #app -->
 
-<!-- ===== ACTIVITY DETAIL MODAL ===== -->
-<div class="modal-overlay" id="actModal">
-  <div class="modal">
-    <div class="modal-hdr">
-      <h2><div class="m-ico" id="actModalIco"></div><span id="actModalTitle"></span></h2>
-      <button class="modal-close" onclick="closeModal('actModal')">✕</button>
-    </div>
-    <div class="modal-body">
-      <p class="m-desc" id="actModalDesc"></p>
-      <div class="m-map"><div class="map-loading" id="actModalMapLoad">Route berekenen...</div><div id="actModalMap" style="height:100%;"></div></div>
-      <div class="m-route-info" id="actModalRoute"></div>
-      <div class="m-sections" id="actModalSections"></div>
-      <div class="m-cta" id="actModalCta"></div>
-    </div>
-  </div>
-</div>
 
-<!-- ===== PLANNING ACTIVITY PICKER MODAL ===== -->
-<div class="modal-overlay" id="actPickModal">
-  <div class="picker-modal">
-    <div class="picker-hdr"><h3>Activiteit toevoegen</h3><button class="modal-close" onclick="closeModal('actPickModal')">✕</button></div>
-    <input class="picker-search" id="actPickSearch" placeholder="Zoeken..." oninput="filterActPicker()"/>
-    <div class="picker-list" id="actPickList"></div>
-  </div>
-</div>
 
-<!-- ===== PLANNING RESTAURANT PICKER MODAL ===== -->
-<div class="modal-overlay" id="restPickModal">
-  <div class="picker-modal">
-    <div class="picker-hdr"><h3>Restaurant kiezen</h3><button class="modal-close" onclick="closeModal('restPickModal')">✕</button></div>
-    <input class="picker-search" id="restPickSearch" placeholder="Zoeken..." oninput="filterRestPicker()"/>
-    <div class="picker-list" id="restPickList"></div>
-  </div>
-</div>
-
-<!-- ===== DAGBOEK: NEW ACTIVITY MODAL ===== -->
-<div class="modal-overlay" id="diaryNewActModal">
-  <div class="modal act-form-modal">
-    <div class="modal-hdr">
-      <h2>✏️ Nieuwe activiteit</h2>
-      <button class="modal-close" onclick="closeModal('diaryNewActModal')">✕</button>
-    </div>
-    <div class="modal-body">
-      <div class="form-field">
-        <label>Emoji icoon</label>
-        <div class="emoji-picker-row" id="emojiPickerRow"></div>
-        <input type="hidden" id="newActEmoji" value="🏔️"/>
-      </div>
-      <div class="form-field">
-        <label>Titel *</label>
-        <input type="text" id="newActTitle" placeholder="bv. Downhillen La Clusaz"/>
-      </div>
-      <div class="form-field">
-        <label>Beschrijving</label>
-        <textarea id="newActDesc" placeholder="Vertel wat er gebeurde..."></textarea>
-      </div>
-      <div class="form-field">
-        <label>Deelnemers</label>
-        <input type="text" id="newActPeople" placeholder="bv. Stijn, Rik, Tom"/>
-      </div>
-      <div class="form-field">
-        <label>Groepsnaam (optioneel)</label>
-        <input type="text" id="newActGroup" placeholder="bv. Niet-fietsers"/>
-      </div>
-      <div class="form-field">
-        <label>Jouw naam *</label>
-        <input type="text" id="newActAuthor" placeholder="Jouw naam"/>
-      </div>
-      <div style="display:flex;gap:.6rem;justify-content:flex-end;margin-top:.5rem;">
-        <button class="btn btn-sec" onclick="closeModal('diaryNewActModal')">Annuleren</button>
-        <button class="btn btn-rose" onclick="submitNewDiaryAct()">Toevoegen ✓</button>
-      </div>
-    </div>
-  </div>
-</div>
 
 <!-- ===== LIGHTBOX ===== -->
 <div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
@@ -1021,6 +948,7 @@ let activeRestFilter='all';
 
 function renderAll(){
   renderActivities();
+  renderRestaurantFilters();
   renderRestaurants();
   renderEvents();
   renderNightlife();
@@ -1054,6 +982,17 @@ function renderActivities(){
 
 function setActFilter(f){activeFilter=f;renderAll();}
 
+function renderRestaurantFilters(){
+  const cats=[['all','Alle'],['Gastronomisch','⭐ Gastro'],['Savoyard','🧀 Savoyard'],['Pizza','🍕 Pizza'],['Bakkerij','🥐 Boulangerie']];
+  const bar=document.getElementById('rest-filters');
+  if(!bar) return;
+  bar.innerHTML=cats.map(([v,l])=>`<button class="filter-btn${activeRestFilter===v?' active':''}" onclick="setRestFilter('${v}')">${l}</button>`).join('');
+}
+function setRestFilter(cat){
+  activeRestFilter=cat;
+  renderRestaurantFilters();
+  renderRestaurants();
+}
 function renderRestaurants(){
   let data=sortWithFavs(restaurants,'rest');
   document.getElementById('rest-list').innerHTML=data.map(r=>`
@@ -1187,7 +1126,7 @@ function openGenModal(item){
   if(typeof item==='string') try{item=JSON.parse(item);}catch(e){return;}
   const overlay=document.getElementById('gen-modal');
   overlay.classList.add('open');
-  document.getElementById('gm-title').textContent=(item.name||item.title||'');
+  document.getElementById('gm-title').textContent=((item.e?item.e+' ':'')+( item.name||item.title||''));
   document.getElementById('gm-desc').textContent=(item.desc||'');
   document.getElementById('gm-meta').innerHTML=
     (item.loc?`<span class="badge">📍 ${item.loc}</span>`:'')
@@ -1199,6 +1138,13 @@ function openGenModal(item){
   document.getElementById('gm-tags').innerHTML=(item.tags||[]).map(t=>`<span class="tag">${t}</span>`).join('');
   document.getElementById('gm-specs').innerHTML=(item.specs||[]).map(s=>({dh:'<span class="st st-dh">Downhill</span>',mtb:'<span class="st st-mtb">MTB</span>',emtb:'<span class="st st-emtb">eMTB</span>',road:'<span class="st st-road">Road</span>',kids:'<span class="st st-kids">Kids</span>'})[s]||'').join('');
   document.getElementById('gm-route').innerHTML='';
+  // Show "add to plan note" for plannable items
+  const gmCta=document.getElementById('gm-cta');
+  if(gmCta){
+    const hasNote=item.hours||item.price;
+    const noteText=hasNote?`<span style="font-size:.72rem;color:var(--muted)">${item.hours?'🕐 '+item.hours+' ':''} ${item.price||''}</span>`:'';
+    gmCta.innerHTML=noteText;
+  }
   if(genModalMapObj){genModalMapObj.remove();genModalMapObj=null;}
   document.getElementById('gm-loading').style.display='flex';
   setTimeout(async()=>{
@@ -2242,12 +2188,22 @@ function closeLightbox(e){
   document.getElementById('lb-img').src='';
 }
 
-// Keyboard nav lightbox
+// Keyboard nav: lightbox arrows + ESC closes any open modal
 document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){
+    if(document.getElementById('lightbox')?.classList.contains('open')){closeLightbox(null);return;}
+    const open=document.querySelector('.modal-overlay.open');
+    if(open){
+      const id=open.id;
+      if(id==='act-modal') closeActModal();
+      else if(id==='gen-modal') closeGenModal();
+      else closeModal(id);
+    }
+    return;
+  }
   if(!document.getElementById('lightbox').classList.contains('open')) return;
   if(e.key==='ArrowLeft') lightboxNav(-1);
   if(e.key==='ArrowRight') lightboxNav(1);
-  if(e.key==='Escape') closeLightbox(null);
 });
 
 // ---- TABS ----
@@ -2273,7 +2229,7 @@ let customActGeocodedLng=null;
 
 async function loadCustomActivities(){
   try{
-    const r=await fetch(`${SUPA_URL}/rest/v1/custom_activities?order=created_at.asc`,{headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY}});
+    const r=await fetch(`${SUPA_URL}/rest/v1/custom_activities?order=created_at.asc`,{headers:supaHeaders()});
     if(r.ok) customActivities=await r.json();
   }catch(e){console.warn('loadCustomActivities:',e);}
 }
@@ -2356,7 +2312,7 @@ async function submitCustomActivity(){
   try{
     const r=await fetch(`${SUPA_URL}/rest/v1/custom_activities`,{
       method:'POST',
-      headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Content-Type':'application/json','Prefer':'return=representation'},
+      headers:{...supaHeaders(),'Prefer':'return=representation'},
       body:JSON.stringify(payload)
     });
     if(!r.ok) throw new Error(await r.text());
@@ -2373,7 +2329,7 @@ async function submitCustomActivity(){
 async function deleteCustomActivity(id){
   if(!isMaster()||!confirm('Eigen activiteit verwijderen?')) return;
   await fetch(`${SUPA_URL}/rest/v1/custom_activities?id=eq.${id}`,{
-    method:'DELETE',headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY}
+    method:'DELETE',headers:supaHeaders()
   });
   customActivities=customActivities.filter(x=>x.id!==id);
   renderActPickerList();
@@ -2389,7 +2345,7 @@ function initApp(){
 
 <!-- ===== EXTRA MODALS (activity detail + generic) ===== -->
 <!-- Activity detail modal -->
-<div class="modal-overlay" id="act-modal">
+<div class="modal-overlay" id="act-modal" onclick="if(event.target===this)closeActModal()">
   <div class="modal">
     <div class="modal-hdr">
       <h2><div class="m-ico" id="am-ico"></div><span id="am-title"></span></h2>
@@ -2407,7 +2363,7 @@ function initApp(){
 </div>
 
 <!-- Generic modal (restaurants, nightlife, etc.) -->
-<div class="modal-overlay" id="gen-modal">
+<div class="modal-overlay" id="gen-modal" onclick="if(event.target===this)closeGenModal()">
   <div class="modal" style="max-width:600px;">
     <div class="modal-hdr">
       <h2 id="gm-title"></h2>
@@ -2420,6 +2376,7 @@ function initApp(){
       <div id="gm-specs" style="display:flex;gap:.25rem;flex-wrap:wrap;margin-bottom:.7rem;"></div>
       <div class="m-map" style="height:220px;"><div class="map-loading" id="gm-loading">🗺️ Kaart laden...</div><div id="gm-map-inner" style="height:100%;"></div></div>
       <div class="m-route-info" id="gm-route" style="margin-top:.5rem;"></div>
+      <div id="gm-cta" style="margin-top:.6rem;display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;"></div>
     </div>
   </div>
 </div>
