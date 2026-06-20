@@ -135,7 +135,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 .info-banner.purple{background:rgba(168,85,247,.07);border-color:rgba(168,85,247,.2);color:#c084fc;}
 .info-banner.green{background:rgba(34,197,94,.07);border-color:rgba(34,197,94,.2);color:#4ade80;}
 /* MODALS (shared) */
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:500;align-items:center;justify-content:center;padding:1rem;backdrop-filter:blur(4px);}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:1100;align-items:center;justify-content:center;padding:1rem;backdrop-filter:blur(4px);}
 .modal-overlay.open{display:flex;}
 .modal{background:#fff;border:1px solid var(--border);border-radius:16px;width:100%;max-width:800px;max-height:92vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.15);}
 .modal-hdr{padding:1.2rem 1.2rem 0;display:flex;align-items:flex-start;justify-content:space-between;gap:.8rem;}
@@ -143,7 +143,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 .m-ico{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;}
 .modal-close{background:#f1f5f9;border:none;border-radius:7px;color:var(--muted);font-size:1rem;width:28px;height:28px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .modal-close:hover{background:#e2e8f0;}
-.modal-body{padding:.9rem 1.2rem 1.2rem;}
+.modal-body{padding:.9rem 1.2rem 1.2rem;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;}
 .m-desc{color:var(--muted);font-size:.83rem;line-height:1.6;margin-bottom:.9rem;}
 .m-map{height:260px;border-radius:10px;overflow:hidden;margin-bottom:.9rem;border:1px solid var(--border);position:relative;}
 .map-loading{position:absolute;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:.82rem;z-index:10;}
@@ -1807,7 +1807,7 @@ function openAddToDayModal(item){
   const _dur=item.duration||60;
   _atdEndTime=minsToTime(timeToMins('09:00')+_dur);
   renderAtdModal();
-  document.getElementById('add-to-day-modal').classList.add('open');
+  document.getElementById('add-to-day-modal').classList.add('open');document.body.classList.add('modal-open');
 }
 
 function renderAtdModal(){
@@ -1869,6 +1869,7 @@ function confirmAddToDay(){
 
 function closeAddToDayModal(){
   document.getElementById('add-to-day-modal').classList.remove('open');
+  if(!document.querySelector('.modal-overlay.open')) document.body.classList.remove('modal-open');
   _atdItem=null;
 }
 
@@ -2077,7 +2078,7 @@ function openNewRouteModal(){
   document.getElementById('nr-gpx-selected').innerHTML='';
   document.getElementById('nr-lat').value='';
   document.getElementById('nr-lng').value='';
-  document.getElementById('new-route-modal').classList.add('open');
+  document.getElementById('new-route-modal').classList.add('open');document.body.classList.add('modal-open');
 }
 
 async function geocodeStart(){
@@ -2820,7 +2821,7 @@ function openCustomActForm(){
   document.getElementById('cam-error').style.display='none';
   document.getElementById('cam-title-hdr').textContent='Eigen activiteit aanmaken';
   customActGpxFile=null;customActGeocodedLat=null;customActGeocodedLng=null;
-  document.getElementById('custom-act-modal').classList.add('open');
+  document.getElementById('custom-act-modal').classList.add('open');document.body.classList.add('modal-open');
 }
 
 async function geocodeCustomAct(){
@@ -2948,7 +2949,7 @@ function openCustomItemModal(type) {
   
   const titles = {activity:'🎿 Activiteit toevoegen',restaurant:'🍽️ Restaurant toevoegen',bar:'🍸 Bar / Uitgaan toevoegen',event:'🎪 Event toevoegen',shop:'🛍️ Winkel toevoegen',rental:'🚲 Verhuur toevoegen'};
   document.getElementById('ci-modal-title').textContent = titles[_ciType] || 'Item toevoegen';
-  document.getElementById('ci-modal').classList.add('open');
+  document.getElementById('ci-modal').classList.add('open');document.body.classList.add('modal-open');
 }
 
 function ciSetType(type){
@@ -3489,6 +3490,15 @@ function showToast(msg) {
   .ci-type-pill{min-width:2.6rem;font-size:.58rem;}
   .week-strip .day-card{min-width:95px;}
 }
+
+/* Fix: prevent body scroll when modal open + iOS scroll */
+body.modal-open{overflow:hidden;position:fixed;width:100%;}
+.modal-overlay .modal,.modal-overlay .modal-box,.modal-overlay .picker-modal{
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior:contain;
+}
+/* Ensure Leaflet controls inside modals stay visible, background ones don't bleed through */
+.tab-map .leaflet-top,.tab-map .leaflet-bottom{z-index:400 !important;}
 </style>
 
 
