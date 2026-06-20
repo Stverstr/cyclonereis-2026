@@ -2,14 +2,17 @@
 <html lang="nl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0c4a6e">
 <title>🚵 Cyclonereis Annecy 2026</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <style>
 :root{--bg:#f0f4f8;--card:#ffffff;--border:#dde3ec;--accent:#0ea5e9;--text:#1e293b;--muted:#64748b;--success:#16a34a;--warn:#ea580c;--purple:#7c3aed;--indigo:#4f46e5;}
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text);min-height:100vh;;padding-bottom:env(safe-area-inset-bottom,0px)}
 #gate{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(135deg,#e0f2fe,#f0f4f8);}
 .gate-logo{font-size:3rem;}.gate-title{font-size:1.6rem;font-weight:800;margin:.4rem 0 .2rem;}.gate-sub{color:#475569;font-size:.9rem;margin-bottom:2rem;}
 .gate-box{background:#fff;border:1px solid var(--border);border-radius:16px;padding:2rem;width:340px;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,.1);}
@@ -30,7 +33,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 .badge.accent{border-color:rgba(255,255,255,.5);color:#fff;}
 .nav{background:#fff;border-bottom:1px solid var(--border);padding:0 1.5rem;overflow-x:auto;-webkit-overflow-scrolling:touch;box-shadow:0 1px 3px rgba(0,0,0,.06);}
 .nav-inner{max-width:1300px;margin:0 auto;display:flex;min-width:max-content;}
-.nav-tab{padding:.85rem 1rem;font-size:.8rem;font-weight:600;color:#64748b;cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;white-space:nowrap;display:flex;align-items:center;gap:.3rem;}
+.nav-tab{padding:.85rem 1rem;font-size:.8rem;font-weight:600;color:#64748b;cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;white-space:nowrap;display:flex;align-items:center;gap:.3rem;;-webkit-tap-highlight-color:transparent}
 .nav-tab:hover{color:var(--text);}
 .nav-tab.active{color:var(--accent);border-bottom-color:var(--accent);}
 .nav-tab.plan-tab{color:var(--indigo);}.nav-tab.plan-tab.active{color:var(--indigo);border-bottom-color:var(--indigo);}
@@ -52,7 +55,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 .fp{background:#fff;border:1px solid var(--border);border-radius:20px;padding:.25rem .75rem;font-size:.75rem;color:var(--muted);cursor:pointer;transition:all .15s;box-shadow:0 1px 2px rgba(0,0,0,.04);}
 .fp:hover,.fp.active{background:#e0f2fe;border-color:var(--accent);color:var(--accent);}
 .act-grid{display:flex;flex-direction:column;gap:.65rem;}
-.act-card{background:#fff;border:1px solid var(--border);border-radius:11px;overflow:hidden;cursor:pointer;transition:all .2s;display:flex;align-items:center;box-shadow:0 1px 4px rgba(0,0,0,.06);}
+.act-card{background:#fff;border:1px solid var(--border);border-radius:11px;overflow:hidden;cursor:pointer;transition:all .2s;display:flex;align-items:center;box-shadow:0 1px 4px rgba(0,0,0,.06);;-webkit-tap-highlight-color:transparent}
 .act-card:hover{border-color:var(--accent);transform:translateX(2px);box-shadow:0 4px 12px rgba(14,165,233,.15);}
 .act-card.favd{border-color:rgba(251,191,36,.3);}
 .card-ico{width:66px;height:66px;display:flex;align-items:center;justify-content:center;font-size:1.7rem;flex-shrink:0;}
@@ -77,7 +80,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 .fav-btn:hover{transform:scale(1.3);}
 .add-plan-btn{background:#eef2ff;border:1px solid rgba(79,70,229,.2);border-radius:6px;color:var(--indigo);font-size:.65rem;padding:.12rem .45rem;cursor:pointer;white-space:nowrap;}
 .add-plan-btn:hover{background:rgba(129,140,248,.2);}
-.list-card{background:#fff;border:1px solid var(--border);border-radius:11px;overflow:hidden;cursor:pointer;transition:all .2s;display:flex;align-items:stretch;box-shadow:0 1px 4px rgba(0,0,0,.06);}
+.list-card{background:#fff;border:1px solid var(--border);border-radius:11px;overflow:hidden;cursor:pointer;transition:all .2s;display:flex;align-items:stretch;box-shadow:0 1px 4px rgba(0,0,0,.06);;-webkit-tap-highlight-color:transparent}
 .list-card:hover{border-color:var(--accent);transform:translateX(2px);}
 .lc-ico{width:60px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0;}
 .lc-body{padding:.65rem .9rem;flex:1;min-width:0;}
@@ -98,7 +101,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 .tag{background:#f1f5f9;border:1px solid var(--border);border-radius:20px;padding:.08rem .45rem;font-size:.65rem;color:var(--muted);}
 .lc-right{padding:.65rem .8rem;text-align:right;display:flex;flex-direction:column;justify-content:center;gap:.2rem;flex-shrink:0;}
 .lc-dist{font-size:.73rem;color:var(--accent);font-weight:600;}.lc-sub{font-size:.7rem;color:var(--muted);}
-.ev-card{background:#fff;border:1px solid var(--border);border-radius:11px;overflow:hidden;cursor:pointer;transition:all .2s;display:flex;box-shadow:0 1px 4px rgba(0,0,0,.06);}
+.ev-card{background:#fff;border:1px solid var(--border);border-radius:11px;overflow:hidden;cursor:pointer;transition:all .2s;display:flex;box-shadow:0 1px 4px rgba(0,0,0,.06);;-webkit-tap-highlight-color:transparent}
 .ev-card:hover{border-color:var(--accent);transform:translateX(2px);}
 .ev-card.during{border-color:rgba(45,212,191,.25);}
 .ev-date{width:60px;background:linear-gradient(135deg,var(--accent),#0ea5e9);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;color:#000;font-weight:900;}
@@ -107,7 +110,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 .ev-body h3{font-size:.85rem;font-weight:700;margin-bottom:.15rem;display:flex;align-items:center;gap:.35rem;flex-wrap:wrap;}
 .during-tag{background:rgba(45,212,191,.12);color:var(--accent);border:1px solid rgba(45,212,191,.25);border-radius:4px;padding:.08rem .4rem;font-size:.62rem;font-weight:700;}
 .ev-body p{font-size:.73rem;color:var(--muted);line-height:1.4;}.ev-loc{font-size:.7rem;color:var(--accent);margin-top:.2rem;}
-.bar-card{background:#fff;border:1px solid var(--border);border-radius:11px;overflow:hidden;cursor:pointer;transition:all .2s;display:flex;box-shadow:0 1px 4px rgba(0,0,0,.06);}
+.bar-card{background:#fff;border:1px solid var(--border);border-radius:11px;overflow:hidden;cursor:pointer;transition:all .2s;display:flex;box-shadow:0 1px 4px rgba(0,0,0,.06);;-webkit-tap-highlight-color:transparent}
 .bar-card:hover{border-color:var(--purple);transform:translateX(2px);}
 .bar-body{padding:.65rem .9rem;flex:1;}.bar-body h3{font-size:.85rem;font-weight:700;margin-bottom:.05rem;}
 .bar-type{font-size:.65rem;color:var(--purple);text-transform:uppercase;font-weight:700;letter-spacing:.4px;margin-bottom:.2rem;}
@@ -153,7 +156,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 .m-section li{font-size:.76rem;color:var(--muted);padding:.14rem 0;display:flex;gap:.3rem;line-height:1.4;}
 .m-section li::before{content:"→";color:var(--accent);flex-shrink:0;}
 .m-cta{margin-top:.9rem;display:flex;gap:.5rem;flex-wrap:wrap;}
-.btn{display:inline-flex;align-items:center;gap:.3rem;padding:.5rem .9rem;border-radius:8px;font-size:.79rem;font-weight:600;cursor:pointer;text-decoration:none;border:none;transition:opacity .2s;}
+.btn{display:inline-flex;align-items:center;gap:.3rem;padding:.5rem .9rem;border-radius:8px;font-size:.79rem;font-weight:600;cursor:pointer;text-decoration:none;border:none;transition:opacity .2s;;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 .btn:hover{opacity:.82;}
 .btn-primary{background:linear-gradient(135deg,var(--accent),#0ea5e9);color:#000;}
 .btn-sec{background:#f8fafc;color:var(--text);border:1px solid var(--border);}
@@ -1069,7 +1072,7 @@ function initTabMap(tab){
   if(tabMaps[tab]) return;
   const el=document.getElementById('map-'+tab);
   if(!el) return;
-  const map=L.map(el,{scrollWheelZoom:false}).setView([45.93,6.42],11);
+  const map=L.map(el,{scrollWheelZoom:false,dragging:!L.Browser.mobile,tap:!L.Browser.mobile}).setView([45.93,6.42],11);
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OSM',maxZoom:18}).addTo(map);
   tabMaps[tab]=map; tabMarkers[tab]=[]; tabRoutes[tab]=null;
   L.marker([CHALET.lat,CHALET.lng],{icon:chaletIco(),zIndexOffset:1000}).addTo(map).bindPopup('<b>🏠 Chalet Elomaz</b><br>Saint-Jean-de-Sixt');
@@ -1328,7 +1331,7 @@ function openActModal(id){
   document.getElementById('am-route').innerHTML='';
   setTimeout(async()=>{
     const el=document.getElementById('am-map-inner');
-    modalMapObj=L.map(el,{scrollWheelZoom:false}).setView([a.lat,a.lng],12);
+    modalMapObj=L.map(el,{scrollWheelZoom:false,dragging:!L.Browser.mobile,tap:!L.Browser.mobile}).setView([a.lat,a.lng],12);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OSM',maxZoom:18}).addTo(modalMapObj);
     const isH=a.rtype==='hike';
     // Waymarked trails overlay removed — too much visual noise
@@ -1405,7 +1408,7 @@ function openGenModal(item){
   setTimeout(async()=>{
     if(!item.lat){document.getElementById('gm-loading').style.display='none';return;}
     const el=document.getElementById('gm-map-inner');
-    genModalMapObj=L.map(el,{scrollWheelZoom:false}).setView([item.lat,item.lng],13);
+    genModalMapObj=L.map(el,{scrollWheelZoom:false,dragging:!L.Browser.mobile,tap:!L.Browser.mobile}).setView([item.lat,item.lng],13);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OSM',maxZoom:18}).addTo(genModalMapObj);
     L.marker([CHALET.lat,CHALET.lng],{icon:chaletIco(),zIndexOffset:1000}).addTo(genModalMapObj).bindPopup('<b>🏠 Chalet Elomaz</b>');
     L.marker([item.lat,item.lng],{icon:colorIco(item.e||'📍','#f97316')}).addTo(genModalMapObj).bindPopup(`<b>${item.name||item.title}</b>`);
@@ -1530,7 +1533,7 @@ function initPlanMap(){
   if(planMap) return;
   const el=document.getElementById('plan-map');
   if(!el) return;
-  planMap=L.map(el,{scrollWheelZoom:false}).setView([45.93,6.42],11);
+  planMap=L.map(el,{scrollWheelZoom:false,dragging:!L.Browser.mobile,tap:!L.Browser.mobile}).setView([45.93,6.42],11);
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OSM',maxZoom:18}).addTo(planMap);
   L.marker([CHALET.lat,CHALET.lng],{icon:chaletIco(),zIndexOffset:1000}).addTo(planMap).bindPopup('<b>🏠 Chalet Elomaz</b>');
 }
@@ -3353,6 +3356,139 @@ function showToast(msg) {
 .ci-addr-row{display:flex;gap:.5rem;align-items:flex-start;}
 .ci-addr-row input{flex:1;}
 .ci-addr-row .btn{white-space:nowrap;flex-shrink:0;margin-top:0;}
+
+/* ========================================
+   MOBILE OPTIMALISATIE (≤640px)
+   ======================================== */
+@keyframes slideUp{from{transform:translateY(50px);opacity:0}to{transform:translateY(0);opacity:1}}
+
+@media(max-width:640px){
+  /* Safe area insets voor notch-telefoons */
+  .header{padding-top:calc(.7rem + env(safe-area-inset-top,0px));padding-bottom:.7rem;}
+  .nav{padding-bottom:env(safe-area-inset-bottom,0px);}
+
+  /* Header compacter */
+  .header{padding:.7rem .9rem;}
+  .chalet-info h1{font-size:.95rem;}
+  .chalet-info p{display:none;}
+  .header-badges{display:none !important;}
+  .chalet-link{padding:.35rem .65rem;gap:.5rem;}
+  .chalet-link .logo{font-size:1.3rem;}
+
+  /* Nav — horizontaal scrollbaar, tabs kleiner */
+  .nav{padding:0 0 0 0;position:relative;z-index:auto;}
+  .nav-inner{padding:0 .3rem;}
+  .nav-tab{padding:.65rem .6rem;font-size:.7rem;gap:.2rem;min-height:44px;}
+
+  /* Hoofdcontent */
+  .main{padding:.6rem .7rem;}
+
+  /* Layouts altijd 1 kolom */
+  .split-layout{grid-template-columns:1fr !important;}
+  .map-panel{position:static !important;}
+  .m-sections{grid-template-columns:1fr !important;}
+  .day-detail{grid-template-columns:1fr !important;}
+  .groups-layout{grid-template-columns:1fr !important;}
+  .plan-detail-grid{grid-template-columns:1fr !important;}
+  .parallel-slots{gap:.3rem;}
+  
+  /* Tabkaarten compacter */
+  .tab-map{height:240px !important;}
+
+  /* MODALS — bottom sheet stijl */
+  .modal-overlay{align-items:flex-end !important;padding:0 !important;}
+  .modal-overlay .modal,
+  .modal-overlay .modal-box,
+  .modal-overlay .picker-modal{
+    border-radius:20px 20px 0 0 !important;
+    max-width:100% !important;
+    width:100% !important;
+    max-height:90vh !important;
+    margin:0 !important;
+    animation:slideUp .22s ease-out;
+  }
+  /* Handle bar bovenaan modal */
+  .modal-overlay .modal-hdr,
+  .modal-overlay .modal-box > h3:first-child{
+    padding-top:1rem;
+  }
+  /* Interne modal kaarten */
+  .m-map{height:200px !important;}
+  #am-map-inner,#gm-map-inner{height:200px !important;}
+
+  /* Knoppen — minimum tap target 44px */
+  .btn{min-height:42px;padding:.55rem .85rem;font-size:.82rem;}
+  .modal-close{width:32px;height:32px;}
+  .atd-day-btn{min-height:48px;min-width:40px;padding:.35rem .4rem;}
+  .atd-group-btn{min-height:42px;}
+  .slot-del,.diary-img-del{min-width:36px;min-height:36px;}
+
+  /* iOS input zoom-fix — font-size ≥ 16px */
+  input:not([type=range]),select,textarea{font-size:16px !important;}
+  /* Maar display-tekst behouden */
+  .ci-section-title,.ci-field label,.form-label{font-size:.72rem !important;}
+
+  /* Kaartjes — grotere tap area */
+  .list-card,.act-card,.bar-card,.rental-card,.ev-card{
+    padding:.6rem .8rem;min-height:60px;
+  }
+
+  /* Week strip — horizontaal scrollbaar */
+  .week-strip{
+    display:flex !important;overflow-x:auto;-webkit-overflow-scrolling:touch;
+    gap:.4rem;padding-bottom:.5rem;
+    scrollbar-width:none;
+  }
+  .week-strip::-webkit-scrollbar{display:none;}
+  .week-strip .day-card{min-width:110px;flex-shrink:0;}
+
+  /* Dagplanning groepen */
+  .group-card{border-radius:12px;}
+  .group-slot{padding:.45rem .55rem;}
+  .group-meal-input{font-size:14px;padding:.35rem .5rem;}
+  
+  /* Dagboek */
+  .diary-day-btn{min-width:58px;padding:.4rem .5rem;font-size:.72rem;}
+  .diary-strip{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+  .diary-strip::-webkit-scrollbar{display:none;}
+
+  /* Gallery */
+  .gallery-grid{grid-template-columns:repeat(auto-fill,minmax(90px,1fr)) !important;}
+
+  /* Route chips */
+  .route-chip{font-size:.68rem;padding:.18rem .45rem;}
+
+  /* "Toevoegen aan dag" modal */
+  #atd-days{gap:.3rem;}
+  #atd-groups{gap:.4rem;}
+
+  /* CI modal pills kleiner */
+  .ci-type-pills{gap:.3rem;}
+  .ci-type-pill{min-width:2.9rem;padding:.35rem .4rem;font-size:.62rem;}
+  .ci-type-pill .pill-ico{font-size:1.15rem;}
+
+  /* M-meta chips in modals wrappen */
+  .m-meta{flex-wrap:wrap;gap:.3rem;}
+  .m-cta{flex-wrap:wrap;gap:.4rem;}
+  .m-cta .btn{flex:1;min-width:120px;text-align:center;justify-content:center;}
+
+  /* Activity modal stats */
+  .m-stat{font-size:.72rem;padding:.25rem .5rem;}
+
+  /* Stat chips wrap */
+  .m-stats{flex-wrap:wrap;}
+
+  /* Praktisch/Tips grid 1 col */
+  .m-sections{grid-template-columns:1fr !important;}
+}
+
+/* Extra smal (≤380px — kleine iPhones) */
+@media(max-width:380px){
+  .nav-tab{padding:.6rem .45rem;font-size:.65rem;}
+  .chalet-info h1{font-size:.85rem;}
+  .ci-type-pill{min-width:2.6rem;font-size:.58rem;}
+  .week-strip .day-card{min-width:95px;}
+}
 </style>
 
 
