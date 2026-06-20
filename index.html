@@ -91,6 +91,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 .atd-meal-btn.active{border-color:#f97316;background:rgba(249,115,22,.1);font-weight:700;}
 .rest-hours{color:var(--muted)}
 .rest-closed{color:#ef4444;font-weight:500}
+.gm-addr-block{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:.6rem .8rem;margin-bottom:.7rem;display:flex;flex-direction:column;gap:.35rem;}
+.gm-addr-row{display:flex;align-items:flex-start;gap:.5rem;font-size:.8rem;color:var(--text);}
+.gm-addr-ico{font-size:.9rem;flex-shrink:0;margin-top:.05rem;}
 .tag{background:#f1f5f9;border:1px solid var(--border);border-radius:20px;padding:.08rem .45rem;font-size:.65rem;color:var(--muted);}
 .lc-right{padding:.65rem .8rem;text-align:right;display:flex;flex-direction:column;justify-content:center;gap:.2rem;flex-shrink:0;}
 .lc-dist{font-size:.73rem;color:var(--accent);font-weight:600;}.lc-sub{font-size:.7rem;color:var(--muted);}
@@ -691,7 +694,7 @@ function supaHeaders(){return{'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_K
 
 // ---- DATA ----
 const activities_raw=[
-  {id:1,cat:'downhill',e:'🚵',ico:'ico-dh',title:'Downhill MTB — La Clusaz',sub:'Half dag vol gas naar beneden',diff:'medium',dl:'Gemiddeld',rtype:'drive',
+  {id:1,cat:'downhill',e:'🚵',ico:'ico-dh',title:'Downhill MTB — La Clusaz',addr:'Route du Télécabine, 74220 La Clusaz',parking:'🅿️ Parking des Pistes — gratis, 200m van gondelbaan',sub:'Half dag vol gas naar beneden',diff:'medium',dl:'Gemiddeld',rtype:'drive',
    stats:[{i:'⏱️',l:'4–6u'},{i:'🎿',l:'6 tracks'},{i:'🔼',l:'Lift'}],
    desc:"La Clusaz heeft een van de beste bike parks van de Franse Alpen. 6 downhill trails + 5 enduro tracks met 3 stoeltjesliften. Open dagelijks 1 jul–30 aug.",
    lat:45.9031,lng:6.4239,
@@ -699,7 +702,7 @@ const activities_raw=[
    prak:['Rij via D909 richting La Clusaz (10 min)','Dagpass: ca. €35-40/persoon','Huurbike DH: ca. €55-70/dag','Bescherming aangeraden'],
    tips:['Ga vroeg (9u) voor de drukte','Probeer Spider (rood), La Combe (zwart)','Lunch in het dorp na de ochtend'],
    links:[{u:'https://www.laclusaz.com/en/mountain-bike/bikepark/',l:'🌐 La Clusaz Bike Park',c:'btn-primary'}]},
-  {id:2,cat:'downhill',e:'🏔️',ico:'ico-dh',title:'Downhill MTB — Grand-Bornand',sub:'Minder druk, net zo fun',diff:'medium',dl:'Gemiddeld',rtype:'drive',
+  {id:2,cat:'downhill',e:'🏔️',ico:'ico-dh',title:'Downhill MTB — Grand-Bornand',addr:'La Joyère, 74450 Le Grand-Bornand',parking:'🅿️ Parking Télécabine La Joyère — gratis in zomer',sub:'Minder druk, net zo fun',diff:'medium',dl:'Gemiddeld',rtype:'drive',
    stats:[{i:'⏱️',l:'4–6u'},{i:'🎿',l:'10 tracks'},{i:'🔼',l:'Lift'}],
    desc:"Le Grand-Bornand heeft 10 downhill trails, iets minder toeristisch dan La Clusaz. Prachtig uitzicht op de Aravis.",
    lat:45.9437,lng:6.4826,
@@ -707,14 +710,14 @@ const activities_raw=[
    prak:['Rij richting Le Grand-Bornand (15 min, D4)','Dagpass: ca. €32/persoon'],
    tips:['Rustiger dan La Clusaz','Ideaal voor beginners DH'],
    links:[{u:'https://en.legrandbornand.com/mountain-biking-trails.html',l:'🌐 Grand-Bornand MTB',c:'btn-primary'}]},
-  {id:3,cat:'downhill',e:'🎯',ico:'ico-dh',title:'Dubbele DH dag: 2 parken',sub:'La Clusaz ochtend + Grand-Bornand namiddag',diff:'hard',dl:'Zwaar',rtype:'drive',
+  {id:3,cat:'downhill',e:'🎯',ico:'ico-dh',title:'Dubbele DH dag: 2 parken',addr:'La Clusaz + Le Grand-Bornand',parking:'🅿️ Ochtend: Parking des Pistes La Clusaz · Namiddag: La Joyère Grand-Bornand',sub:'La Clusaz ochtend + Grand-Bornand namiddag',diff:'hard',dl:'Zwaar',rtype:'drive',
    stats:[{i:'⏱️',l:'Hele dag'},{i:'🎿',l:'2 parken'},{i:'💪',l:'Full send'}],
    desc:"Ochtend in La Clusaz (9u-13u), lunch, dan door naar Le Grand-Bornand (14u-17u). Twee complete bike parks op één dag.",
    lat:45.9035,lng:6.4255,
    wp:[{lat:45.9203,lng:6.4154,l:'🏠 Chalet'},{lat:45.9031,lng:6.4239,l:'⚡ La Clusaz'},{lat:45.9437,lng:6.4826,l:'🎯 Grand-Bornand'}],
    prak:['Vertrek 8u30 naar La Clusaz','Ochtendpas 9u-13u','Lunch dorp','Namiddagpas 14u-17u30 GBornand'],
    tips:['Koop dagpas per park','Beenspieren = de bottleneck'],links:[]},
-  {id:4,cat:'hiking',e:'🥾',ico:'ico-hike',title:'La Tournette — 2351m top',sub:'1200 hm · 8u · Ketting',diff:'hard',dl:'Zwaar',rtype:'hike',
+  {id:4,cat:'hiking',e:'🥾',ico:'ico-hike',title:'La Tournette — 2351m top',addr:'Col de Blénières, 74210 Montmin',parking:'🅿️ Parking Col de Blénières (Montmin) — gratis, 20 plaatsen, vroeg vol!',sub:'1200 hm · 8u · Ketting',diff:'hard',dl:'Zwaar',rtype:'hike',
    stats:[{i:'⏱️',l:'7–9u'},{i:'📏',l:'14 km'},{i:'🔼',l:'1200 hm'}],
    desc:"La Tournette (2351m) boven Lac d'Annecy. Vaste ketting naar panorama op meer en Mont Blanc. Één van de mooiste dagwandelingen van Haute-Savoie.",
    lat:45.8498,lng:6.2998,
@@ -722,7 +725,7 @@ const activities_raw=[
    prak:['Rij via D12 naar Montmin (45 min)','Min. 2L water + energie','Goede wandelschoenen verplicht'],
    tips:['Vertrek 7u30','Ketting: 15 min, weinig technisch','Top bewolkt namiddag'],
    links:[{u:'https://www.alltrails.com/trail/france/haute-savoie/la-tournette-par-montmin',l:'🗺️ AllTrails',c:'btn-green'}]},
-  {id:5,cat:'hiking',e:'⛰️',ico:'ico-hike',title:'Col des Aravis + Tête du Danay',sub:'1100 hm · 6u · Vlakbij chalet',diff:'medium',dl:'Gemiddeld',rtype:'hike',
+  {id:5,cat:'hiking',e:'⛰️',ico:'ico-hike',title:'Col des Aravis + Tête du Danay',addr:'Col des Aravis, D909, 74220 La Clusaz',parking:'🅿️ Parking Col des Aravis — gratis, naast het wegrestaurant',sub:'1100 hm · 6u · Vlakbij chalet',diff:'medium',dl:'Gemiddeld',rtype:'hike',
    stats:[{i:'⏱️',l:'5–7u'},{i:'📏',l:'16 km'},{i:'🔼',l:'1100 hm'}],
    desc:"Klim via Col des Aravis (1486m) naar de Tête du Danay voor 360° panorama op Mont Blanc en Aravis. De bekendste route vanuit Saint-Jean-de-Sixt.",
    lat:45.9078,lng:6.5175,
@@ -730,7 +733,7 @@ const activities_raw=[
    prak:['Rij 5 min naar Col des Aravis parking','Vertrek 8u30 aangeraden'],
    tips:['Marmotten spotten','Col van Kwiatkowski in Dauphiné'],
    links:[{u:'https://www.alltrails.com/trail/france/haute-savoie/col-des-aravis-et-tete-du-danay',l:'🗺️ AllTrails',c:'btn-green'},{u:'https://ridewithgps.com/routes/44987221',l:'🚴 Ride with GPS',c:'btn-purple'}]},
-  {id:6,cat:'hiking',e:'🏔️',ico:'ico-hike',title:'Plateau des Glières — WW2',sub:'1300 hm · 8u · Historisch + episch',diff:'hard',dl:'Zwaar',rtype:'hike',
+  {id:6,cat:'hiking',e:'🏔️',ico:'ico-hike',title:'Plateau des Glières — WW2',addr:'Le Grand-Bornand Chef-Lieu, 74450 Le Grand-Bornand',parking:'🅿️ Parking Village Le Grand-Bornand of Col des Annes (D4)',sub:'1300 hm · 8u · Historisch + episch',diff:'hard',dl:'Zwaar',rtype:'hike',
    stats:[{i:'⏱️',l:'7–9u'},{i:'📏',l:'20 km'},{i:'🔼',l:'1300 hm'}],
    desc:"Via Col des Annes (1722m) naar het Plateau des Glières, beroemde WW2-verzetsplaats. Eindeloze vergezichten.",
    lat:45.9437,lng:6.4826,
@@ -738,7 +741,7 @@ const activities_raw=[
    prak:['Startpunt Le Grand-Bornand (15 min)','Vroeg vertrek verplicht (7u30)','Min. 3L water'],
    tips:['Refuge des Glières: lunch op plateau','Bliksem na 14u'],
    links:[{u:'https://www.alltrails.com/trail/france/haute-savoie/plateau-des-glieres-depuis-le-grand-bornand',l:'🗺️ AllTrails',c:'btn-green'}]},
-  {id:7,cat:'ferrata',e:'🧗',ico:'ico-ferrata',title:'Via Ferrata Tour du Jallouvre',sub:'3u klimmen · Aravis klassieker · D-niveau',diff:'hard',dl:'Moeilijk',rtype:'hike',
+  {id:7,cat:'ferrata',e:'🧗',ico:'ico-ferrata',title:'Via Ferrata Tour du Jallouvre',addr:'Le Chinaillon, 74450 Le Grand-Bornand',parking:'🅿️ Parking Le Chinaillon — gratis naast de kerk, 25 min wandelen naar start',sub:'3u klimmen · Aravis klassieker · D-niveau',diff:'hard',dl:'Moeilijk',rtype:'hike',
    stats:[{i:'⏱️',l:'4–5u'},{i:'🔼',l:'600 hm'},{i:'🧗',l:'D-niveau'}],
    desc:"De Tour du Jallouvre via ferrata is DE klassieker van het Aravis massief. Verticale passages + fantastisch panorama.",
    lat:45.9607,lng:6.5086,
@@ -746,7 +749,7 @@ const activities_raw=[
    prak:['Rij naar Le Chinaillon (20 min)','Harnais + longe + helm: verplicht'],
    tips:['Reserveer gids op voorhand','Handschoenen aangeraden'],
    links:[{u:'https://www.directmountain.com/en/activities/310-via-ferrata-la-tour-du-jallouvre-grand-bornand/',l:'📍 Info',c:'btn-green'}]},
-  {id:8,cat:'ferrata',e:'🧗',ico:'ico-ferrata',title:'Via Ferrata Pollet-Villard',sub:'5 min van chalet · Col des Aravis · C-niveau',diff:'medium',dl:'Gemiddeld',rtype:'hike',
+  {id:8,cat:'ferrata',e:'🧗',ico:'ico-ferrata',title:'Via Ferrata Pollet-Villard',addr:'Col des Aravis, D909, 74220 La Clusaz',parking:'🅿️ Parking Col des Aravis — 5 min van chalet, gratis',sub:'5 min van chalet · Col des Aravis · C-niveau',diff:'medium',dl:'Gemiddeld',rtype:'hike',
    stats:[{i:'⏱️',l:'3–4u'},{i:'🔼',l:'400 hm'},{i:'🧗',l:'C-niveau'}],
    desc:"Aan de Col des Aravis — 5 min van het chalet. Ideaal voor eerste via ferrata.",
    lat:45.9078,lng:6.5175,
@@ -754,7 +757,7 @@ const activities_raw=[
    prak:['Park aan Col des Aravis (5 min)','30 min aanloopwandeling'],
    tips:['Begin vroeg (8u30)'],
    links:[{u:'https://www.directmountain.com/en/activities/317-via-ferrata-aravis-pass-la-clusaz-haute-savoie/',l:'📍 Info',c:'btn-green'}]},
-  {id:9,cat:'water',e:'🛶',ico:'ico-water',title:'Raften op de Giffre — Samoëns',sub:'Klasse III-IV wildwater',diff:'medium',dl:'Gemiddeld',rtype:'drive',
+  {id:9,cat:'water',e:'🛶',ico:'ico-water',title:'Raften op de Giffre — Samoëns',addr:'Les Gorges des Tines, 74340 Samoëns',parking:'🅿️ Parking Gorges des Tines of meeting point organisatie (bevestig bij boeking)',sub:'Klasse III-IV wildwater',diff:'medium',dl:'Gemiddeld',rtype:'drive',
    stats:[{i:'⏱️',l:'Halve dag'},{i:'🌊',l:'Klasse III-IV'}],
    desc:"Rafting op de Giffre bij Samoëns via de Gorges des Tines. Professionele gidsen. Prijs: ca. €42/pers.",
    lat:46.0803,lng:6.7225,
@@ -762,7 +765,7 @@ const activities_raw=[
    prak:['Rij via Thônes, Cluses (1u15)','Reserveer: altitude-rafting.com'],
    tips:['Pre-book 3 dagen op voorhand'],
    links:[{u:'https://www.altitude-rafting.com/',l:'🛶 Altitude Rafting',c:'btn-primary'}]},
-  {id:10,cat:'water',e:'💦',ico:'ico-canyon',title:"Canyoning Angon — eindigt in het meer",sub:"60m waterval · IN Lac d'Annecy",diff:'medium',dl:'Gemiddeld',rtype:'drive',
+  {id:10,cat:'water',e:'💦',ico:'ico-canyon',title:"Canyoning Angon — eindigt in het meer",addr:'Route du Canyon d\'Angon, 74290 Talloires',parking:'🅿️ Parking Angon village — beperkt, vroeg aanwezig zijn',sub:"60m waterval · IN Lac d'Annecy",diff:'medium',dl:'Gemiddeld',rtype:'drive',
    stats:[{i:'⏱️',l:'4–5u'},{i:'💦',l:'60m waterval'},{i:'🏊',l:'Einde = meer'}],
    desc:"Angon is het meest iconische canyon van Haute-Savoie. Daalt af naar Lac d'Annecy. Combineer met zwemnamiddag.",
    lat:45.8442,lng:6.2028,
@@ -770,14 +773,14 @@ const activities_raw=[
    prak:['Rij richting Annecy via Thônes (50 min)','Prijs: ca. €55-70/pers'],
    tips:['Vroeg boeken in augustus'],
    links:[{u:'https://www.annecymountainguide.com/canyoning',l:'📍 Guides Annecy',c:'btn-primary'}]},
-  {id:11,cat:'water',e:'🌊',ico:'ico-canyon',title:'Canyoning Morette — Beginnersvriendelijk',sub:'45m waterval · Dichterbij',diff:'easy',dl:'Beginner',rtype:'drive',
+  {id:11,cat:'water',e:'🌊',ico:'ico-canyon',title:'Canyoning Morette — Beginnersvriendelijk',addr:'Gorges de Morette, 74230 Thônes',parking:'🅿️ Parking langs D16 bij ingang gorges, gratis',sub:'45m waterval · Dichterbij',diff:'easy',dl:'Beginner',rtype:'drive',
    stats:[{i:'⏱️',l:'3–4u'},{i:'💦',l:'45m waterval'},{i:'🟢',l:'Beginner OK'}],
    desc:"Ideaal voor eerste canyoners. 45m repel onvergetelijk.",
    lat:45.8781,lng:6.3642,
    wp:[{lat:45.9203,lng:6.4154,l:'🏠 Chalet'},{lat:45.8781,lng:6.3642,l:'🎯 Morette'}],
    prak:['Rij naar Thônes (25 min)'],
    tips:['Combineer met kaas in Thônes'],links:[]},
-  {id:12,cat:'water',e:'🏖️',ico:'ico-lake',title:"Lac d'Annecy — Zwemdag + Stad",sub:"Zuiverste meer Europa · Talloires",diff:'easy',dl:'Makkelijk',rtype:'drive',
+  {id:12,cat:'water',e:'🏖️',ico:'ico-lake',title:"Lac d'Annecy — Zwemdag + Stad",addr:'Plage de Talloires, 74290 Talloires-Montmin',parking:'🅿️ Parking Plage de Talloires (€2-4/u) · Stad: Parking Bonlieu of P+R Courier',sub:"Zuiverste meer Europa · Talloires",diff:'easy',dl:'Makkelijk',rtype:'drive',
    stats:[{i:'⏱️',l:'Hele dag'},{i:'🏊',l:'25°C water'},{i:'🏙️',l:'Annecy stad'}],
    desc:"Talloires strand — kristalhelder water tot 25°C in augustus. Combineer met Annecy oude stad.",
    lat:45.8380,lng:6.2115,
@@ -785,14 +788,14 @@ const activities_raw=[
    prak:['Rij via Thônes naar Talloires (40 min)','Parking voor 9u'],
    tips:['Snorkelen geweldig'],
    links:[{u:'https://en.lac-annecy.com/',l:'🏖️ Lac Annecy info',c:'btn-primary'}]},
-  {id:13,cat:'water',e:'🏞️',ico:'ico-river',title:"Borne rivier — wild zwemmen Grand-Bornand",sub:'Kristalhelder bergwater · 15 min',diff:'easy',dl:'Makkelijk',rtype:'drive',
+  {id:13,cat:'water',e:'🏞️',ico:'ico-river',title:"Borne rivier — wild zwemmen Grand-Bornand",addr:'Le Grand-Bornand, Route des Glières, 74450',parking:'🅿️ Parking village centre Le Grand-Bornand, 5 min stappen naar rivier',sub:'Kristalhelder bergwater · 15 min',diff:'easy',dl:'Makkelijk',rtype:'drive',
    stats:[{i:'🚗',l:'15 min'},{i:'🌡️',l:'~16°C'},{i:'🏞️',l:'Natuur'}],
    desc:"Prachtige rotsige zwemplekken met kristalhelder smeltwater. Dichtste wilde zwemplek bij het chalet.",
    lat:45.9380,lng:6.4650,
    wp:[{lat:45.9203,lng:6.4154,l:'🏠 Chalet'},{lat:45.9380,lng:6.4650,l:'🏞️ Borne rivier'}],
    prak:['Rij naar Le Grand-Bornand (15 min)','Parkeer in het centrum','5 min stappen'],
    tips:['Water koud — handdoek mee','Vroeg gaan = rustig'],links:[]},
-  {id:14,cat:'water',e:'💧',ico:'ico-river',title:"Fier rivier — wilde pools Thônes",sub:'Rotsige pools · 20 min',diff:'easy',dl:'Makkelijk',rtype:'drive',
+  {id:14,cat:'water',e:'💧',ico:'ico-river',title:"Fier rivier — wilde pools Thônes",addr:'Pont Saint-Clair, D16, 74230 Thônes',parking:'🅿️ Klein parkeerterrein bij brug Saint-Clair — gratis',sub:'Rotsige pools · 20 min',diff:'easy',dl:'Makkelijk',rtype:'drive',
    stats:[{i:'🚗',l:'20 min'},{i:'🌡️',l:'~15°C'},{i:'🏞️',l:'Rotsig'}],
    desc:"Spectaculaire rotsige pools bij Thônes. Populair bij locals. Beste plek bij de brug Saint-Clair.",
    lat:45.8580,lng:6.3150,
@@ -803,69 +806,69 @@ const activities_raw=[
 
 const restaurants_raw=[
   // --- GASTRONOMISCH ---
-  {id:'r1',e:'⭐',ico:'ico-rest',name:'Le Cin5 (1 Michelin ⭐)',loc:'La Clusaz',lat:45.9030,lng:6.4240,cat:'gastro',
+  {id:'r1',e:'⭐',ico:'ico-rest',name:'Le Cin5 (1 Michelin ⭐)',addr:'50 Montée du Télécabine, 74220 La Clusaz',parking:'🅿️ Parking des Pistes La Clusaz (200m)',loc:'La Clusaz',lat:45.9030,lng:6.4240,cat:'gastro',
    desc:'Chef Vincent Deforce. Mauritiaanse invloeden + Savoie producten. Verrassingsmenu. Reservatie verplicht.',
    tags:['Gastronomisch','Michelin ⭐'],stars:'★★★★★',price:'€€€€',
    hours:'Di–Za 19u30–21u30',closed:'Zo & Ma gesloten'},
-  {id:'r2',e:'🌿',ico:'ico-rest',name:'Le Cairn',loc:'Saint-Jean-de-Sixt',lat:45.9203,lng:6.4154,cat:'gastro',
+  {id:'r2',e:'🌿',ico:'ico-rest',name:'Le Cairn',addr:'130 Impasse de la Clairière, 74450 Saint-Jean-de-Sixt',parking:'🅿️ Eigen parking bij restaurant — vlakbij chalet',loc:'Saint-Jean-de-Sixt',lat:45.9203,lng:6.4154,cat:'gastro',
    desc:'Creatieve gastronomie vanuit de tuin. Verrassingsmenu met lokale producten. Vlakbij het chalet!',
    tags:['Gastronomisch','Lokaal'],stars:'★★★★☆',price:'€€€',
    hours:'Di–Za 12u–14u & 19u–21u',closed:'Zo-avond & Ma gesloten'},
-  {id:'r3',e:'🏔️',ico:'ico-rest',name:'Confins des Sens',loc:'Le Grand-Bornand',lat:45.9435,lng:6.4820,cat:'gastro',
+  {id:'r3',e:'🏔️',ico:'ico-rest',name:'Confins des Sens',addr:'347 Route des Confins, 74450 Le Grand-Bornand',parking:'🅿️ Gratis parking bij restaurant',loc:'Le Grand-Bornand',lat:45.9435,lng:6.4820,cat:'gastro',
    desc:'Inventief met seizoensproducten. Terras met Aravis-panorama. Reservatie aanbevolen.',
    tags:['Gastronomisch','Terras'],stars:'★★★★☆',price:'€€€',
    hours:'Wo–Za 12u–14u & 19u–21u30',closed:'Ma, Di & Zo-avond gesloten'},
-  {id:'r7',e:'🐟',ico:'ico-rest',name:"L'Auberge du Père Bise",loc:"Talloires — Lac d'Annecy",lat:45.8380,lng:6.2115,cat:'gastro',
+  {id:'r7',e:'🐟',ico:'ico-rest',name:"L'Auberge du Père Bise",addr:'Route du Port, 74290 Talloires',parking:'🅿️ Eigen parking restaurant aan meeroever',loc:"Talloires — Lac d'Annecy",lat:45.8380,lng:6.2115,cat:'gastro',
    desc:"Legendarisch 2-Michelin sterren restaurant aan de oevers van het Lac d'Annecy. Unieke ervaring.",
    tags:['2 Michelin ⭐⭐','Meer'],stars:'★★★★★',price:'€€€€€',
    hours:'Do–Ma 12u–14u & 19u30–21u30',closed:'Di & Wo gesloten'},
 
   // --- SAVOYARD ---
-  {id:'r5',e:'🧀',ico:'ico-rest',name:'La Ferme de Lormay',loc:'La Clusaz',lat:45.9050,lng:6.4250,cat:'savoyard',
+  {id:'r5',e:'🧀',ico:'ico-rest',name:'La Ferme de Lormay',addr:'741 Route de Lormay, 74220 La Clusaz',parking:'🅿️ Eigen boerderijparkering — gratis',loc:'La Clusaz',lat:45.9050,lng:6.4250,cat:'savoyard',
    desc:'Traditionele Savoyard bergboerderij. Fondue, raclette, tartiflette in authentieke sfeer.',
    tags:['Savoyard','Fondue'],stars:'★★★★☆',price:'€€',
    hours:'Elke dag 12u–14u & 19u–22u',closed:'Altijd open in zomer'},
-  {id:'r9',e:'🍶',ico:'ico-rest',name:'Le Vieux Chalet',loc:'La Clusaz',lat:45.9045,lng:6.4255,cat:'savoyard',
+  {id:'r9',e:'🍶',ico:'ico-rest',name:'Le Vieux Chalet',addr:'Les Villards, 74220 La Clusaz',parking:'🅿️ Parking dorp La Clusaz (300m)',loc:'La Clusaz',lat:45.9045,lng:6.4255,cat:'savoyard',
    desc:'Rustieke bergsfeer, oudste chalet-restaurant van La Clusaz. Specialiteit: Croûte au Reblochon.',
    tags:['Savoyard','Traditioneel'],stars:'★★★★☆',price:'€€',
    hours:'Di–Zo 12u–14u & 18u30–21u30',closed:'Ma gesloten'},
-  {id:'r10',e:'🥘',ico:'ico-rest',name:'Le Belalp',loc:'La Clusaz',lat:45.9038,lng:6.4248,cat:'savoyard',
+  {id:'r10',e:'🥘',ico:'ico-rest',name:'Le Belalp',addr:'Chef-Lieu, 74220 La Clusaz',parking:'🅿️ Centrum La Clusaz — parking gratis buiten seizoen',loc:'La Clusaz',lat:45.9038,lng:6.4248,cat:'savoyard',
    desc:'Brasserie met Savoyard klassiekers: pierrade, fondue bourguignonne, côte de boeuf.',
    tags:['Savoyard','Brasserie'],stars:'★★★☆☆',price:'€€',
    hours:'Elke dag 12u–14u30 & 18u30–22u',closed:'Altijd open juli–aug'},
-  {id:'r11',e:'🏡',ico:'ico-rest',name:'La Croix-Fry',loc:'Manigod',lat:45.8781,lng:6.3642,cat:'savoyard',
+  {id:'r11',e:'🏡',ico:'ico-rest',name:'La Croix-Fry',addr:'Col de la Croix-Fry, 74230 Manigod',parking:'🅿️ Gratis parking Col de la Croix-Fry (cols-parkeerplaats)',loc:'Manigod',lat:45.8781,lng:6.3642,cat:'savoyard',
    desc:'Authentieke bergboerderij op Col de la Croix-Fry. Diots au vin blanc, tomme de Savoie.',
    tags:['Savoyard','Uitzicht'],stars:'★★★★☆',price:'€€',
    hours:'Elke dag 12u–15u',closed:'Avond gesloten (lunchtijd only)'},
 
   // --- PIZZA / CASUAL ---
-  {id:'r4',e:'🍕',ico:'ico-rest',name:"La Pizz' de Saint Jean",loc:'Saint-Jean-de-Sixt',lat:45.9203,lng:6.4154,cat:'pizza',
+  {id:'r4',e:'🍕',ico:'ico-rest',name:"La Pizz' de Saint Jean",addr:'Place du Village, 74450 Saint-Jean-de-Sixt',parking:'🅿️ Dorpsplein Saint-Jean-de-Sixt — gratis',loc:'Saint-Jean-de-Sixt',lat:45.9203,lng:6.4154,cat:'pizza',
    desc:"Lokale favoriet. Houtoven pizza's met bergkaas. Ook afhalen. Gezellige sfeer.",
    tags:['Pizza','Casual'],stars:'★★★★☆',price:'€€',
    hours:'Di–Zo 12u–14u & 18u30–22u',closed:'Ma gesloten'},
-  {id:'r12',e:'🔥',ico:'ico-rest',name:'Le Vieux Four — Pizza & Pasta',loc:'La Clusaz',lat:45.9028,lng:6.4233,cat:'pizza',
+  {id:'r12',e:'🔥',ico:'ico-rest',name:'Le Vieux Four — Pizza & Pasta',addr:'Route du Centre, 74220 La Clusaz',parking:'🅿️ Parking Centre La Clusaz',loc:'La Clusaz',lat:45.9028,lng:6.4233,cat:'pizza',
    desc:'Traditionele houtoven. Dikke napolitaanse pizza, zelfgemaakte pasta. Populair bij locals.',
    tags:['Pizza','Pasta'],stars:'★★★★☆',price:'€€',
    hours:'Elke dag 18u30–22u',closed:'Middag gesloten'},
-  {id:'r6',e:'🍔',ico:'ico-rest',name:'Le Flambeau',loc:'La Clusaz',lat:45.9032,lng:6.4235,cat:'casual',
+  {id:'r6',e:'🍔',ico:'ico-rest',name:'Le Flambeau',addr:'Chef-Lieu, 74220 La Clusaz',parking:'🅿️ Parking Centre La Clusaz (100m)',loc:'La Clusaz',lat:45.9032,lng:6.4235,cat:'casual',
    desc:'Lokale bieren, burger, snacks. Terras op zonkant. Ideaal na de bike park.',
    tags:['Casual','Burger'],stars:'★★★☆☆',price:'€€',
    hours:'Elke dag 11u30–22u30',closed:'Altijd open'},
-  {id:'r13',e:'🌮',ico:'ico-rest',name:"Le P'tit Resto — Chez Gaston",loc:'Le Grand-Bornand',lat:45.9437,lng:6.4826,cat:'casual',
+  {id:'r13',e:'🌮',ico:'ico-rest',name:"Le P'tit Resto — Chez Gaston",addr:'Village, 74450 Le Grand-Bornand',parking:'🅿️ Dorpsplein Le Grand-Bornand — gratis',loc:'Le Grand-Bornand',lat:45.9437,lng:6.4826,cat:'casual',
    desc:'Gezellig dorpsrestaurant. Dagschotel, steak-frites, lokale specialiteiten. Goede prijs-kwaliteit.',
    tags:['Casual','Dagschotel'],stars:'★★★☆☆',price:'€',
    hours:'Di–Za 12u–14u & 19u–21u',closed:'Zo-avond & Ma gesloten'},
 
   // --- BAKKERIJ / ONTBIJT ---
-  {id:'r8',e:'🥐',ico:'ico-rest',name:'Boulangerie Aravis',loc:'Saint-Jean-de-Sixt',lat:45.9203,lng:6.4154,cat:'bakkerij',
+  {id:'r8',e:'🥐',ico:'ico-rest',name:'Boulangerie Aravis',addr:'Le Villaret, 74450 Saint-Jean-de-Sixt',parking:'🅿️ Straat parkeren of dorpsplein SJS',loc:'Saint-Jean-de-Sixt',lat:45.9203,lng:6.4154,cat:'bakkerij',
    desc:'Verse croissants, broodjes, quiches. Perfect voor ontbijt of picknick onderweg.',
    tags:['Bakkerij','Ontbijt'],stars:'★★★★☆',price:'€',
    hours:'Elke dag 7u–13u & 15u–19u',closed:'Woensdag gesloten'},
-  {id:'r14',e:'🧇',ico:'ico-rest',name:'Café de la Poste',loc:'Saint-Jean-de-Sixt',lat:45.9205,lng:6.4158,cat:'bakkerij',
+  {id:'r14',e:'🧇',ico:'ico-rest',name:'Café de la Poste',addr:'Route Nationale, 74450 Saint-Jean-de-Sixt',parking:'🅿️ Dorpsplein Saint-Jean-de-Sixt',loc:'Saint-Jean-de-Sixt',lat:45.9205,lng:6.4158,cat:'bakkerij',
    desc:'Gezellig terras, koffie, versgebakken taarten. Lokaal ontbijtpunt. Vaste klanten.',
    tags:['Café','Ontbijt'],stars:'★★★★☆',price:'€',
    hours:'Elke dag 7u30–18u',closed:'Di gesloten in laagseizoen (open in aug)'},
-  {id:'r15',e:'🥞',ico:'ico-rest',name:'Crêperie La Savoyarde',loc:'La Clusaz',lat:45.9033,lng:6.4241,cat:'bakkerij',
+  {id:'r15',e:'🥞',ico:'ico-rest',name:'Crêperie La Savoyarde',addr:'Centre Village, 74220 La Clusaz',parking:'🅿️ Parking Centre La Clusaz',loc:'La Clusaz',lat:45.9033,lng:6.4241,cat:'bakkerij',
    desc:'Bretonse galettes + Savoyard crêpes. Vegetarisch-vriendelijk. Leuk voor tussendoor.',
    tags:['Crêpes','Vegetarisch'],stars:'★★★★☆',price:'€€',
    hours:'Elke dag 11u–22u',closed:'Altijd open juli–aug'},
@@ -882,13 +885,13 @@ const events_raw=[
 ];
 
 const nightlife_raw=[
-  {id:'n1',e:'🍺',ico:'ico-bar',name:'Le Moulin — Terrasbar',type:'Bar & Terras',lat:45.9032,lng:6.4237,desc:'Populairste terras van La Clusaz. Grote bierkaart. Ideaal voor eerste drink na de berg.',vibe:'busy',vl:'Druk',hours:'14u–1u',tags:['Terras','Bier','Après']},
-  {id:'n2',e:'🍹',ico:'ico-bar',name:'Le Barioz — Cocktailbar',type:'Cocktailbar',lat:45.9031,lng:6.4241,desc:'Hippe cocktailbar, inventieve cocktails, goede muziek.',vibe:'busy',vl:'Druk',hours:'17u–2u',tags:['Cocktails','Muziek']},
-  {id:'n3',e:'💃',ico:'ico-bar',name:'Le Pressoir — Club La Clusaz',type:'Club / Dansvloer',lat:45.9029,lng:6.4238,desc:'Enige discotheek van La Clusaz. Open vr en za. DJ, dansvloer.',vibe:'party',vl:'Party',hours:'Vr-Za 23u–4u',tags:['Club','Dansen','DJ']},
-  {id:'n4',e:'🥂',ico:'ico-bar',name:"La P'tite Bodega",type:'Tapasbar & Terras',lat:45.9033,lng:6.4243,desc:'Gezellige tapasbar met aperitief. Sangria, pintxos, wijnen.',vibe:'quiet',vl:'Gezellig',hours:'16u–23u',tags:['Tapas','Terras']},
-  {id:'n5',e:'🍷',ico:'ico-bar',name:'Le Gressoney — Wijnbar',type:'Wijnbar',lat:45.9436,lng:6.4824,desc:'Savoie-wijnen, kaasplank, charcuterie. Rustige avond.',vibe:'quiet',vl:'Sfeervol',hours:'17u–23u30',tags:['Wijn','Kaas']},
-  {id:'n6',e:'🍻',ico:'ico-bar',name:'Bar des Glières — Lokaal',type:'Dorpscafé',lat:45.9391,lng:6.4152,desc:'2 min van chalet. Goedkope bieren, dartbord, lokale sfeer.',vibe:'quiet',vl:'Lokaal',hours:'9u–23u',tags:['Lokaal','Dichtbij']},
-  {id:'n7',e:'🎸',ico:'ico-bar',name:'Le Galop — Live muziek',type:'Bar met livemuziek',lat:45.9031,lng:6.4238,desc:'Regelmatig live muziek in zomer. Bands, folk, rock. Facebook: "Le Galop La Clusaz".',vibe:'busy',vl:'Live muziek',hours:'18u–1u',tags:['Live muziek','Bands']},
+  {id:'n1',e:'🍺',ico:'ico-bar',name:'Le Moulin — Terrasbar',addr:'Chef-Lieu, 74220 La Clusaz',parking:'🅿️ Parking Centre La Clusaz',type:'Bar & Terras',lat:45.9032,lng:6.4237,desc:'Populairste terras van La Clusaz. Grote bierkaart. Ideaal voor eerste drink na de berg.',vibe:'busy',vl:'Druk',hours:'14u–1u',tags:['Terras','Bier','Après']},
+  {id:'n2',e:'🍹',ico:'ico-bar',name:'Le Barioz — Cocktailbar',addr:'Place de l\'Église, 74220 La Clusaz',parking:'🅿️ Parking Centre La Clusaz',type:'Cocktailbar',lat:45.9031,lng:6.4241,desc:'Hippe cocktailbar, inventieve cocktails, goede muziek.',vibe:'busy',vl:'Druk',hours:'17u–2u',tags:['Cocktails','Muziek']},
+  {id:'n3',e:'💃',ico:'ico-bar',name:'Le Pressoir — Club La Clusaz',addr:'Route du Centre, 74220 La Clusaz',parking:'🅿️ Parking des Pistes (late shift, gratis na 20u)',type:'Club / Dansvloer',lat:45.9029,lng:6.4238,desc:'Enige discotheek van La Clusaz. Open vr en za. DJ, dansvloer.',vibe:'party',vl:'Party',hours:'Vr-Za 23u–4u',tags:['Club','Dansen','DJ']},
+  {id:'n4',e:'🥂',ico:'ico-bar',name:"La P'tite Bodega",addr:'Centre Village, 74220 La Clusaz',parking:'🅿️ Centrum La Clusaz',type:'Tapasbar & Terras',lat:45.9033,lng:6.4243,desc:'Gezellige tapasbar met aperitief. Sangria, pintxos, wijnen.',vibe:'quiet',vl:'Gezellig',hours:'16u–23u',tags:['Tapas','Terras']},
+  {id:'n5',e:'🍷',ico:'ico-bar',name:'Le Gressoney — Wijnbar',addr:'Village, 74450 Le Grand-Bornand',parking:'🅿️ Dorpsplein Le Grand-Bornand',type:'Wijnbar',lat:45.9436,lng:6.4824,desc:'Savoie-wijnen, kaasplank, charcuterie. Rustige avond.',vibe:'quiet',vl:'Sfeervol',hours:'17u–23u30',tags:['Wijn','Kaas']},
+  {id:'n6',e:'🍻',ico:'ico-bar',name:'Bar des Glières — Lokaal',addr:'Place du Village, 74450 Saint-Jean-de-Sixt',parking:'🅿️ Dorpsplein SJS — 2 min van chalet',type:'Dorpscafé',lat:45.9391,lng:6.4152,desc:'2 min van chalet. Goedkope bieren, dartbord, lokale sfeer.',vibe:'quiet',vl:'Lokaal',hours:'9u–23u',tags:['Lokaal','Dichtbij']},
+  {id:'n7',e:'🎸',ico:'ico-bar',name:'Le Galop — Live muziek',addr:'Centre, 74220 La Clusaz',parking:'🅿️ Parking Centre La Clusaz',type:'Bar met livemuziek',lat:45.9031,lng:6.4238,desc:'Regelmatig live muziek in zomer. Bands, folk, rock. Facebook: "Le Galop La Clusaz".',vibe:'busy',vl:'Live muziek',hours:'18u–1u',tags:['Live muziek','Bands']},
   {id:'n8',e:'🎰',ico:'ico-bar',name:'Casino de Megève',type:'Casino',lat:45.8569,lng:6.6178,desc:'Dichtstbijzijnde casino (30 min). Roulette, slots, blackjack. Dresscode. Open dagelijks.',vibe:'busy',vl:'Casino',hours:'20u–3u',tags:['Casino','Dresscode']},
   {id:'n9',e:'🎲',ico:'ico-bar',name:"Casino d'Annecy",type:'Casino',lat:45.9102,lng:6.1556,desc:'Roulette, blackjack, pokertafels. Combineer met Vieille Ville.',vibe:'busy',vl:'Casino',hours:'20u–3u',tags:['Casino','Poker']}
 ];
@@ -903,13 +906,13 @@ const rentals_raw=[
 ];
 
 const shops_raw=[
-  {id:'s1',e:'🏪',ico:'ico-shop',name:'Intermarché Aravis',type:'Supermarkt',lat:45.9300,lng:6.4000,desc:'Grootste supermarkt regio. Vers vlees, vis, groenten, wijn.',hours:'Ma-Za 8u30–20u, Zo 9u–13u'},
-  {id:'s2',e:'🛒',ico:'ico-shop',name:'Carrefour Express La Clusaz',type:'Supermarkt',lat:45.9030,lng:6.4238,desc:'Handige dagelijkse supermarkt in La Clusaz.',hours:'Elke dag 8u–20u'},
-  {id:'s3',e:'🏔️',ico:'ico-shop',name:'Sherpa Les Villards-sur-Thônes',type:'Bergsupermarkt',lat:45.9100,lng:6.3800,desc:'Lokale producten, reblochon, beaufort.',hours:'Ma-Za 8u–19u30, Zo 8u30–12u30'},
-  {id:'s4',e:'🧀',ico:'ico-shop',name:'Fromagerie Paccard',type:'Kaaswinkel',lat:45.9150,lng:6.3900,desc:'Beste fromagerie. Reblochon AOC, Beaufort, Abondance.',hours:'Di-Za 9u–12u & 15u–19u'},
-  {id:'s5',e:'🛍️',ico:'ico-shop',name:'Centre Bonlieu Annecy',type:'Winkelcentrum',lat:45.8992,lng:6.1294,desc:'H&M, FNAC en meer. Combineer met oude stad.',hours:'Ma-Za 10u–19u30'},
-  {id:'s6',e:'🍷',ico:'ico-shop',name:'Cave des Aravis',type:'Wijnwinkel',lat:45.9445,lng:6.4310,desc:'Savoie wijnen: Roussette, Apremont, Mondeuse.',hours:'Di-Za 10u–12u & 16u–19u'},
-  {id:'s7',e:'🏕️',ico:'ico-shop',name:'Maison de la Montagne',type:'Berguitrusting',lat:45.9031,lng:6.4239,desc:'Via ferrata uitrusting, wandelkaarten.',hours:'Elke dag 9u–19u'}
+  {id:'s1',e:'🏪',ico:'ico-shop',name:'Intermarché Aravis',addr:'Route d\'Annecy, 74230 Thônes',parking:'🅿️ Eigen supermarktparkering — gratis',type:'Supermarkt',lat:45.9300,lng:6.4000,desc:'Grootste supermarkt regio. Vers vlees, vis, groenten, wijn.',hours:'Ma-Za 8u30–20u, Zo 9u–13u'},
+  {id:'s2',e:'🛒',ico:'ico-shop',name:'Carrefour Express La Clusaz',addr:'Chef-Lieu, 74220 La Clusaz',parking:'🅿️ Centrum La Clusaz',type:'Supermarkt',lat:45.9030,lng:6.4238,desc:'Handige dagelijkse supermarkt in La Clusaz.',hours:'Elke dag 8u–20u'},
+  {id:'s3',e:'🏔️',ico:'ico-shop',name:'Sherpa Les Villards-sur-Thônes',addr:'Les Villards-sur-Thônes, 74230',parking:'🅿️ Voor de winkel — gratis',type:'Bergsupermarkt',lat:45.9100,lng:6.3800,desc:'Lokale producten, reblochon, beaufort.',hours:'Ma-Za 8u–19u30, Zo 8u30–12u30'},
+  {id:'s4',e:'🧀',ico:'ico-shop',name:'Fromagerie Paccard',addr:'Route d\'Annecy, 74230 Manigod',parking:'🅿️ Kleine parking bij fromagerie',type:'Kaaswinkel',lat:45.9150,lng:6.3900,desc:'Beste fromagerie. Reblochon AOC, Beaufort, Abondance.',hours:'Di-Za 9u–12u & 15u–19u'},
+  {id:'s5',e:'🛍️',ico:'ico-shop',name:'Centre Bonlieu Annecy',addr:'1 Rue Jean Jaurès, 74000 Annecy',parking:'🅿️ P Bonlieu of P+R Courier (shuttle naar centrum)',type:'Winkelcentrum',lat:45.8992,lng:6.1294,desc:'H&M, FNAC en meer. Combineer met oude stad.',hours:'Ma-Za 10u–19u30'},
+  {id:'s6',e:'🍷',ico:'ico-shop',name:'Cave des Aravis',addr:'Route de la Clusaz, 74450 Saint-Jean-de-Sixt',parking:'🅿️ Voor de zaak — gratis',type:'Wijnwinkel',lat:45.9445,lng:6.4310,desc:'Savoie wijnen: Roussette, Apremont, Mondeuse.',hours:'Di-Za 10u–12u & 16u–19u'},
+  {id:'s7',e:'🏕️',ico:'ico-shop',name:'Maison de la Montagne',addr:'Place de l\'Église, 74220 La Clusaz',parking:'🅿️ Parking Centre La Clusaz (150m)',type:'Berguitrusting',lat:45.9031,lng:6.4239,desc:'Via ferrata uitrusting, wandelkaarten.',hours:'Elke dag 9u–19u'}
 ];
 
 
@@ -1233,6 +1236,9 @@ function openActModal(id){
   document.getElementById('am-sections').innerHTML=`
     <div class="m-section"><h4>📋 Praktisch</h4><ul>${a.prak.map(p=>`<li>${p}</li>`).join('')}</ul></div>
     <div class="m-section"><h4>💡 Tips</h4><ul>${a.tips.map(t=>`<li>${t}</li>`).join('')}</ul></div>`;
+  const _amAddrHtml=(a.addr?`<div class="gm-addr-row"><span class="gm-addr-ico">🏠</span><span>${a.addr}</span></div>`:'')+(a.parking?`<div class="gm-addr-row"><span class="gm-addr-ico">🅿️</span><span>${a.parking.replace('🅿️ ','')}</span></div>`:'');
+  const _amAddrEl=document.getElementById('am-addr');
+  if(_amAddrEl){_amAddrEl.innerHTML=_amAddrHtml;_amAddrEl.style.display=_amAddrHtml?'flex':'none';}
   document.getElementById('am-cta').innerHTML=a.links.map(l=>`<a class="btn ${l.c}" href="${l.u}" target="_blank" rel="noopener">${l.l}</a>`).join('')+`<button class="btn btn-purple" onclick="quickAddToPlan(${a.id})">+ Dag toevoegen</button>`;
   // Map
   if(modalMapObj){modalMapObj.remove();modalMapObj=null;}
@@ -1292,6 +1298,11 @@ function openGenModal(item){
     +(item.price?`<span class="badge">${item.price}</span>`:'')
     +(item.dist?`<span class="badge" style="color:var(--accent)">📏 ${item.dist} km</span>`:'')
     +(item.vl?`<span class="vibe v-${item.vibe}">${item.vl}</span>`:'');
+  const _addrEl=document.getElementById('gm-addr');
+  const _addrHtml=(item.addr?`<div class="gm-addr-row"><span class="gm-addr-ico">🏠</span><span>${item.addr}</span></div>`:'')
+    +(item.parking?`<div class="gm-addr-row"><span class="gm-addr-ico">🅿️</span><span>${item.parking.replace('🅿️ ','')}</span></div>`:'');
+  _addrEl.innerHTML=_addrHtml;
+  _addrEl.style.display=_addrHtml?'flex':'none';
   document.getElementById('gm-tags').innerHTML=(item.tags||[]).map(t=>`<span class="tag">${t}</span>`).join('');
   document.getElementById('gm-specs').innerHTML=(item.specs||[]).map(s=>({dh:'<span class="st st-dh">Downhill</span>',mtb:'<span class="st st-mtb">MTB</span>',emtb:'<span class="st st-emtb">eMTB</span>',road:'<span class="st st-road">Road</span>',kids:'<span class="st st-kids">Kids</span>'})[s]||'').join('');
   document.getElementById('gm-route').innerHTML='';
@@ -2761,6 +2772,7 @@ function initApp(){
       <div class="m-map"><div class="map-loading" id="am-loading">🗺️ Route laden...</div><div id="am-map-inner" style="height:100%;"></div></div>
       <div class="m-route-info" id="am-route"></div>
       <div class="m-sections" id="am-sections"></div>
+      <div class="gm-addr-block" id="am-addr" style="display:none;flex-direction:column;gap:.35rem;margin-bottom:.7rem"></div>
       <div class="m-cta" id="am-cta"></div>
     </div>
   </div>
@@ -2776,6 +2788,7 @@ function initApp(){
     <div class="modal-body">
       <div id="gm-meta" style="display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.6rem;"></div>
       <p class="m-desc" id="gm-desc"></p>
+      <div class="gm-addr-block" id="gm-addr" style="display:none"></div>
       <div id="gm-tags" style="display:flex;gap:.25rem;flex-wrap:wrap;margin-bottom:.7rem;"></div>
       <div id="gm-specs" style="display:flex;gap:.25rem;flex-wrap:wrap;margin-bottom:.7rem;"></div>
       <div class="m-map" style="height:220px;"><div class="map-loading" id="gm-loading">🗺️ Kaart laden...</div><div id="gm-map-inner" style="height:100%;"></div></div>
