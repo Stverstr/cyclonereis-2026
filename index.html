@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-<meta charset="UTF-8"><!-- v2 -->
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -1355,6 +1355,9 @@ function openActModal(id){
   setTimeout(async()=>{
     const el=document.getElementById('am-map-inner');
     modalMapObj=L.map(el,{scrollWheelZoom:false,dragging:!L.Browser.mobile,tap:!L.Browser.mobile}).setView([a.lat,a.lng],12);
+    // iOS fix: Leaflet setView can trigger scroll on the modal-body — reset it
+    const _amBody=document.querySelector('#act-modal .modal-body');
+    if(_amBody) _amBody.scrollTop=1;
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OSM',maxZoom:18}).addTo(modalMapObj);
     const isH=a.rtype==='hike';
     // Waymarked trails overlay removed — too much visual noise
@@ -1376,10 +1379,12 @@ function openActModal(id){
         document.getElementById('am-route').innerHTML=`<span class="route-chip">📏 ${km} km</span><span class="route-chip">⏱️ ${fmtDuration(route.duration,prof)}</span><span class="route-chip">${isH?'🥾 Wandelroute':'🚗 Autoroute'}</span>${legend}`;
         const pts=route.geometry.coordinates.map(c=>[c[1],c[0]]);
         modalMapObj.fitBounds(L.polyline(pts).getBounds(),{padding:[30,30]});
+        if(_amBody) _amBody.scrollTop=Math.max(_amBody.scrollTop,1);
       } else {
         const pts=a.wp.map(w=>[w.lat,w.lng]);
         L.polyline(pts,{color:'#f97316',weight:3,dashArray:'8 4'}).addTo(modalMapObj);
         modalMapObj.fitBounds(L.polyline(pts).getBounds(),{padding:[30,30]});
+        if(_amBody) _amBody.scrollTop=Math.max(_amBody.scrollTop,1);
         document.getElementById('am-route').innerHTML='<span style="color:#fbbf24;font-size:.75rem">⚠️ Route tijdelijk niet beschikbaar — rechte lijn getoond</span>';
       }
     }
@@ -3154,11 +3159,9 @@ function ciToModalObj(ci) {
     <div class="modal-body">
       <div id="am-meta" style="display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.7rem;"></div>
       <p class="m-desc" id="am-desc"></p>
-      <div class="m-map"><div class="map-loading" id="am-loading">🗺️ Route laden...</div><div id="am-map-inner" style="height:100%;"></div></div>
-      <div class="m-route-info" id="am-route"></div>
-      <div class="m-sections" id="am-sections"></div>
       <div class="gm-addr-block" id="am-addr" style="display:none;flex-direction:column;gap:.35rem;margin-bottom:.7rem"></div>
-      <div id="am-gpx-section" style="display:none;margin-bottom:.9rem">
+      <div class="m-sections" id="am-sections"></div>
+      <div id="am-gpx-section" style="display:none;margin:.7rem 0">
         <div style="font-size:.72rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.4rem">📁 GPX Route</div>
         <div style="display:flex;gap:.5rem;flex-wrap:wrap;align-items:center">
           <span id="am-gpx-download"></span>
@@ -3166,6 +3169,8 @@ function ciToModalObj(ci) {
           <span id="am-gpx-status" style="font-size:.73rem;color:var(--muted)"></span>
         </div>
       </div>
+      <div class="m-map" style="margin-top:.7rem"><div class="map-loading" id="am-loading">🗺️ Route laden...</div><div id="am-map-inner" style="height:100%;"></div></div>
+      <div class="m-route-info" id="am-route"></div>
       <div class="m-cta" id="am-cta"></div>
     </div>
   </div>
