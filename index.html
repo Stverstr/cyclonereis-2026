@@ -300,9 +300,45 @@
 // ---- AUTH ----
 const MASTER_HASH = '750db0f147fb55c6755f5b3bb2606a35623b43d03c80056c48587dfa2df45c04';
 const CYCLONES_HASH = '54b36f14b97c5570c9bd4c1ebde22dd62f005e085a4a66f7b0e5e5706ff80376';
-async function sha256(s){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('');}
-async function checkPw(){const h=await sha256(document.getElementById('pwInput').value);if(h===MASTER_HASH||h===CYCLONES_HASH){sessionStorage.setItem('auth','1');document.getElementById('gate').style.display='none';document.getElementById('app').style.display='block';initApp();}else{const i=document.getElementById('pwInput');i.style.borderColor='#ef4444';i.value='';setTimeout(()=>i.style.borderColor='#333',600);}}
-window.addEventListener('DOMContentLoaded',()=>{if(sessionStorage.getItem('auth')==='1'){document.getElementById('gate').style.display='none';document.getElementById('app').style.display='block';initApp();}});
+
+async function sha256(s) {
+  try {
+    const b = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s));
+    return Array.from(new Uint8Array(b)).map(x => x.toString(16).padStart(2,'0')).join('');
+  } catch(e) {
+    // Fallback: simple hash for non-secure contexts
+    return 'CRYPTO_UNAVAILABLE_' + s.length;
+  }
+}
+
+async function checkPw() {
+  const input = document.getElementById('pwInput');
+  const errEl = document.getElementById('pwError');
+  try {
+    const h = await sha256(input.value);
+    if (h === MASTER_HASH || h === CYCLONES_HASH) {
+      sessionStorage.setItem('auth','1');
+      document.getElementById('gate').style.display = 'none';
+      document.getElementById('app').style.display = 'block';
+      initApp();
+    } else {
+      input.style.borderColor = '#ef4444';
+      if (errEl) errEl.style.display = 'block';
+      input.value = '';
+      setTimeout(() => { input.style.borderColor = '#333'; if(errEl) errEl.style.display='none'; }, 2000);
+    }
+  } catch(e) {
+    if (errEl) { errEl.textContent = 'Fout: ' + e.message; errEl.style.display = 'block'; }
+  }
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  if (sessionStorage.getItem('auth') === '1') {
+    document.getElementById('gate').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    initApp();
+  }
+});
 
 // ---- DATA ----
 const CHALET = { lat: 45.9442, lng: 6.4303, name: "Chalet Elomaz, Saint-Jean-de-Sixt" };
@@ -346,7 +382,7 @@ const activities = [
     tagline: 'De ultieme MTB dag',
     difficulty: 'hard', diffLabel: 'Zwaar',
     stats: [{ icon: '🚗', label: '10–15 min' }, { icon: '⏱️', label: 'Hele dag' }, { icon: '🎿', label: '2 parken' }, { icon: '💪', label: 'Voor de beesten' }],
-    desc: 'Begin\'s ochtends in La Clusaz (9u-13u), lunch in het dorp, dan 's middags doorrijden naar Le Grand-Bornand (14u-17u). Twee complete bike parks op één dag — perfecte Cyclones bonusdag voor wie niet fietst maar wel shredden wil.',
+    desc: 'Begin\'s ochtends in La Clusaz (9u-13u), lunch in het dorp, dan \'s middags doorrijden naar Le Grand-Bornand (14u-17u). Twee complete bike parks op één dag — perfecte Cyclones bonusdag voor wie niet fietst maar wel shredden wil.',
     lat: 45.9200, lng: 6.4500,
     waypoints: [
       { lat: 45.9442, lng: 6.4303, label: 'Chalet Elomaz (vertrek)' },
