@@ -445,6 +445,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
   <nav class="nav">
     <div class="nav-inner">
       <div class="nav-tab plan-tab active" onclick="showSec('planning',this)" id="tab-planning">📅 Dagplanning</div>
+      <div class="nav-tab diary-tab" onclick="showSec('diary',this)" id="tab-diary">📖 Dagboek</div>
       <div class="nav-tab" onclick="showSec('activities',this)" id="tab-activities">🎿 Activiteiten</div>
       <div class="nav-tab" onclick="showSec('restaurants',this)" id="tab-restaurants">🍽️ Restaurants</div>
       <div class="nav-tab" onclick="showSec('events',this)" id="tab-events">🎪 Events</div>
@@ -452,7 +453,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
       <div class="nav-tab" onclick="showSec('rentals',this)" id="tab-rentals">🚲 Verhuur</div>
       <div class="nav-tab" onclick="showSec('shops',this)" id="tab-shops">🛍️ Winkels</div>
       <div class="nav-tab" style="color:#0369a1;" onclick="showSec('cycling',this)" id="tab-cycling">🚴 Wegfietsen</div>
-      <div class="nav-tab diary-tab" onclick="showSec('diary',this)" id="tab-diary">📖 Dagboek</div>
+      <div class="nav-tab" style="color:#16a34a;" onclick="showSec('ev',this)" id="tab-ev">⚡ Laadpalen</div>
     </div>
   </nav>
 
@@ -601,6 +602,25 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
       <div class="diary-day-strip" id="diary-day-strip"></div>
       <div class="diary-content" id="diary-content">
         <div class="empty-state"><div class="es-icon">📅</div><p>Selecteer een dag hierboven</p></div>
+      </div>
+    </div>
+
+
+    <!-- ===== LAADPALEN ===== -->
+    <div id="sec-ev" class="section">
+      <div class="split-layout">
+        <div class="list-panel">
+          <div class="sec-hdr"><h2>⚡ Laadpalen</h2><p>Laadpunten voor elektrische auto's in de buurt</p></div>
+          <div class="filter-bar" id="ev-filters"></div>
+          <div class="act-grid" id="ev-list"></div>
+        </div>
+        <div class="map-panel">
+          <div class="tab-map" id="map-ev"></div>
+          <div class="route-bar" id="rb-ev">
+            <div class="rb-info" id="rbi-ev"></div>
+            <button class="rb-reset" onclick="resetTabMap('ev')">✕ Reset kaart</button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -821,6 +841,37 @@ const shops_raw=[
   {id:'s7',e:'🏕️',ico:'ico-shop',name:'Maison de la Montagne',type:'Berguitrusting',lat:45.9031,lng:6.4239,desc:'Via ferrata uitrusting, wandelkaarten.',hours:'Elke dag 9u–19u'}
 ];
 
+
+// ===== LAADPALEN DATA =====
+const ev_raw=[
+  // Saint-Jean-de-Sixt / direct omgeving
+  {id:'ev1',e:'⚡',name:'Parking des Contamines',addr:'Saint-Jean-de-Sixt',lat:45.9441,lng:6.4295,type:'AC 22kW',connectors:['Type 2'],plugs:2,free:true,hours:'24/7',network:'Recharge+',dist:0,notes:'200m van het chalet. Gratis, altijd open.'},
+  {id:'ev2',e:'⚡',name:'Mairie Saint-Jean-de-Sixt',addr:'Saint-Jean-de-Sixt',lat:45.9448,lng:6.4310,type:'AC 7kW',connectors:['Type 2'],plugs:2,free:true,hours:'24/7',network:'Recharge+',dist:0.2,notes:'Bij het gemeentehuis. Gratis.'},
+
+  // La Clusaz
+  {id:'ev3',e:'⚡',name:'Parking du Centre La Clusaz',addr:'La Clusaz',lat:45.9031,lng:6.4237,type:'AC 22kW',connectors:['Type 2'],plugs:4,free:false,hours:'24/7',network:'Lidl',dist:4.1,notes:'Centrum La Clusaz. €0.30/kWh.'},
+  {id:'ev4',e:'⚡',name:'Parking des Pistes La Clusaz',addr:'La Clusaz',lat:45.9048,lng:6.4290,type:'AC 22kW',connectors:['Type 2'],plugs:6,free:false,hours:'7u–22u',network:'ChargePoint',dist:4.3,notes:'Ski-parking, ook zomer bruikbaar. App vereist.'},
+  {id:'ev5',e:'🔋',name:'DC Schnelllader La Clusaz',addr:'La Clusaz — Aire de service',lat:45.9025,lng:6.4215,type:'DC 50kW',connectors:['CCS','CHAdeMO'],plugs:2,free:false,hours:'24/7',network:'Ionity',dist:4.5,notes:'Snellader 50kW. ~€0.69/kWh via Ionity.'},
+
+  // Le Grand-Bornand
+  {id:'ev6',e:'⚡',name:'Village Le Grand-Bornand',addr:'Le Grand-Bornand',lat:45.9437,lng:6.4825,type:'AC 22kW',connectors:['Type 2'],plugs:4,free:false,hours:'24/7',network:'Recharge+',dist:3.5,notes:'Centrum village. €0.25/kWh.'},
+  {id:'ev7',e:'⚡',name:'Parking Télécabine Bornand',addr:'Le Grand-Bornand',lat:45.9410,lng:6.4870,type:'AC 7kW',connectors:['Type 2','E/F schuko'],plugs:6,free:true,hours:'6u–22u',network:'Commune',dist:3.8,notes:'Aan de gondelbaan. Gratis maar beperkte tijd.'},
+
+  // Thônes
+  {id:'ev8',e:'⚡',name:'Parking Mairie Thônes',addr:'Thônes',lat:45.8885,lng:6.3267,type:'AC 22kW',connectors:['Type 2'],plugs:2,free:true,hours:'24/7',network:'Recharge+',dist:9.2,notes:'Gratis. Bij het gemeentehuis van Thônes.'},
+  {id:'ev9',e:'⚡',name:'Intermarché Thônes',addr:'Thônes',lat:45.8872,lng:6.3251,type:'AC 22kW',connectors:['Type 2'],plugs:4,free:false,hours:'8u–20u',network:'Intermarché',dist:9.4,notes:'Bij Intermarché. Gratis tijdens aankoop.'},
+
+  // Annecy (langere rit, snelladen)
+  {id:'ev10',e:'🔋',name:'Tesla Supercharger Annecy',addr:'Annecy — Centre commercial Courier',lat:45.9016,lng:6.1307,type:'DC 250kW',connectors:['Tesla (CCS adapter)'],plugs:8,free:false,hours:'24/7',network:'Tesla',dist:32,notes:'Tesla Supercharger V3. Snelst in regio. CCS-adapter voor niet-Tesla.'},
+  {id:'ev11',e:'🔋',name:'Ionity Annecy-Nord',addr:'Annecy — Seynod',lat:45.8821,lng:6.0975,type:'DC 350kW',connectors:['CCS','CHAdeMO'],plugs:6,free:false,hours:'24/7',network:'Ionity',dist:34,notes:'Ultra-snellader. €0.69/kWh of via abonnement goedkoper.'},
+  {id:'ev12',e:'⚡',name:'Parking Vieille Ville Annecy',addr:'Annecy — Vieille Ville',lat:45.9003,lng:6.1264,type:'AC 22kW',connectors:['Type 2'],plugs:8,free:false,hours:'24/7',network:'Annecy Mobilités',dist:33,notes:'Centrum Annecy. Combineer met bezoek stad.'},
+
+  // Megève richting
+  {id:'ev13',e:'⚡',name:'Megève — Parking des Écoles',addr:'Megève',lat:45.8572,lng:6.6175,type:'AC 22kW',connectors:['Type 2'],plugs:4,free:false,hours:'24/7',network:'Schneider',dist:28,notes:'Handig als je richting Megève gaat.'},
+  {id:'ev14',e:'⚡',name:'Flumet — Parking central',addr:'Flumet',lat:45.8212,lng:6.5133,type:'AC 11kW',connectors:['Type 2'],plugs:2,free:true,hours:'24/7',network:'Commune',dist:14,notes:'Gratis AC-lader in Flumet, richting Mont-Blanc.'},
+];
+const evStations=ev_raw.map(x=>({...x,dist:x.dist||hav(CHALET.lat,CHALET.lng,x.lat,x.lng)}));
+
 const activities=addDist(activities_raw);
 let customActivities=[];
 const restaurants=addDist(restaurants_raw);
@@ -926,6 +977,7 @@ function initTabMap(tab){
   else if(tab==='rentals') populateGenMap(map,rentals,'#22c55e');
   else if(tab==='shops') populateGenMap(map,shops,'#22c55e');
   else if(tab==='cycling') populateCyclingMap(map);
+  else if(tab==='ev') populateEVMap(map);
 }
 
 function populateActMap(map){
@@ -966,6 +1018,8 @@ function renderAll(){
   renderActivities();
   renderRestaurantFilters();
   renderRestaurants();
+  renderEVFilters();
+  renderEV();
   renderEvents();
   renderNightlife();
   renderRentals();
@@ -2225,6 +2279,7 @@ function showSec(name,el){
     if(name==='planning'){if(planMap)planMap.invalidateSize();}
     else if(name==='diary'){initDiary();}
     else if(name==='cycling'){loadCyclingRoutes();}
+    else if(name==='ev'){initTabMap('ev');if(tabMaps['ev'])tabMaps['ev'].invalidateSize();populateEVMap(tabMaps['ev']);}
     else{initTabMap(name);if(tabMaps[name])tabMaps[name].invalidateSize();}
   },120);
 }
@@ -2318,6 +2373,68 @@ document.addEventListener('click',e=>{
     }
   }
 });
+
+
+// ===== LAADPALEN =====
+let evTypeFilter='all';
+
+function renderEVFilters(){
+  const bar=document.getElementById('ev-filters');
+  if(!bar) return;
+  const types=[['all','Alle'],['AC','⚡ AC-laden'],['DC','🔋 DC Snelladen'],['free','🆓 Gratis']];
+  bar.innerHTML=types.map(([v,l])=>`<button class="filter-btn${evTypeFilter===v?' active':''}" onclick="setEVFilter('${v}')">${l}</button>`).join('');
+}
+function setEVFilter(t){evTypeFilter=t;renderEVFilters();renderEV();}
+
+function renderEV(){
+  let shown=evStations;
+  if(evTypeFilter==='AC') shown=shown.filter(e=>e.type.startsWith('AC'));
+  else if(evTypeFilter==='DC') shown=shown.filter(e=>e.type.startsWith('DC'));
+  else if(evTypeFilter==='free') shown=shown.filter(e=>e.free);
+  shown=[...shown].sort((a,b)=>a.dist-b.dist);
+  document.getElementById('ev-list').innerHTML=shown.map(ev=>`
+    <div class="list-card" onclick="openGenModal(${JSON.stringify(ev).replace(/"/g,'&quot;')})">
+      <div class="lc-ico" style="background:${ev.type.startsWith('DC')?'linear-gradient(135deg,#7c3aed,#6d28d9)':'linear-gradient(135deg,#16a34a,#15803d)'};color:#fff;font-size:1.4rem;">${ev.e}</div>
+      <div class="lc-body">
+        <h3>${ev.name}</h3>
+        <div class="bar-type">${ev.type} · ${ev.connectors.join(', ')}</div>
+        <p>${ev.notes}</p>
+        <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.3rem;">
+          <span class="badge">🔌 ${ev.plugs} plug${ev.plugs>1?'s':''}</span>
+          <span class="badge">🕐 ${ev.hours}</span>
+          <span class="badge" style="color:${ev.free?'var(--success)':'var(--muted)'}">${ev.free?'🆓 Gratis':'💳 Betaald'}</span>
+          <span class="badge" style="color:var(--accent)">📏 ${typeof ev.dist==='number'?ev.dist.toFixed(1):ev.dist} km</span>
+        </div>
+      </div>
+      <div class="lc-right">
+        <div class="lc-dist" style="color:${ev.type.startsWith('DC')?'#7c3aed':'#16a34a'}">${typeof ev.dist==='number'?ev.dist.toFixed(1):ev.dist} km</div>
+        <div style="font-size:.65rem;color:var(--muted);margin-top:.2rem">${ev.network}</div>
+      </div>
+    </div>`).join('');
+  if(tabMaps['ev']) populateEVMap(tabMaps['ev']);
+}
+
+function populateEVMap(map){
+  const tab='ev';
+  if(tabMarkers[tab]) tabMarkers[tab].forEach(m=>map.removeLayer(m));
+  tabMarkers[tab]=[];
+  const bounds=[[CHALET.lat,CHALET.lng]];
+  let shown=evStations;
+  if(evTypeFilter==='AC') shown=shown.filter(e=>e.type.startsWith('AC'));
+  else if(evTypeFilter==='DC') shown=shown.filter(e=>e.type.startsWith('DC'));
+  else if(evTypeFilter==='free') shown=shown.filter(e=>e.free);
+  shown.forEach(ev=>{
+    if(!ev.lat) return;
+    const col=ev.type.startsWith('DC')?'#7c3aed':'#16a34a';
+    const ic=colorIco(ev.e,col);
+    const m=L.marker([ev.lat,ev.lng],{icon:ic}).addTo(map)
+      .bindPopup(`<b>${ev.e} ${ev.name}</b><br>${ev.type} · ${ev.plugs} plugs<br><span style="color:${col}">${ev.free?'🆓 Gratis':'💳 Betaald'}</span>`);
+    m.on('click',e2=>{L.DomEvent.stopPropagation(e2);showTabRoute(tab,{...ev,name:ev.name,rtype:'drive'});});
+    tabMarkers[tab].push(m);
+    bounds.push([ev.lat,ev.lng]);
+  });
+  if(bounds.length>1){const b=L.latLngBounds(bounds);tabBounds[tab]=b;map.fitBounds(b,{padding:[30,30]});}
+}
 
 // ---- EIGEN ACTIVITEITEN ----
 let customActGpxFile=null;
