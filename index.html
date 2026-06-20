@@ -143,7 +143,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 .m-ico{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;}
 .modal-close{background:#f1f5f9;border:none;border-radius:7px;color:var(--muted);font-size:1rem;width:28px;height:28px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .modal-close:hover{background:#e2e8f0;}
-.modal-body{padding:.9rem 1.2rem 1.2rem;overflow-y:scroll;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;flex:1;min-height:0;}
+.modal-body{padding:.9rem 1.2rem 1.2rem;overflow-y:auto;overscroll-behavior:contain;touch-action:pan-y;flex:1;min-height:0;}
 .m-desc{color:var(--muted);font-size:.83rem;line-height:1.6;margin-bottom:.9rem;}
 .m-map{height:260px;border-radius:10px;overflow:hidden;margin-bottom:.9rem;border:1px solid var(--border);position:relative;}
 .map-loading{position:absolute;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:.82rem;z-index:10;}
@@ -1526,17 +1526,10 @@ function _lockScroll(){
   _scrollY=window.scrollY;
   document.documentElement.classList.add('modal-open');
   document.body.classList.add('modal-open');
-  document.body.addEventListener('touchmove',_preventBodyScroll,{passive:false});
-}
-function _preventBodyScroll(e){
-  // Allow scroll within modal content
-  if(e.target.closest('.modal,.modal-box,.picker-modal,.modal-body'))return;
-  e.preventDefault();
 }
 function _unlockScroll(){
   document.documentElement.classList.remove('modal-open');
   document.body.classList.remove('modal-open');
-  document.body.removeEventListener('touchmove',_preventBodyScroll);
   window.scrollTo(0,_scrollY);
 }
 function _resetModalScroll(id){
@@ -3550,7 +3543,7 @@ function showToast(msg) {
 }
 
 /* Fix: prevent body scroll when modal open + iOS scroll */
-html.modal-open,body.modal-open{overflow:hidden;height:100%;}
+html.modal-open{overflow:hidden;}body.modal-open{overflow:hidden;}
 .modal-overlay .modal,.modal-overlay .modal-box,.modal-overlay .picker-modal{
   overscroll-behavior:contain;
 }
