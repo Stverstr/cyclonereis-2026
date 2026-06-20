@@ -299,8 +299,9 @@
 <script>
 // ---- AUTH ----
 const MASTER_HASH = '750db0f147fb55c6755f5b3bb2606a35623b43d03c80056c48587dfa2df45c04';
+const CYCLONES_HASH = '54b36f14b97c5570c9bd4c1ebde22dd62f005e085a4a66f7b0e5e5706ff80376';
 async function sha256(s){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('');}
-async function checkPw(){const h=await sha256(document.getElementById('pwInput').value);if(h===MASTER_HASH){sessionStorage.setItem('auth','1');document.getElementById('gate').style.display='none';document.getElementById('app').style.display='block';initApp();}else{const i=document.getElementById('pwInput');i.style.borderColor='#ef4444';i.value='';setTimeout(()=>i.style.borderColor='#333',600);}}
+async function checkPw(){const h=await sha256(document.getElementById('pwInput').value);if(h===MASTER_HASH||h===CYCLONES_HASH){sessionStorage.setItem('auth','1');document.getElementById('gate').style.display='none';document.getElementById('app').style.display='block';initApp();}else{const i=document.getElementById('pwInput');i.style.borderColor='#ef4444';i.value='';setTimeout(()=>i.style.borderColor='#333',600);}}
 window.addEventListener('DOMContentLoaded',()=>{if(sessionStorage.getItem('auth')==='1'){document.getElementById('gate').style.display='none';document.getElementById('app').style.display='block';initApp();}});
 
 // ---- DATA ----
