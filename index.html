@@ -83,6 +83,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 .lc-body h3{font-size:.85rem;font-weight:700;margin-bottom:.1rem;}
 .lc-body p{font-size:.73rem;color:var(--muted);line-height:1.4;}
 .lc-tags{display:flex;gap:.25rem;flex-wrap:wrap;margin-top:.3rem;}
+.rest-hours-row{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0;font-size:0.78rem}
+.rest-hours{color:var(--muted)}
+.rest-closed{color:#ef4444;font-weight:500}
 .tag{background:#f1f5f9;border:1px solid var(--border);border-radius:20px;padding:.08rem .45rem;font-size:.65rem;color:var(--muted);}
 .lc-right{padding:.65rem .8rem;text-align:right;display:flex;flex-direction:column;justify-content:center;gap:.2rem;flex-shrink:0;}
 .lc-dist{font-size:.73rem;color:var(--accent);font-weight:600;}.lc-sub{font-size:.7rem;color:var(--muted);}
@@ -790,14 +793,73 @@ const activities_raw=[
 ];
 
 const restaurants_raw=[
-  {id:'r1',e:'⭐',ico:'ico-rest',name:'Le Cin5 (1 Michelin ⭐)',loc:'La Clusaz',lat:45.9030,lng:6.4240,desc:'Chef Vincent Deforce. Mauritiaanse invloeden + Savoie. Reservatie verplicht.',tags:['Gastronomisch','Michelin ⭐'],stars:'★★★★★',price:'€€€€'},
-  {id:'r2',e:'🌿',ico:'ico-rest',name:'Le Cairn',loc:'Saint-Jean-de-Sixt',lat:45.9390,lng:6.4148,desc:'Creatieve gastronomie vanuit de tuin. Verrassingsmenu. Vlakbij het chalet!',tags:['Creatief','Lokaal'],stars:'★★★★☆',price:'€€€'},
-  {id:'r3',e:'🏔️',ico:'ico-rest',name:'Confins des Sens',loc:'Le Grand-Bornand',lat:45.9435,lng:6.4820,desc:'Inventief met seizoensproducten. Terras met Aravis-uitzicht.',tags:['Inventief','Terras'],stars:'★★★★☆',price:'€€€'},
-  {id:'r4',e:'🍕',ico:'ico-rest',name:"La Pizz' de Saint Jean",loc:'Saint-Jean-de-Sixt',lat:45.9440,lng:6.4302,desc:"Lokale favoriet. Genereuze pizza's, ook afhalen.",tags:['Pizza','Casual'],stars:'★★★★☆',price:'€€'},
-  {id:'r5',e:'🧀',ico:'ico-rest',name:'La Ferme de Lormay',loc:'La Clusaz',lat:45.9050,lng:6.4250,desc:'Traditionele Savoyard bergboerderij. Fondue, raclette, tartiflette.',tags:['Savoyard','Fondue'],stars:'★★★★☆',price:'€€'},
-  {id:'r6',e:'🍺',ico:'ico-rest',name:'Le Flambeau',loc:'La Clusaz',lat:45.9032,lng:6.4235,desc:'Lokale bieren, burger, snacks. Ideaal na de bike park.',tags:['Bar','Burger'],stars:'★★★☆☆',price:'€€'},
-  {id:'r7',e:'🐟',ico:'ico-rest',name:"L'Auberge du Père Bise",loc:'Talloires',lat:45.8419,lng:6.2555,desc:"Legendarisch 2-Michelin sterren op Lac d'Annecy.",tags:['2 Michelin ⭐⭐','Meer'],stars:'★★★★★',price:'€€€€€'},
-  {id:'r8',e:'🥐',ico:'ico-rest',name:'Boulangerie Aravis',loc:'Saint-Jean-de-Sixt',lat:45.9385,lng:6.4140,desc:'Verse broodjes, ontbijt, picknick sandwiches.',tags:['Bakkerij','Ontbijt'],stars:'★★★★☆',price:'€'}
+  // --- GASTRONOMISCH ---
+  {id:'r1',e:'⭐',ico:'ico-rest',name:'Le Cin5 (1 Michelin ⭐)',loc:'La Clusaz',lat:45.9030,lng:6.4240,cat:'gastro',
+   desc:'Chef Vincent Deforce. Mauritiaanse invloeden + Savoie producten. Verrassingsmenu. Reservatie verplicht.',
+   tags:['Gastronomisch','Michelin ⭐'],stars:'★★★★★',price:'€€€€',
+   hours:'Di–Za 19u30–21u30',closed:'Zo & Ma gesloten'},
+  {id:'r2',e:'🌿',ico:'ico-rest',name:'Le Cairn',loc:'Saint-Jean-de-Sixt',lat:45.9203,lng:6.4154,cat:'gastro',
+   desc:'Creatieve gastronomie vanuit de tuin. Verrassingsmenu met lokale producten. Vlakbij het chalet!',
+   tags:['Gastronomisch','Lokaal'],stars:'★★★★☆',price:'€€€',
+   hours:'Di–Za 12u–14u & 19u–21u',closed:'Zo-avond & Ma gesloten'},
+  {id:'r3',e:'🏔️',ico:'ico-rest',name:'Confins des Sens',loc:'Le Grand-Bornand',lat:45.9435,lng:6.4820,cat:'gastro',
+   desc:'Inventief met seizoensproducten. Terras met Aravis-panorama. Reservatie aanbevolen.',
+   tags:['Gastronomisch','Terras'],stars:'★★★★☆',price:'€€€',
+   hours:'Wo–Za 12u–14u & 19u–21u30',closed:'Ma, Di & Zo-avond gesloten'},
+  {id:'r7',e:'🐟',ico:'ico-rest',name:"L'Auberge du Père Bise",loc:'Talloires — Lac d'Annecy',lat:45.8419,lng:6.2555,cat:'gastro',
+   desc:"Legendarisch 2-Michelin sterren restaurant aan de oevers van het Lac d'Annecy. Unieke ervaring.",
+   tags:['2 Michelin ⭐⭐','Meer'],stars:'★★★★★',price:'€€€€€',
+   hours:'Do–Ma 12u–14u & 19u30–21u30',closed:'Di & Wo gesloten'},
+
+  // --- SAVOYARD ---
+  {id:'r5',e:'🧀',ico:'ico-rest',name:'La Ferme de Lormay',loc:'La Clusaz',lat:45.9050,lng:6.4250,cat:'savoyard',
+   desc:'Traditionele Savoyard bergboerderij. Fondue, raclette, tartiflette in authentieke sfeer.',
+   tags:['Savoyard','Fondue'],stars:'★★★★☆',price:'€€',
+   hours:'Elke dag 12u–14u & 19u–22u',closed:'Altijd open in zomer'},
+  {id:'r9',e:'🍶',ico:'ico-rest',name:'Le Vieux Chalet',loc:'La Clusaz',lat:45.9045,lng:6.4255,cat:'savoyard',
+   desc:'Rustieke bergsfeer, oudste chalet-restaurant van La Clusaz. Specialiteit: Croûte au Reblochon.',
+   tags:['Savoyard','Traditioneel'],stars:'★★★★☆',price:'€€',
+   hours:'Di–Zo 12u–14u & 18u30–21u30',closed:'Ma gesloten'},
+  {id:'r10',e:'🥘',ico:'ico-rest',name:'Le Belalp',loc:'La Clusaz',lat:45.9038,lng:6.4248,cat:'savoyard',
+   desc:'Brasserie met Savoyard klassiekers: pierrade, fondue bourguignonne, côte de boeuf.',
+   tags:['Savoyard','Brasserie'],stars:'★★★☆☆',price:'€€',
+   hours:'Elke dag 12u–14u30 & 18u30–22u',closed:'Altijd open juli–aug'},
+  {id:'r11',e:'🏡',ico:'ico-rest',name:'La Croix-Fry',loc:'Manigod',lat:45.8781,lng:6.3642,cat:'savoyard',
+   desc:'Authentieke bergboerderij op Col de la Croix-Fry. Diots au vin blanc, tomme de Savoie.',
+   tags:['Savoyard','Uitzicht'],stars:'★★★★☆',price:'€€',
+   hours:'Elke dag 12u–15u',closed:'Avond gesloten (lunchtijd only)'},
+
+  // --- PIZZA / CASUAL ---
+  {id:'r4',e:'🍕',ico:'ico-rest',name:"La Pizz' de Saint Jean",loc:'Saint-Jean-de-Sixt',lat:45.9203,lng:6.4154,cat:'pizza',
+   desc:"Lokale favoriet. Houtoven pizza's met bergkaas. Ook afhalen. Gezellige sfeer.",
+   tags:['Pizza','Casual'],stars:'★★★★☆',price:'€€',
+   hours:'Di–Zo 12u–14u & 18u30–22u',closed:'Ma gesloten'},
+  {id:'r12',e:'🔥',ico:'ico-rest',name:'Le Vieux Four — Pizza & Pasta',loc:'La Clusaz',lat:45.9028,lng:6.4233,cat:'pizza',
+   desc:'Traditionele houtoven. Dikke napolitaanse pizza, zelfgemaakte pasta. Populair bij locals.',
+   tags:['Pizza','Pasta'],stars:'★★★★☆',price:'€€',
+   hours:'Elke dag 18u30–22u',closed:'Middag gesloten'},
+  {id:'r6',e:'🍔',ico:'ico-rest',name:'Le Flambeau',loc:'La Clusaz',lat:45.9032,lng:6.4235,cat:'casual',
+   desc:'Lokale bieren, burger, snacks. Terras op zonkant. Ideaal na de bike park.',
+   tags:['Casual','Burger'],stars:'★★★☆☆',price:'€€',
+   hours:'Elke dag 11u30–22u30',closed:'Altijd open'},
+  {id:'r13',e:'🌮',ico:'ico-rest',name:'Le P'tit Resto — Chez Gaston',loc:'Le Grand-Bornand',lat:45.9437,lng:6.4826,cat:'casual',
+   desc:'Gezellig dorpsrestaurant. Dagschotel, steak-frites, lokale specialiteiten. Goede prijs-kwaliteit.',
+   tags:['Casual','Dagschotel'],stars:'★★★☆☆',price:'€',
+   hours:'Di–Za 12u–14u & 19u–21u',closed:'Zo-avond & Ma gesloten'},
+
+  // --- BAKKERIJ / ONTBIJT ---
+  {id:'r8',e:'🥐',ico:'ico-rest',name:'Boulangerie Aravis',loc:'Saint-Jean-de-Sixt',lat:45.9203,lng:6.4154,cat:'bakkerij',
+   desc:'Verse croissants, broodjes, quiches. Perfect voor ontbijt of picknick onderweg.',
+   tags:['Bakkerij','Ontbijt'],stars:'★★★★☆',price:'€',
+   hours:'Elke dag 7u–13u & 15u–19u',closed:'Woensdag gesloten'},
+  {id:'r14',e:'🧇',ico:'ico-rest',name:'Café de la Poste',loc:'Saint-Jean-de-Sixt',lat:45.9205,lng:6.4158,cat:'bakkerij',
+   desc:'Gezellig terras, koffie, versgebakken taarten. Lokaal ontbijtpunt. Vaste klanten.',
+   tags:['Café','Ontbijt'],stars:'★★★★☆',price:'€',
+   hours:'Elke dag 7u30–18u',closed:'Di gesloten in laagseizoen (open in aug)'},
+  {id:'r15',e:'🥞',ico:'ico-rest',name:'Crêperie La Savoyarde',loc:'La Clusaz',lat:45.9033,lng:6.4241,cat:'bakkerij',
+   desc:'Bretonse galettes + Savoyard crêpes. Vegetarisch-vriendelijk. Leuk voor tussendoor.',
+   tags:['Crêpes','Vegetarisch'],stars:'★★★★☆',price:'€€',
+   hours:'Elke dag 11u–22u',closed:'Altijd open juli–aug'},
 ];
 
 const events_raw=[
@@ -1053,7 +1115,14 @@ function renderActivities(){
 function setActFilter(f){activeFilter=f;renderAll();}
 
 function renderRestaurantFilters(){
-  const cats=[['all','Alle'],['Gastronomisch','⭐ Gastro'],['Savoyard','🧀 Savoyard'],['Pizza','🍕 Pizza'],['Bakkerij','🥐 Boulangerie']];
+  const cats=[
+    ['all','Alle'],
+    ['gastro','⭐ Gastronomisch'],
+    ['savoyard','🧀 Savoyard'],
+    ['pizza','🍕 Pizza'],
+    ['casual','🍔 Casual'],
+    ['bakkerij','🥐 Boulangerie']
+  ];
   const bar=document.getElementById('rest-filters');
   if(!bar) return;
   bar.innerHTML=cats.map(([v,l])=>`<button class="filter-btn${activeRestFilter===v?' active':''}" onclick="setRestFilter('${v}')">${l}</button>`).join('');
@@ -1065,10 +1134,17 @@ function setRestFilter(cat){
 }
 function renderRestaurants(){
   let data=sortWithFavs(restaurants,'rest');
-  document.getElementById('rest-list').innerHTML=data.map(r=>`
+  if(activeRestFilter!=='all') data=data.filter(r=>r.cat===activeRestFilter);
+  document.getElementById('rest-list').innerHTML=data.length?data.map(r=>`
     <div class="list-card ${isFav('rest',r.id)?'favd':''}" onclick="openGenModal(${JSON.stringify(r).replace(/"/g,'&quot;')})">
       <div class="lc-ico ico-rest">${r.e}</div>
-      <div class="lc-body"><h3>${r.name}</h3><p>${r.desc}</p>
+      <div class="lc-body">
+        <h3>${r.name}</h3>
+        <p>${r.desc}</p>
+        <div class="rest-hours-row">
+          <span class="rest-hours">🕐 ${r.hours||'—'}</span>
+          ${r.closed?`<span class="rest-closed">🚫 ${r.closed}</span>`:''}
+        </div>
         <div class="lc-tags">${r.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
       </div>
       <div class="lc-right">
@@ -1077,7 +1153,7 @@ function renderRestaurants(){
         <div class="lc-sub">${r.price}</div>
         <button class="fav-btn" onclick="toggleFav('rest','${r.id}',event)">${isFav('rest',r.id)?'⭐':'☆'}</button>
       </div>
-    </div>`).join('');
+    </div>`).join(''):'<p style="padding:1rem;color:var(--muted)">Geen restaurants in deze categorie.</p>';
 }
 
 function renderEvents(){
@@ -1202,6 +1278,7 @@ function openGenModal(item){
   document.getElementById('gm-meta').innerHTML=
     (item.loc?`<span class="badge">📍 ${item.loc}</span>`:'')
     +(item.hours?`<span class="badge">🕐 ${item.hours}</span>`:'')
+    +(item.closed?`<span class="badge" style="color:#ef4444">🚫 ${item.closed}</span>`:'')
     +(item.stars?`<span class="badge stars-row">${item.stars}</span>`:'')
     +(item.price?`<span class="badge">${item.price}</span>`:'')
     +(item.dist?`<span class="badge" style="color:var(--accent)">📏 ${item.dist} km</span>`:'')
