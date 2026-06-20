@@ -57,7 +57,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 .act-grid{display:flex;flex-direction:column;gap:.65rem;}
 .act-card{background:#fff;border:1px solid var(--border);border-radius:11px;overflow:hidden;cursor:pointer;transition:all .2s;display:flex;align-items:center;box-shadow:0 1px 4px rgba(0,0,0,.06);;-webkit-tap-highlight-color:transparent}
 .act-card:hover{border-color:var(--accent);transform:translateX(2px);box-shadow:0 4px 12px rgba(14,165,233,.15);}
-.act-card.favd{border-color:rgba(251,191,36,.3);}
+.act-card.favd,.list-card.favd,.bar-card.favd,.rental-card.favd,.ev-card.favd{border-color:rgba(251,191,36,.4);background:rgba(251,191,36,.04);}
 .card-ico{width:66px;height:66px;display:flex;align-items:center;justify-content:center;font-size:1.7rem;flex-shrink:0;}
 .ico-dh{background:linear-gradient(135deg,#064e3b,#065f46);}.ico-hike{background:linear-gradient(135deg,#1e3a5f,#1e40af);}
 .ico-ferrata{background:linear-gradient(135deg,#4c1d95,#6d28d9);}.ico-water{background:linear-gradient(135deg,#0c4a6e,#0369a1);}
@@ -1291,6 +1291,7 @@ function renderNightlife(){
 function setVibeFilter(v){document.getElementById('vibe-filter').value=v;renderNightlife();}
 
 function renderRentals(){
+  const allRentals=sortWithFavs(rentals,'rental');
   const customRentals=customItems.filter(ci=>ci.item_type==='rental');
   const customRentalsHtml=customRentals.map(ci=>`
     <div class="rental-card" onclick="openGenModal(${JSON.stringify(ciToModalObj(ci)).replace(/"/g,'&quot;')})">
@@ -1298,7 +1299,7 @@ function renderRentals(){
       <div class="rental-body"><h3>${ci.name}<span class="eigen-badge">✎ Eigen</span></h3><p>${ci.description||''}</p><p style="font-size:.72rem;color:var(--accent)">🕐 ${ci.hours||'—'} · ${ci.price||''}</p></div>
       <div class="lc-right"><button class="del-eigen-btn" onclick="deleteCustomItem('${ci.id}','${ci.name.replace(/'/g,"\'").replace(/"/g,'')}',event)">🗑</button></div>
     </div>`).join('');
-  document.getElementById('rental-list').innerHTML=rentals.map(r=>`
+  document.getElementById('rental-list').innerHTML=allRentals.map(r=>`
     <div class="rental-card ${isFav('rental',r.id)?'favd':''}" onclick="openGenModal(${JSON.stringify(r).replace(/"/g,'&quot;')})">
       <div class="lc-ico ${r.ico}">${r.e}</div>
       <div class="rental-body"><h3>${r.name}</h3><p>${r.desc}</p><p style="font-size:.72rem;color:var(--accent)">🕐 ${r.hours} · ${r.price}</p>
@@ -1309,6 +1310,7 @@ function renderRentals(){
 }
 
 function renderShops(){
+  const allShops=sortWithFavs(shops,'shop');
   const customShops=customItems.filter(ci=>ci.item_type==='shop');
   const customShopsHtml=customShops.map(ci=>`
     <div class="list-card" onclick="openGenModal(${JSON.stringify(ciToModalObj(ci)).replace(/"/g,'&quot;')})">
@@ -1316,7 +1318,7 @@ function renderShops(){
       <div class="lc-body"><h3>${ci.name}<span class="eigen-badge">✎ Eigen</span></h3><div class="bar-type">${ci.bar_type||'Winkel'}</div><p>${ci.description||''}</p><p style="font-size:.72rem;color:#22c55e;margin-top:.2rem">🕐 ${ci.hours||'—'}</p></div>
       <div class="lc-right"><button class="del-eigen-btn" onclick="deleteCustomItem('${ci.id}','${ci.name.replace(/'/g,"\'").replace(/"/g,'')}',event)">🗑</button></div>
     </div>`).join('');
-  document.getElementById('shops-list').innerHTML=shops.map(s=>`
+  document.getElementById('shops-list').innerHTML=allShops.map(s=>`
     <div class="list-card ${isFav('shop',s.id)?'favd':''}" onclick="openGenModal(${JSON.stringify(s).replace(/"/g,'&quot;')})">
       <div class="lc-ico ${s.ico}">${s.e}</div>
       <div class="lc-body"><h3>${s.name}</h3><div class="bar-type">${s.type}</div><p>${s.desc}</p><p style="font-size:.72rem;color:#22c55e;margin-top:.2rem">🕐 ${s.hours}</p></div>
@@ -1520,6 +1522,7 @@ function showToast(msg,dur=2500){
 function closeGenModal(){
   document.getElementById('gen-modal').classList.remove('open');
   if(genModalMapObj){genModalMapObj.remove();genModalMapObj=null;}
+  _unlockScroll();
 }
 
 let _scrollY=0;
@@ -1546,7 +1549,7 @@ function closeModal(id){
   document.getElementById(id).classList.remove('open');
   if(id==='act-modal'&&modalMapObj){modalMapObj.remove();modalMapObj=null;}
   if(id==='gen-modal'&&genModalMapObj){genModalMapObj.remove();genModalMapObj=null;}
-  if(!document.querySelector('.modal-overlay.open'))_unlockScroll();
+  _unlockScroll();
 }
 
 // ---- DAGPLANNING ----
@@ -3135,14 +3138,6 @@ function ciToModalObj(ci) {
   };
 }
 
-function showToast(msg) {
-  let t = document.getElementById('ci-toast');
-  if (!t) {
-    t = document.createElement('div');
-    t.id = 'ci-toast';
-    t.style.cssText = 'position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);background:#1e293b;color:#f1f5f9;padding:.65rem 1.4rem;border-radius:10px;font-size:.88rem;font-weight:600;z-index:9999;box-shadow:0 4px 16px rgba(0,0,0,.4);pointer-events:none;transition:opacity .3s;';
-    document.body.appendChild(t);
-  }
   t.textContent = msg;
   t.style.opacity = '1';
   clearTimeout(t._timer);
@@ -3218,7 +3213,7 @@ function showToast(msg) {
 </div>
 
 <!-- Custom activity create/view modal -->
-<div class="modal-overlay" id="custom-act-modal">
+<div class="modal-overlay" id="custom-act-modal" onclick="if(event.target===this)closeModal('custom-act-modal')">
   <div class="modal custom-act-modal">
     <div class="modal-hdr">
       <h2>✏️ <span id="cam-title-hdr">Eigen activiteit</span></h2>
@@ -3279,7 +3274,7 @@ function showToast(msg) {
 </div>
 
 <!-- Diary new activity modal -->
-<div class="modal-overlay" id="diary-new-act-modal">
+<div class="modal-overlay" id="diary-new-act-modal" onclick="if(event.target===this)closeModal('diary-new-act-modal')">
   <div class="modal act-form-modal">
     <div class="modal-hdr">
       <h2>✏️ Nieuwe activiteit</h2>
@@ -3314,7 +3309,7 @@ function showToast(msg) {
 
 
 <!-- ===== WEGFIETSEN: NIEUWE ROUTE MODAL ===== -->
-<div class="modal-overlay" id="new-route-modal">
+<div class="modal-overlay" id="new-route-modal" onclick="if(event.target===this)closeModal('new-route-modal')">
   <div class="modal act-form-modal" style="max-width:540px;">
     <div class="modal-hdr">
       <h2>🚴 Nieuwe fietsroute</h2>
@@ -3580,7 +3575,7 @@ html.modal-open{overflow:hidden;}body.modal-open{overflow:hidden;}
 </div>
 
 <!-- ===== CUSTOM ITEM MODAL ===== -->
-<div class="modal-overlay" id="ci-modal" style="z-index:1200">
+<div class="modal-overlay" id="ci-modal" style="z-index:1200" onclick="if(event.target===this)closeModal('ci-modal')">
   <div class="modal" style="max-width:540px;">
     <div class="modal-hdr" style="background:linear-gradient(135deg,var(--accent),#0ea5e9);border-radius:14px 14px 0 0;padding:1rem 1.2rem;">
       <h2 style="color:#fff;font-size:1rem;font-weight:800;display:flex;align-items:center;gap:.5rem;">➕ <span id="ci-modal-title">Eigen item toevoegen</span></h2>
