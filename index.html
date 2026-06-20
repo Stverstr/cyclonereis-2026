@@ -2048,7 +2048,7 @@ function renderDiaryActCard(act,date){
       </div>
       <div class="diary-act-actions">
         <span class="expand-btn">${isExpanded?'▲ Inklappen':'▼ Uitklappen'}</span>
-        ${isMaster()?`<button class="del-act-btn" onclick="event.stopPropagation();deleteDiaryAct('${act.id}','${date}')">🗑️</button>`:''}
+        <button class="del-act-btn" onclick="event.stopPropagation();deleteDiaryAct('${act.id}','${date}')">🗑️</button>
       </div>
     </div>
     <div class="diary-act-body ${isExpanded?'open':''}" id="diary-body-${act.id}">
@@ -2086,7 +2086,7 @@ function renderComment(c,actId){
       <button class="highlight-btn ${c.is_highlight?'active':''}" onclick="toggleHighlight('${c.id}',${c.is_highlight?'true':'false'},'${actId}')">
         ${c.is_highlight?'⭐ Highlight':'☆ Highlight'}
       </button>
-      ${isMaster()?`<button class="del-comment-btn" onclick="deleteComment('${c.id}','${actId}')">🗑️ Verwijderen</button>`:''}
+      <button class="del-comment-btn" onclick="deleteComment('${c.id}','${actId}')">🗑️ Verwijderen</button>
     </div>
   </div>`;
 }
@@ -2291,7 +2291,6 @@ async function toggleHighlight(commentId,current,actId){
 
 // ---- DELETE (master only) ----
 async function deleteDiaryAct(actId,date){
-  if(!isMaster()){alert('Geen toegang');return;}
   if(!confirm('Activiteit en alle reacties/fotos verwijderen?')) return;
   try{
     await fetch(`${SUPA_URL}/rest/v1/diary_photos?activity_id=eq.${actId}`,{method:'DELETE',headers:supaHeaders()});
@@ -2303,7 +2302,6 @@ async function deleteDiaryAct(actId,date){
 }
 
 async function deleteComment(commentId,actId){
-  if(!isMaster()){alert('Geen toegang');return;}
   if(!confirm('Reactie verwijderen?')) return;
   try{
     await fetch(`${SUPA_URL}/rest/v1/diary_photos?comment_id=eq.${commentId}`,{method:'DELETE',headers:supaHeaders()});
