@@ -137,7 +137,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 /* MODALS (shared) */
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:1100;align-items:center;justify-content:center;padding:1rem;backdrop-filter:blur(4px);}
 .modal-overlay.open{display:flex;}
-.modal{background:#fff;border:1px solid var(--border);border-radius:16px;width:100%;max-width:800px;max-height:92vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.15);}
+.modal{background:#fff;border:1px solid var(--border);border-radius:16px;width:100%;max-width:800px;max-height:92vh;overflow-y:scroll;-webkit-overflow-scrolling:touch;box-shadow:0 20px 60px rgba(0,0,0,.15);}
 .modal-hdr{padding:1.2rem 1.2rem 0;display:flex;align-items:flex-start;justify-content:space-between;gap:.8rem;}
 .modal-hdr h2{font-size:1.1rem;font-weight:800;display:flex;align-items:center;gap:.5rem;}
 .m-ico{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;}
@@ -200,7 +200,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 .plan-map{height:320px;border-radius:10px;overflow:hidden;border:1px solid var(--border);}
 .route-day-info{margin-top:.5rem;display:flex;gap:.4rem;flex-wrap:wrap;}
 /* PICKERS */
-.picker-modal{background:#fff;border:1px solid var(--border);border-radius:16px;width:100%;max-width:600px;max-height:88vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.15);}
+.picker-modal{background:#fff;border:1px solid var(--border);border-radius:16px;width:100%;max-width:600px;max-height:88vh;overflow-y:scroll;-webkit-overflow-scrolling:touch;box-shadow:0 20px 60px rgba(0,0,0,.15);}
 .picker-hdr{padding:1rem 1rem .5rem;display:flex;align-items:center;justify-content:space-between;}
 .picker-hdr h3{font-size:1rem;font-weight:800;}
 .picker-search{display:block;width:calc(100% - 2rem);margin:.5rem 1rem;background:#f8fafc;border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:.82rem;padding:.5rem .7rem;outline:none;}
@@ -1498,10 +1498,15 @@ function closeGenModal(){
   if(genModalMapObj){genModalMapObj.remove();genModalMapObj=null;}
 }
 
+let _scrollY=0;
+function _lockScroll(){_scrollY=window.scrollY;document.body.style.top='-'+_scrollY+'px';_lockScroll();}
+function _unlockScroll(){document.body.classList.remove('modal-open');document.body.style.top='';window.scrollTo(0,_scrollY);}
+function _resetModalScroll(id){const m=document.getElementById(id);if(m){const box=m.querySelector('.modal,.modal-box,.picker-modal');if(box)box.scrollTop=0;}}
 function closeModal(id){
   document.getElementById(id).classList.remove('open');
   if(id==='act-modal'&&modalMapObj){modalMapObj.remove();modalMapObj=null;}
   if(id==='gen-modal'&&genModalMapObj){genModalMapObj.remove();genModalMapObj=null;}
+  if(!document.querySelector('.modal-overlay.open'))_unlockScroll();
 }
 
 // ---- DAGPLANNING ----
@@ -1807,7 +1812,7 @@ function openAddToDayModal(item){
   const _dur=item.duration||60;
   _atdEndTime=minsToTime(timeToMins('09:00')+_dur);
   renderAtdModal();
-  document.getElementById('add-to-day-modal').classList.add('open');document.body.classList.add('modal-open');
+  document.getElementById('add-to-day-modal').classList.add('open');_lockScroll();_resetModalScroll('add-to-day-modal');
 }
 
 function renderAtdModal(){
@@ -1869,7 +1874,7 @@ function confirmAddToDay(){
 
 function closeAddToDayModal(){
   document.getElementById('add-to-day-modal').classList.remove('open');
-  if(!document.querySelector('.modal-overlay.open')) document.body.classList.remove('modal-open');
+  if(!document.querySelector('.modal-overlay.open'))_unlockScroll();
   _atdItem=null;
 }
 
@@ -2078,7 +2083,7 @@ function openNewRouteModal(){
   document.getElementById('nr-gpx-selected').innerHTML='';
   document.getElementById('nr-lat').value='';
   document.getElementById('nr-lng').value='';
-  document.getElementById('new-route-modal').classList.add('open');document.body.classList.add('modal-open');
+  document.getElementById('new-route-modal').classList.add('open');_lockScroll();_resetModalScroll('new-route-modal');
 }
 
 async function geocodeStart(){
@@ -2821,7 +2826,7 @@ function openCustomActForm(){
   document.getElementById('cam-error').style.display='none';
   document.getElementById('cam-title-hdr').textContent='Eigen activiteit aanmaken';
   customActGpxFile=null;customActGeocodedLat=null;customActGeocodedLng=null;
-  document.getElementById('custom-act-modal').classList.add('open');document.body.classList.add('modal-open');
+  document.getElementById('custom-act-modal').classList.add('open');_lockScroll();_resetModalScroll('custom-act-modal');
 }
 
 async function geocodeCustomAct(){
@@ -2949,7 +2954,7 @@ function openCustomItemModal(type) {
   
   const titles = {activity:'🎿 Activiteit toevoegen',restaurant:'🍽️ Restaurant toevoegen',bar:'🍸 Bar / Uitgaan toevoegen',event:'🎪 Event toevoegen',shop:'🛍️ Winkel toevoegen',rental:'🚲 Verhuur toevoegen'};
   document.getElementById('ci-modal-title').textContent = titles[_ciType] || 'Item toevoegen';
-  document.getElementById('ci-modal').classList.add('open');document.body.classList.add('modal-open');
+  document.getElementById('ci-modal').classList.add('open');_lockScroll();_resetModalScroll('ci-modal');
 }
 
 function ciSetType(type){
@@ -3492,10 +3497,11 @@ function showToast(msg) {
 }
 
 /* Fix: prevent body scroll when modal open + iOS scroll */
-body.modal-open{overflow:hidden;position:fixed;width:100%;}
+body.modal-open{overflow:hidden;position:fixed;width:100%;left:0;right:0;}
 .modal-overlay .modal,.modal-overlay .modal-box,.modal-overlay .picker-modal{
   -webkit-overflow-scrolling:touch;
   overscroll-behavior:contain;
+  overflow-y:scroll;
 }
 /* Ensure Leaflet controls inside modals stay visible, background ones don't bleed through */
 .tab-map .leaflet-top,.tab-map .leaflet-bottom{z-index:400 !important;}
@@ -3512,7 +3518,7 @@ body.modal-open{overflow:hidden;position:fixed;width:100%;}
 
 <!-- ===== ADD TO DAY MODAL ===== -->
 <div class="modal-overlay" id="add-to-day-modal" onclick="if(event.target===this)closeAddToDayModal()">
-  <div class="modal-box" style="max-width:420px">
+  <div class="modal-box" style="max-width:420px;overflow-y:scroll;-webkit-overflow-scrolling:touch;">
     <button class="modal-close" onclick="closeAddToDayModal()">✕</button>
     <h3 style="font-size:1rem;font-weight:800;margin-bottom:.3rem">📅 Toevoegen aan dagplanning</h3>
     <div id="atd-item-label" style="font-size:.85rem;color:var(--muted);margin-bottom:1rem;padding:.4rem .7rem;background:var(--bg);border-radius:8px;font-weight:600"></div>
@@ -3536,7 +3542,7 @@ body.modal-open{overflow:hidden;position:fixed;width:100%;}
       <h2 style="color:#fff;font-size:1rem;font-weight:800;display:flex;align-items:center;gap:.5rem;">➕ <span id="ci-modal-title">Eigen item toevoegen</span></h2>
       <button class="modal-close" onclick="closeModal('ci-modal')" style="color:#fff;background:rgba(255,255,255,.2);border:none;border-radius:8px;width:28px;height:28px;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;">✕</button>
     </div>
-    <div class="modal-body" style="max-height:78vh;overflow-y:auto;padding:1rem 1rem .75rem;">
+    <div class="modal-body" style="max-height:78vh;overflow-y:scroll;-webkit-overflow-scrolling:touch;padding:1rem 1rem .75rem;">
 
       <!-- TYPE SELECTOR -->
       <div style="margin-bottom:.85rem;">
