@@ -47,7 +47,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 .route-chip{background:rgba(249,115,22,.15);border:1px solid rgba(249,115,22,.25);border-radius:6px;padding:.15rem .5rem;font-size:.72rem;color:var(--warn);}
 .rb-reset{background:none;border:1px solid var(--border);border-radius:6px;color:var(--muted);font-size:.75rem;padding:.15rem .55rem;cursor:pointer;}
 .rb-reset:hover{border-color:var(--warn);color:var(--warn);}
-.sec-hdr{margin-bottom:.9rem;}.sec-hdr h2{font-size:1.2rem;font-weight:800;margin-bottom:.15rem;}.sec-hdr p{color:var(--muted);font-size:.8rem;}
+.sec-hdr-text h2{font-size:1.2rem;font-weight:800;margin-bottom:.15rem;}.sec-hdr-text p{color:var(--muted);font-size:.8rem;}
 .filter-bar{display:flex;gap:.35rem;flex-wrap:wrap;margin-bottom:.9rem;}
 .fp{background:#fff;border:1px solid var(--border);border-radius:20px;padding:.25rem .75rem;font-size:.75rem;color:var(--muted);cursor:pointer;transition:all .15s;box-shadow:0 1px 2px rgba(0,0,0,.04);}
 .fp:hover,.fp.active{background:#e0f2fe;border-color:var(--accent);color:var(--accent);}
@@ -423,6 +423,18 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 .emo-item:hover{background:var(--bg);}
 .emo-cat-label{grid-column:1/-1;font-size:.62rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;padding:.3rem .2rem .1rem;pointer-events:none;}
 
+
+.sec-hdr{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:.9rem;}
+.sec-hdr-text h2{font-size:1.2rem;font-weight:800;margin-bottom:.15rem;}
+.sec-hdr-text p{color:var(--muted);font-size:.8rem;}
+.btn-add-item{background:rgba(139,92,246,.15);color:#a78bfa;border:1px solid rgba(139,92,246,.3);border-radius:8px;padding:.35rem .75rem;font-size:.78rem;font-weight:700;cursor:pointer;white-space:nowrap;transition:all .2s;}
+.btn-add-item:hover{background:rgba(139,92,246,.28);}
+.eigen-badge{background:rgba(139,92,246,.2);color:#a78bfa;border:1px solid rgba(139,92,246,.3);border-radius:4px;font-size:.65rem;font-weight:700;padding:.05rem .35rem;margin-left:.4rem;vertical-align:middle;}
+.del-eigen-btn{background:rgba(239,68,68,.12);color:#f87171;border:1px solid rgba(239,68,68,.2);border-radius:6px;padding:.2rem .5rem;font-size:.72rem;cursor:pointer;white-space:nowrap;}
+.del-eigen-btn:hover{background:rgba(239,68,68,.25);}
+/* custom item modal */
+#ci-type-fields > div{display:none;}
+#ci-type-fields > div.active{display:block;}
 </style>
 </head>
 <body>
@@ -489,7 +501,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
     <div id="sec-activities" class="section">
       <div class="split-layout">
         <div class="list-panel">
-          <div class="sec-hdr"><h2>🎿 Activiteiten</h2><p>Gesorteerd op afstand van chalet · klik om te routeren</p></div>
+          <div class="sec-hdr"><div class="sec-hdr-text"><h2>🎿 Activiteiten</h2><p>Gesorteerd op afstand van chalet · klik om te routeren</p></div><button class="btn-add-item" onclick="openCustomItemModal('activity')">➕ Toevoegen</button></div>
           <div class="filter-bar" id="act-filters"></div>
           <div class="act-grid" id="act-grid"></div>
         </div>
@@ -507,7 +519,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
     <div id="sec-restaurants" class="section">
       <div class="split-layout">
         <div class="list-panel">
-          <div class="sec-hdr"><h2>🍽️ Restaurants</h2><p>Gesorteerd op afstand van chalet</p></div>
+          <div class="sec-hdr"><div class="sec-hdr-text"><h2>🍽️ Restaurants</h2><p>Gesorteerd op afstand van chalet</p></div><button class="btn-add-item" onclick="openCustomItemModal('restaurant')">➕ Toevoegen</button></div>
           <div class="filter-bar" id="rest-filters"></div>
           <div class="act-grid" id="rest-list"></div>
         </div>
@@ -525,7 +537,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
     <div id="sec-events" class="section">
       <div class="split-layout">
         <div class="list-panel">
-          <div class="sec-hdr"><h2>🎪 Events</h2><p>Publieke evenementen tijdens ons verblijf</p></div>
+          <div class="sec-hdr"><div class="sec-hdr-text"><h2>🎪 Events</h2><p>Publieke evenementen tijdens ons verblijf</p></div><button class="btn-add-item" onclick="openCustomItemModal('event')">➕ Toevoegen</button></div>
           <div class="act-grid" id="events-list"></div>
         </div>
         <div class="map-panel">
@@ -542,7 +554,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
     <div id="sec-nightlife" class="section">
       <div class="split-layout">
         <div class="list-panel">
-          <div class="sec-hdr"><h2>🍸 Uitgaan</h2><p>Bars, terrassen, clubs en casino\'s in de regio</p></div>
+          <div class="sec-hdr"><div class="sec-hdr-text"><h2>🍸 Uitgaan</h2><p>Bars, terrassen, clubs en casino\'s in de regio</p></div><button class="btn-add-item" onclick="openCustomItemModal('bar')">➕ Toevoegen</button></div>
           <div class="filter-bar" id="uit-filters"></div>
           <div class="act-grid" id="night-list"></div>
         </div>
@@ -560,7 +572,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
     <div id="sec-rentals" class="section">
       <div class="split-layout">
         <div class="list-panel">
-          <div class="sec-hdr"><h2>🚲 Verhuur</h2><p>Fietsverhuur in de buurt · gesorteerd op afstand</p></div>
+          <div class="sec-hdr"><div class="sec-hdr-text"><h2>🚲 Verhuur</h2><p>Fietsverhuur in de buurt · gesorteerd op afstand</p></div><button class="btn-add-item" onclick="openCustomItemModal('rental')">➕ Toevoegen</button></div>
           <div class="act-grid" id="rental-list"></div>
         </div>
         <div class="map-panel">
@@ -577,7 +589,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
     <div id="sec-shops" class="section">
       <div class="split-layout">
         <div class="list-panel">
-          <div class="sec-hdr"><h2>🛍️ Winkels</h2><p>Supermarkten en lokale winkels</p></div>
+          <div class="sec-hdr"><div class="sec-hdr-text"><h2>🛍️ Winkels</h2><p>Supermarkten en lokale winkels</p></div><button class="btn-add-item" onclick="openCustomItemModal('shop')">➕ Toevoegen</button></div>
           <div class="act-grid" id="shops-list"></div>
         </div>
         <div class="map-panel">
@@ -688,7 +700,8 @@ const DIARY_DAY_NAMES=['Vr','Za','Zo','Ma','Di','Wo','Do','Vr','Za'];
 function hav(lat1,lng1,lat2,lng2){const R=6371,dL=(lat2-lat1)*Math.PI/180,dN=(lng2-lng1)*Math.PI/180;const a=Math.sin(dL/2)**2+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dN/2)**2;return+(R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a))).toFixed(1);}
 function addDist(arr){return arr.map(x=>({...x,dist:x.lat?hav(CHALET.lat,CHALET.lng,x.lat,x.lng):999})).sort((a,b)=>a.dist-b.dist);}
 function getFavs(type){try{return JSON.parse(localStorage.getItem('cf_'+type)||'[]');}catch{return[];}}
-function toggleFav(type,id,e){e.stopPropagation();const f=getFavs(type);const i=f.indexOf(id);if(i>-1)f.splice(i,1);else f.push(id);localStorage.setItem('cf_'+type,JSON.stringify(f));renderAll();}
+function toggleFav(type,id,e){e.stopPropagation();const f=getFavs(type);const i=f.indexOf(id);if(i>-1)f.splice(i,1);else f.push(id);localStorage.setItem('cf_'+type,JSON.stringify(f));loadCustomItems();
+  renderAll();}
 function isFav(type,id){return getFavs(type).includes(id);}
 function sortWithFavs(arr,type){const favs=getFavs(type);return [...arr.filter(x=>favs.includes(x.id||x.name)),...arr.filter(x=>!favs.includes(x.id||x.name))];}
 function supaHeaders(){return{'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Content-Type':'application/json'};}
@@ -826,43 +839,43 @@ const restaurants_raw=[
   {id:'r1',e:'⭐',ico:'ico-rest',name:'Le Cin5 (1 Michelin ⭐)',addr:'50 Montée du Télécabine, 74220 La Clusaz',parking:'🅿️ Parking des Pistes La Clusaz (200m)',loc:'La Clusaz',lat:45.9030,lng:6.4240,cat:'gastro',
    desc:'Chef Vincent Deforce. Mauritiaanse invloeden + Savoie producten. Verrassingsmenu. Reservatie verplicht.',
    tags:['Gastronomisch','Michelin ⭐'],stars:'★★★★★',price:'€€€€',
-   hours:'Di–Za 19u30–21u30',closed:'Zo & Ma gesloten'},
+   hours:'Di–Za 19u30–21u30',closed:'Zo & Ma gesloten',links:[{u:'https://www.hotel-aucoeurduvillage.fr/en/catering/le-cinq/',l:'🌐 Website',c:'btn-primary'},{u:'https://www.tripadvisor.com/Restaurant_Review-g196706-d2276692-Reviews-Restaurant_Le_Cinq-La_Clusaz_Haute_Savoie_Auvergne_Rhone_Alpes.html',l:'⭐ TripAdvisor',c:'btn-green'}]},
   {id:'r2',e:'🌿',ico:'ico-rest',name:'Le Cairn',addr:'130 Impasse de la Clairière, 74450 Saint-Jean-de-Sixt',parking:'🅿️ Eigen parking bij restaurant — vlakbij chalet',loc:'Saint-Jean-de-Sixt',lat:45.9203,lng:6.4154,cat:'gastro',
    desc:'Creatieve gastronomie vanuit de tuin. Verrassingsmenu met lokale producten. Vlakbij het chalet!',
-   tags:['Gastronomisch','Lokaal'],stars:'★★★★☆',price:'€€€',
-   hours:'Di–Za 12u–14u & 19u–21u',closed:'Zo-avond & Ma gesloten'},
+   tags:['Gastronomisch','Lokaal'],stars:'★★★★★',price:'€€€',
+   hours:'Di–Za 12u–14u & 19u–21u',closed:'Zo-avond & Ma gesloten',links:[{u:'https://www.tripadvisor.com/Restaurant_Review-g1924750-d22889211-Reviews-Le_Cairn-Saint_Jean_de_Sixt_Haute_Savoie_Auvergne_Rhone_Alpes.html',l:'⭐ TripAdvisor',c:'btn-green'}]},
   {id:'r3',e:'🏔️',ico:'ico-rest',name:'Confins des Sens',addr:'347 Route des Confins, 74450 Le Grand-Bornand',parking:'🅿️ Gratis parking bij restaurant',loc:'Le Grand-Bornand',lat:45.9435,lng:6.4820,cat:'gastro',
    desc:'Inventief met seizoensproducten. Terras met Aravis-panorama. Reservatie aanbevolen.',
-   tags:['Gastronomisch','Terras'],stars:'★★★★☆',price:'€€€',
-   hours:'Wo–Za 12u–14u & 19u–21u30',closed:'Ma, Di & Zo-avond gesloten'},
+   tags:['Gastronomisch','Terras'],stars:'★★★★★',price:'€€€',
+   hours:'Wo–Za 12u–14u & 19u–21u30',closed:'Ma, Di & Zo-avond gesloten',links:[{u:'https://en.legrandbornand.com/restaurant-confins-des-sens.html',l:'🌐 Website',c:'btn-primary'},{u:'https://www.tripadvisor.com/Restaurant_Review-g616133-d2421636-Reviews-Le_Confins_Des_Sens-Le_Grand_Bornand_Haute_Savoie_Auvergne_Rhone_Alpes.html',l:'⭐ TripAdvisor',c:'btn-green'}]},
   {id:'r7',e:'🐟',ico:'ico-rest',name:"L'Auberge du Père Bise",addr:'Route du Port, 74290 Talloires',parking:'🅿️ Eigen parking restaurant aan meeroever',loc:"Talloires — Lac d'Annecy",lat:45.8380,lng:6.2115,cat:'gastro',
    desc:"Legendarisch 2-Michelin sterren restaurant aan de oevers van het Lac d'Annecy. Unieke ervaring.",
    tags:['2 Michelin ⭐⭐','Meer'],stars:'★★★★★',price:'€€€€€',
-   hours:'Do–Ma 12u–14u & 19u30–21u30',closed:'Di & Wo gesloten'},
+   hours:'Do–Ma 12u–14u & 19u30–21u30',closed:'Di & Wo gesloten',links:[{u:'https://www.perebise.com/en/',l:'🌐 Website',c:'btn-primary'},{u:'https://www.tripadvisor.com/Restaurant_Review-g187270-d1069114-Reviews-Restaurant_Jean_Sulpice-Talloires_Haute_Savoie_Auvergne_Rhone_Alpes.html',l:'⭐ TripAdvisor',c:'btn-green'}]},
 
   // --- SAVOYARD ---
   {id:'r5',e:'🧀',ico:'ico-rest',name:'La Ferme de Lormay',addr:'741 Route de Lormay, 74220 La Clusaz',parking:'🅿️ Eigen boerderijparkering — gratis',loc:'La Clusaz',lat:45.9050,lng:6.4250,cat:'savoyard',
    desc:'Traditionele Savoyard bergboerderij. Fondue, raclette, tartiflette in authentieke sfeer.',
    tags:['Savoyard','Fondue'],stars:'★★★★☆',price:'€€',
-   hours:'Elke dag 12u–14u & 19u–22u',closed:'Altijd open in zomer'},
+   hours:'Elke dag 12u–14u & 19u–22u',closed:'Altijd open in zomer',links:[{u:'http://lafermedelormay.com/',l:'🌐 Website',c:'btn-primary'},{u:'https://www.tripadvisor.com/Restaurant_Review-g196706-d1162832-Reviews-La_Ferme_Restaurant-La_Clusaz_Haute_Savoie_Auvergne_Rhone_Alpes.html',l:'⭐ TripAdvisor',c:'btn-green'}]},
   {id:'r9',e:'🍶',ico:'ico-rest',name:'Le Vieux Chalet',addr:'Les Villards, 74220 La Clusaz',parking:'🅿️ Parking dorp La Clusaz (300m)',loc:'La Clusaz',lat:45.9045,lng:6.4255,cat:'savoyard',
    desc:'Rustieke bergsfeer, oudste chalet-restaurant van La Clusaz. Specialiteit: Croûte au Reblochon.',
    tags:['Savoyard','Traditioneel'],stars:'★★★★☆',price:'€€',
-   hours:'Di–Zo 12u–14u & 18u30–21u30',closed:'Ma gesloten'},
+   hours:'Di–Zo 12u–14u & 18u30–21u30',closed:'Ma gesloten',links:[{u:'https://www.tripadvisor.com/Restaurant_Review-g196706-d1233800-Reviews-Le_Vieux_Chalet-La_Clusaz_Haute_Savoie_Auvergne_Rhone_Alpes.html',l:'⭐ TripAdvisor',c:'btn-green'}]},
   {id:'r10',e:'🥘',ico:'ico-rest',name:'Le Belalp',addr:'Chef-Lieu, 74220 La Clusaz',parking:'🅿️ Centrum La Clusaz — parking gratis buiten seizoen',loc:'La Clusaz',lat:45.9038,lng:6.4248,cat:'savoyard',
    desc:'Brasserie met Savoyard klassiekers: pierrade, fondue bourguignonne, côte de boeuf.',
    tags:['Savoyard','Brasserie'],stars:'★★★☆☆',price:'€€',
    hours:'Elke dag 12u–14u30 & 18u30–22u',closed:'Altijd open juli–aug'},
   {id:'r11',e:'🏡',ico:'ico-rest',name:'La Croix-Fry',addr:'Col de la Croix-Fry, 74230 Manigod',parking:'🅿️ Gratis parking Col de la Croix-Fry (cols-parkeerplaats)',loc:'Manigod',lat:45.8781,lng:6.3642,cat:'savoyard',
    desc:'Authentieke bergboerderij op Col de la Croix-Fry. Diots au vin blanc, tomme de Savoie.',
-   tags:['Savoyard','Uitzicht'],stars:'★★★★☆',price:'€€',
-   hours:'Elke dag 12u–15u',closed:'Avond gesloten (lunchtijd only)'},
+   tags:['Savoyard','Uitzicht'],stars:'★★★★★',price:'€€',
+   hours:'Elke dag 12u–15u',closed:'Avond gesloten (lunchtijd only)',links:[{u:'https://www.manigod.com/restaurant-chalet-hotel-croix-fry.html',l:'🌐 Website',c:'btn-primary'},{u:'https://www.tripadvisor.com/Restaurant_Review-g1315836-d6449752-Reviews-La_Croix_Fry_Restaurant-Manigod_Haute_Savoie_Auvergne_Rhone_Alpes.html',l:'⭐ TripAdvisor',c:'btn-green'}]},
 
   // --- PIZZA / CASUAL ---
   {id:'r4',e:'🍕',ico:'ico-rest',name:"La Pizz' de Saint Jean",addr:'Place du Village, 74450 Saint-Jean-de-Sixt',parking:'🅿️ Dorpsplein Saint-Jean-de-Sixt — gratis',loc:'Saint-Jean-de-Sixt',lat:45.9203,lng:6.4154,cat:'pizza',
    desc:"Lokale favoriet. Houtoven pizza's met bergkaas. Ook afhalen. Gezellige sfeer.",
-   tags:['Pizza','Casual'],stars:'★★★★☆',price:'€€',
-   hours:'Di–Zo 12u–14u & 18u30–22u',closed:'Ma gesloten'},
+   tags:['Pizza','Casual'],stars:'★★★☆☆',price:'€€',
+   hours:'Di–Zo 12u–14u & 18u30–22u',closed:'Ma gesloten',links:[{u:'https://lapizzdesaintjean.sitew.fr/',l:'🌐 Website',c:'btn-primary'},{u:'https://www.tripadvisor.com/Restaurant_Review-g1924750-d23921913-Reviews-La_Pizz_De_Saint_jean-Saint_Jean_de_Sixt_Haute_Savoie_Auvergne_Rhone_Alpes.html',l:'⭐ TripAdvisor',c:'btn-green'}]},
   {id:'r12',e:'🔥',ico:'ico-rest',name:'Le Vieux Four — Pizza & Pasta',addr:'Route du Centre, 74220 La Clusaz',parking:'🅿️ Parking Centre La Clusaz',loc:'La Clusaz',lat:45.9028,lng:6.4233,cat:'pizza',
    desc:'Traditionele houtoven. Dikke napolitaanse pizza, zelfgemaakte pasta. Populair bij locals.',
    tags:['Pizza','Pasta'],stars:'★★★★☆',price:'€€',
@@ -874,7 +887,7 @@ const restaurants_raw=[
   {id:'r13',e:'🌮',ico:'ico-rest',name:"Le P'tit Resto — Chez Gaston",addr:'Village, 74450 Le Grand-Bornand',parking:'🅿️ Dorpsplein Le Grand-Bornand — gratis',loc:'Le Grand-Bornand',lat:45.9437,lng:6.4826,cat:'casual',
    desc:'Gezellig dorpsrestaurant. Dagschotel, steak-frites, lokale specialiteiten. Goede prijs-kwaliteit.',
    tags:['Casual','Dagschotel'],stars:'★★★☆☆',price:'€',
-   hours:'Di–Za 12u–14u & 19u–21u',closed:'Zo-avond & Ma gesloten'},
+   hours:'Di–Za 12u–14u & 19u–21u',closed:'Zo-avond & Ma gesloten',links:[{u:'https://www.tripadvisor.com/Restaurant_Review-g1924750-d22889211-Reviews-Le_Cairn-Saint_Jean_de_Sixt_Haute_Savoie_Auvergne_Rhone_Alpes.html',l:'⭐ TripAdvisor',c:'btn-green'}]},
 
   // --- BAKKERIJ / ONTBIJT ---
   {id:'r8',e:'🥐',ico:'ico-rest',name:'Boulangerie Aravis',addr:'Le Villaret, 74450 Saint-Jean-de-Sixt',parking:'🅿️ Straat parkeren of dorpsplein SJS',loc:'Saint-Jean-de-Sixt',lat:45.9203,lng:6.4154,cat:'bakkerij',
@@ -909,14 +922,14 @@ const nightlife_raw=[
   {id:'n5',e:'🍷',ico:'ico-bar',name:'Le Gressoney — Wijnbar',addr:'Village, 74450 Le Grand-Bornand',parking:'🅿️ Dorpsplein Le Grand-Bornand',type:'Wijnbar',lat:45.9436,lng:6.4824,desc:'Savoie-wijnen, kaasplank, charcuterie. Rustige avond.',vibe:'quiet',vl:'Sfeervol',hours:'17u–23u30',tags:['Wijn','Kaas']},
   {id:'n6',e:'🍻',ico:'ico-bar',name:'Bar des Glières — Lokaal',addr:'Place du Village, 74450 Saint-Jean-de-Sixt',parking:'🅿️ Dorpsplein SJS — 2 min van chalet',type:'Dorpscafé',lat:45.9391,lng:6.4152,desc:'2 min van chalet. Goedkope bieren, dartbord, lokale sfeer.',vibe:'quiet',vl:'Lokaal',hours:'9u–23u',tags:['Lokaal','Dichtbij']},
   {id:'n7',e:'🎸',ico:'ico-bar',name:'Le Galop — Live muziek',addr:'Centre, 74220 La Clusaz',parking:'🅿️ Parking Centre La Clusaz',type:'Bar met livemuziek',lat:45.9031,lng:6.4238,desc:'Regelmatig live muziek in zomer. Bands, folk, rock. Facebook: "Le Galop La Clusaz".',vibe:'busy',vl:'Live muziek',hours:'18u–1u',tags:['Live muziek','Bands']},
-  {id:'n8',e:'🎰',ico:'ico-bar',name:'Casino de Megève',type:'Casino',lat:45.8569,lng:6.6178,desc:'Dichtstbijzijnde casino (30 min). Roulette, slots, blackjack. Dresscode. Open dagelijks.',vibe:'busy',vl:'Casino',hours:'20u–3u',tags:['Casino','Dresscode']},
+  {id:'n8',e:'🎰',ico:'ico-bar',name:'Casino de Megève',type:'Casino',lat:45.8569,lng:6.6178,desc:'Dichtstbijzijnde casino (30 min). Roulette, slots, blackjack. Dresscode. Open dagelijks.',vibe:'busy',vl:'Casino',hours:'20u–3u',tags:['Casino','Dresscode'],links:[{u:'https://casino-megeve.com/',l:'🌐 Website',c:'btn-primary'},{u:'https://www.tripadvisor.com/Attraction_Review-g187266-d12881776-Reviews-Casino_Barriere-Megeve_Haute_Savoie_Auvergne_Rhone_Alpes.html',l:'⭐ TripAdvisor',c:'btn-green'}]},
   {id:'n9',e:'🎲',ico:'ico-bar',name:"Casino d'Annecy",type:'Casino',lat:45.9102,lng:6.1556,desc:'Roulette, blackjack, pokertafels. Combineer met Vieille Ville.',vibe:'busy',vl:'Casino',hours:'20u–3u',tags:['Casino','Poker']}
 ];
 
 const rentals_raw=[
-  {id:'rt1',e:'🚵',ico:'ico-rental',name:'La Clusaz Bike Park Rentals',addr:'Route du Télécabine, 74220 La Clusaz',parking:'🅿️ Parking des Pistes La Clusaz — gratis',loc:'La Clusaz',lat:45.9031,lng:6.4239,desc:'Officiële verhuur. DH-pakket: fiets + bescherming.',hours:'8u30–17u30',specs:['dh','mtb','emtb'],price:'DH ca. €55-70/dag'},
-  {id:'rt2',e:'🏔️',ico:'ico-rental',name:'Intersport La Clusaz',addr:'Chef-Lieu, 74220 La Clusaz',parking:'🅿️ Parking Centre La Clusaz (200m)',loc:'La Clusaz',lat:45.9033,lng:6.4242,desc:'DH, e-bike en koersfiets.',hours:'9u–19u',specs:['dh','mtb','emtb','road'],price:'MTB ca. €30-45/dag'},
-  {id:'rt3',e:'🚲',ico:'ico-rental',name:'Sport 2000 Grand-Bornand',addr:'Place du Village, 74450 Le Grand-Bornand',parking:'🅿️ Dorpsplein Le Grand-Bornand',loc:'Le Grand-Bornand',lat:45.9437,lng:6.4828,desc:'Specialisatie MTB en eMTB.',hours:'8u30–18u30',specs:['mtb','emtb','kids'],price:'MTB ca. €28-40/dag'},
+  {id:'rt1',e:'🚵',ico:'ico-rental',name:'La Clusaz Bike Park Rentals',addr:'Route du Télécabine, 74220 La Clusaz',parking:'🅿️ Parking des Pistes La Clusaz — gratis',loc:'La Clusaz',lat:45.9031,lng:6.4239,desc:'Officiële verhuur. DH-pakket: fiets + bescherming.',hours:'8u30–17u30',specs:['dh','mtb','emtb'],price:'DH ca. €55-70/dag',links:[{u:'https://www.laclusaz.com/en/mountain-bike/bikepark/',l:'🌐 La Clusaz Bikepark',c:'btn-primary'}]},
+  {id:'rt2',e:'🏔️',ico:'ico-rental',name:'Intersport La Clusaz',addr:'Chef-Lieu, 74220 La Clusaz',parking:'🅿️ Parking Centre La Clusaz (200m)',loc:'La Clusaz',lat:45.9033,lng:6.4242,desc:'DH, e-bike en koersfiets.',hours:'9u–19u',specs:['dh','mtb','emtb','road'],price:'MTB ca. €30-45/dag',links:[{u:'https://www.intersport-laclusaz.com/en/',l:'🌐 Website',c:'btn-primary'},{u:'https://bike.intersport-rent.fr/intersport-la-clusaz/',l:'🚲 Bike Rental',c:'btn-green'}]},
+  {id:'rt3',e:'🚲',ico:'ico-rental',name:'Sport 2000 Grand-Bornand',addr:'Place du Village, 74450 Le Grand-Bornand',parking:'🅿️ Dorpsplein Le Grand-Bornand',loc:'Le Grand-Bornand',lat:45.9437,lng:6.4828,desc:'Specialisatie MTB en eMTB.',hours:'8u30–18u30',specs:['mtb','emtb','kids'],price:'MTB ca. €28-40/dag',links:[{u:'https://en.legrandbornand.com/stay/shops-and-services/ski-shop-sport-2000-le-grand-bornand-en-5596150/',l:'🌐 Sport 2000',c:'btn-primary'}]},
   {id:'rt4',e:'⛷️',ico:'ico-rental',name:'Saint-Jean Sport',addr:'Route Nationale, 74450 Saint-Jean-de-Sixt',parking:'🅿️ Voor de winkel of dorpsplein SJS',loc:'Saint-Jean-de-Sixt',lat:45.9340,lng:6.4145,desc:'Vlakbij het chalet. Via ferrata + MTB.',hours:'9u–12u30 & 15u–19u30',specs:['mtb','emtb'],price:'MTB ca. €25-35/dag'},
   {id:'rt5',e:'⚡',ico:'ico-rental',name:'Eco Bike — eMTB specialist',addr:'Route du Centre, 74220 La Clusaz',parking:'🅿️ Parking Centre La Clusaz',loc:'La Clusaz',lat:45.9028,lng:6.4242,desc:'Elektrische mountainbikes. Bosch-systemen.',hours:'9u–18u',specs:['emtb'],price:'eMTB ca. €60-75/dag incl. helm'},
   {id:'rt6',e:'🚴',ico:'ico-rental',name:'Bikeworld Annecy',addr:'Route d\'Annecy, 74000 Annecy',parking:'🅿️ Eigen parking bij de winkel',loc:'Annecy',lat:45.9050,lng:6.0900,desc:'Grootste verhuurder regio. eMTB, koersfiets, MTB.',hours:'9u–19u ma-za',specs:['mtb','emtb','road','kids'],price:'eBike ca. €35/dag'}
@@ -926,7 +939,7 @@ const shops_raw=[
   {id:'s1',e:'🏪',ico:'ico-shop',name:'Intermarché Aravis',addr:'Route d\'Annecy, 74230 Thônes',parking:'🅿️ Eigen supermarktparkering — gratis',type:'Supermarkt',lat:45.9300,lng:6.4000,desc:'Grootste supermarkt regio. Vers vlees, vis, groenten, wijn.',hours:'Ma-Za 8u30–20u, Zo 9u–13u'},
   {id:'s2',e:'🛒',ico:'ico-shop',name:'Carrefour Express La Clusaz',addr:'Chef-Lieu, 74220 La Clusaz',parking:'🅿️ Centrum La Clusaz',type:'Supermarkt',lat:45.9030,lng:6.4238,desc:'Handige dagelijkse supermarkt in La Clusaz.',hours:'Elke dag 8u–20u'},
   {id:'s3',e:'🏔️',ico:'ico-shop',name:'Sherpa Les Villards-sur-Thônes',addr:'Les Villards-sur-Thônes, 74230',parking:'🅿️ Voor de winkel — gratis',type:'Bergsupermarkt',lat:45.9100,lng:6.3800,desc:'Lokale producten, reblochon, beaufort.',hours:'Ma-Za 8u–19u30, Zo 8u30–12u30'},
-  {id:'s4',e:'🧀',ico:'ico-shop',name:'Fromagerie Paccard',addr:'Route d\'Annecy, 74230 Manigod',parking:'🅿️ Kleine parking bij fromagerie',type:'Kaaswinkel',lat:45.9150,lng:6.3900,desc:'Beste fromagerie. Reblochon AOC, Beaufort, Abondance.',hours:'Di-Za 9u–12u & 15u–19u'},
+  {id:'s4',e:'🧀',ico:'ico-shop',name:'Fromagerie Paccard',addr:'Route d\'Annecy, 74230 Manigod',parking:'🅿️ Kleine parking bij fromagerie',type:'Kaaswinkel',lat:45.9150,lng:6.3900,desc:'Beste fromagerie. Reblochon AOC, Beaufort, Abondance.',hours:'Di-Za 9u–12u & 15u–19u',links:[{u:'https://www.reblochon-paccard.fr/',l:'🌐 Website',c:'btn-primary'}]},
   {id:'s5',e:'🛍️',ico:'ico-shop',name:'Centre Bonlieu Annecy',addr:'1 Rue Jean Jaurès, 74000 Annecy',parking:'🅿️ P Bonlieu of P+R Courier (shuttle naar centrum)',type:'Winkelcentrum',lat:45.8992,lng:6.1294,desc:'H&M, FNAC en meer. Combineer met oude stad.',hours:'Ma-Za 10u–19u30'},
   {id:'s6',e:'🍷',ico:'ico-shop',name:'Cave des Aravis',addr:'Route de la Clusaz, 74450 Saint-Jean-de-Sixt',parking:'🅿️ Voor de zaak — gratis',type:'Wijnwinkel',lat:45.9445,lng:6.4310,desc:'Savoie wijnen: Roussette, Apremont, Mondeuse.',hours:'Di-Za 10u–12u & 16u–19u'},
   {id:'s7',e:'🏕️',ico:'ico-shop',name:'Maison de la Montagne',addr:'Place de l\'Église, 74220 La Clusaz',parking:'🅿️ Parking Centre La Clusaz (150m)',type:'Berguitrusting',lat:45.9031,lng:6.4239,desc:'Via ferrata uitrusting, wandelkaarten.',hours:'Elke dag 9u–19u'}
@@ -1164,7 +1177,22 @@ function setRestFilter(cat){
 function renderRestaurants(){
   let data=sortWithFavs(restaurants,'rest');
   if(activeRestFilter!=='all') data=data.filter(r=>r.cat===activeRestFilter);
-  document.getElementById('rest-list').innerHTML=data.length?data.map(r=>`
+  const customRest=customItems.filter(ci=>ci.item_type==='restaurant');
+  const customRestHtml=customRest.map(ci=>`
+    <div class="list-card" onclick="openGenModal(${JSON.stringify(ciToModalObj(ci)).replace(/"/g,'&quot;')})">
+      <div class="lc-ico ico-rest">${ci.emoji||'📍'}</div>
+      <div class="lc-body">
+        <h3>${ci.name}<span class="eigen-badge">✎ Eigen</span></h3>
+        <p>${ci.description||''}</p>
+        <div class="lc-tags">${ci.tags?ci.tags.split(',').map(t=>`<span class="tag">${t.trim()}</span>`).join(''):''}</div>
+      </div>
+      <div class="lc-right">
+        <div class="lc-sub stars-row">${ci.stars||''}</div>
+        <div class="lc-sub">${ci.price||''}</div>
+        <button class="del-eigen-btn" onclick="deleteCustomItem('${ci.id}','${ci.name.replace(/'/g,"\'").replace(/"/g,'')}',event)">🗑</button>
+      </div>
+    </div>`).join('');
+  document.getElementById('rest-list').innerHTML=(data.length?data.map(r=>`
     <div class="list-card ${isFav('rest',r.id)?'favd':''}" onclick="openGenModal(${JSON.stringify(r).replace(/"/g,'&quot;')})">
       <div class="lc-ico ico-rest">${r.e}</div>
       <div class="lc-body">
@@ -1182,11 +1210,19 @@ function renderRestaurants(){
         <div class="lc-sub">${r.price}</div>
         <button class="fav-btn" onclick="toggleFav('rest','${r.id}',event)">${isFav('rest',r.id)?'⭐':'☆'}</button>
       </div>
-    </div>`).join(''):'<p style="padding:1rem;color:var(--muted)">Geen restaurants in deze categorie.</p>';
+    </div>`).join(''):'')+(customRest.length?customRestHtml:'')|| '<p style="padding:1rem;color:var(--muted)">Geen restaurants gevonden.</p>';
 }
 
 function renderEvents(){
   const data=events;
+  const customEvents=customItems.filter(ci=>ci.item_type==='event');
+  const customEventsHtml=customEvents.map(ci=>`
+    <div class="ev-card" onclick="openGenModal(${JSON.stringify(ciToModalObj(ci)).replace(/"/g,'&quot;')})">
+      <div class="ev-date"><div class="ev-day">${ci.event_day||'—'}</div><div class="ev-mo">${ci.event_month||'AUG'}</div></div>
+      <div class="ev-body"><h3>${ci.emoji||'🎪'} ${ci.name}<span class="eigen-badge">✎ Eigen</span></h3><p>${ci.description||''}</p>
+        <button class="del-eigen-btn" style="margin-top:.3rem" onclick="deleteCustomItem('${ci.id}','${ci.name.replace(/'/g,"\'").replace(/"/g,'')}',event)">🗑 Verwijderen</button>
+      </div>
+    </div>`).join('');
   document.getElementById('events-list').innerHTML=data.map((ev,i)=>`
     <div class="ev-card ${ev.during?'during':''}" onclick="openGenModal(${JSON.stringify(ev).replace(/"/g,'&quot;')})">
       <div class="ev-date"><div class="ev-day">${ev.day}</div><div class="ev-mo">${ev.mo}</div></div>
@@ -1198,6 +1234,18 @@ function renderNightlife(){
   let data=sortWithFavs(nightlife,'uit');
   const vibeFilter=document.getElementById('vibe-filter')?.value||'all';
   if(vibeFilter!=='all') data=data.filter(b=>b.vibe===vibeFilter);
+  const customBars=customItems.filter(ci=>ci.item_type==='bar');
+  const customBarsHtml=customBars.map(ci=>`
+    <div class="bar-card" onclick="openGenModal(${JSON.stringify(ciToModalObj(ci)).replace(/"/g,'&quot;')})">
+      <div class="lc-ico ico-bar">${ci.emoji||'🍺'}</div>
+      <div class="bar-body"><div class="bar-type">${ci.bar_type||'Bar'}</div><h3>${ci.name}<span class="eigen-badge">✎ Eigen</span></h3><p>${ci.description||''}</p>
+        <div class="lc-tags">${ci.tags?ci.tags.split(',').map(t=>`<span class="tag">${t.trim()}</span>`).join(''):''}</div>
+      </div>
+      <div class="bar-right">
+        <div class="lc-sub">${ci.hours||''}</div>
+        <button class="del-eigen-btn" onclick="deleteCustomItem('${ci.id}','${ci.name.replace(/'/g,"\'").replace(/"/g,'')}',event)">🗑</button>
+      </div>
+    </div>`).join('');
   document.getElementById('night-list').innerHTML=data.map(b=>`
     <div class="bar-card ${isFav('uit',b.id)?'favd':''}" onclick="openGenModal(${JSON.stringify(b).replace(/"/g,'&quot;')})">
       <div class="lc-ico ${b.ico}">${b.e}</div>
@@ -1220,6 +1268,13 @@ function renderNightlife(){
 function setVibeFilter(v){document.getElementById('vibe-filter').value=v;renderNightlife();}
 
 function renderRentals(){
+  const customRentals=customItems.filter(ci=>ci.item_type==='rental');
+  const customRentalsHtml=customRentals.map(ci=>`
+    <div class="rental-card" onclick="openGenModal(${JSON.stringify(ciToModalObj(ci)).replace(/"/g,'&quot;')})">
+      <div class="lc-ico ico-rental">${ci.emoji||'🚲'}</div>
+      <div class="rental-body"><h3>${ci.name}<span class="eigen-badge">✎ Eigen</span></h3><p>${ci.description||''}</p><p style="font-size:.72rem;color:var(--accent)">🕐 ${ci.hours||'—'} · ${ci.price||''}</p></div>
+      <div class="lc-right"><button class="del-eigen-btn" onclick="deleteCustomItem('${ci.id}','${ci.name.replace(/'/g,"\'").replace(/"/g,'')}',event)">🗑</button></div>
+    </div>`).join('');
   document.getElementById('rental-list').innerHTML=rentals.map(r=>`
     <div class="rental-card" onclick="openGenModal(${JSON.stringify(r).replace(/"/g,'&quot;')})">
       <div class="lc-ico ${r.ico}">${r.e}</div>
@@ -1227,16 +1282,23 @@ function renderRentals(){
         <div class="spec-tags">${r.specs.map(s=>({dh:'<span class="st st-dh">Downhill</span>',mtb:'<span class="st st-mtb">MTB</span>',emtb:'<span class="st st-emtb">eMTB</span>',road:'<span class="st st-road">Road</span>',kids:'<span class="st st-kids">Kids</span>'})[s]||'').join('')}</div>
       </div>
       <div class="lc-right"><div class="lc-dist">${r.dist} km</div></div>
-    </div>`).join('');
+    </div>`).join('')+customRentalsHtml;
 }
 
 function renderShops(){
+  const customShops=customItems.filter(ci=>ci.item_type==='shop');
+  const customShopsHtml=customShops.map(ci=>`
+    <div class="list-card" onclick="openGenModal(${JSON.stringify(ciToModalObj(ci)).replace(/"/g,'&quot;')})">
+      <div class="lc-ico ico-shop">${ci.emoji||'🛍️'}</div>
+      <div class="lc-body"><h3>${ci.name}<span class="eigen-badge">✎ Eigen</span></h3><div class="bar-type">${ci.bar_type||'Winkel'}</div><p>${ci.description||''}</p><p style="font-size:.72rem;color:#22c55e;margin-top:.2rem">🕐 ${ci.hours||'—'}</p></div>
+      <div class="lc-right"><button class="del-eigen-btn" onclick="deleteCustomItem('${ci.id}','${ci.name.replace(/'/g,"\'").replace(/"/g,'')}',event)">🗑</button></div>
+    </div>`).join('');
   document.getElementById('shops-list').innerHTML=shops.map(s=>`
     <div class="list-card" onclick="openGenModal(${JSON.stringify(s).replace(/"/g,'&quot;')})">
       <div class="lc-ico ${s.ico}">${s.e}</div>
       <div class="lc-body"><h3>${s.name}</h3><div class="bar-type">${s.type}</div><p>${s.desc}</p><p style="font-size:.72rem;color:#22c55e;margin-top:.2rem">🕐 ${s.hours}</p></div>
       <div class="lc-right"><div class="lc-dist">${s.dist} km</div></div>
-    </div>`).join('');
+    </div>`).join('')+customShopsHtml;
 }
 
 // ---- ACTIVITY MODAL ----
@@ -1335,7 +1397,8 @@ function openGenModal(item){
     else if(item.vibe||item.type?.includes('Bar')||item.type?.includes('Club')||item.type?.includes('Casino')||item.type?.includes('Wijn')) itemType='bar';
     else if(item.day||item.mo) itemType='event';
     const addBtn=`<button class="btn btn-purple" onclick="openAddToDayModal(${JSON.stringify(item).replace(/"/g,'&quot;')})">📅 Dag toevoegen</button>`;
-    gmCta.innerHTML=addBtn;
+    const linksHtml=(item.links||[]).map(l=>`<a class="btn ${l.c||'btn-primary'}" href="${l.u}" target="_blank" rel="noopener">${l.l}</a>`).join('');
+    gmCta.innerHTML=linksHtml+addBtn;
   }
   if(genModalMapObj){genModalMapObj.remove();genModalMapObj=null;}
   document.getElementById('gm-loading').style.display='flex';
@@ -2834,6 +2897,187 @@ function initApp(){
   loadCustomActivities();
   setTimeout(()=>initTabMap('activities'),250);
 }
+
+// ===== CUSTOM ITEMS =====
+let customItems = [];
+let _ciType = 'activity';
+
+async function loadCustomItems() {
+  try {
+    const res = await fetch(`${SUPA_URL}/rest/v1/custom_items?order=created_at.asc`, {headers: supaHeaders()});
+    if (!res.ok) return;
+    customItems = await res.json();
+    renderAll();
+  } catch(e) { console.warn('custom items load:', e); }
+}
+
+function openCustomItemModal(type) {
+  _ciType = type || 'activity';
+  document.getElementById('ci-type').value = _ciType;
+  ciTypeChange();
+  // reset form
+  ['ci-name','ci-desc','ci-addr','ci-parking','ci-hours','ci-closed','ci-tags','ci-bar-tags',
+   'ci-act-cat','ci-distance','ci-elevation','ci-duration','ci-event-day','ci-event-month',
+   'ci-shop-type','ci-rental-price','ci-specs','ci-website','ci-tripadvisor'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  document.getElementById('ci-emoji').value = '📍';
+  document.getElementById('ci-emoji-disp').textContent = '📍';
+  document.getElementById('ci-lat').value = '';
+  document.getElementById('ci-lng').value = '';
+  document.getElementById('ci-geocode-result').textContent = '';
+  document.getElementById('ci-error').style.display = 'none';
+  
+  const titles = {activity:'🎿 Activiteit toevoegen',restaurant:'🍽️ Restaurant toevoegen',bar:'🍸 Bar / Uitgaan toevoegen',event:'🎪 Event toevoegen',shop:'🛍️ Winkel toevoegen',rental:'🚲 Verhuur toevoegen'};
+  document.getElementById('ci-modal-title').textContent = titles[_ciType] || 'Item toevoegen';
+  document.getElementById('ci-modal').classList.add('active');
+}
+
+function ciTypeChange() {
+  _ciType = document.getElementById('ci-type').value;
+  // hide all type-specific divs, show active one
+  ['activity','restaurant','bar','event','shop','rental'].forEach(t => {
+    const el = document.getElementById('ci-fields-' + t);
+    if (el) el.classList.toggle('active', t === _ciType);
+  });
+  const titles = {activity:'🎿 Activiteit toevoegen',restaurant:'🍽️ Restaurant toevoegen',bar:'🍸 Bar / Uitgaan toevoegen',event:'🎪 Event toevoegen',shop:'🛍️ Winkel toevoegen',rental:'🚲 Verhuur toevoegen'};
+  document.getElementById('ci-modal-title').textContent = titles[_ciType] || 'Item toevoegen';
+}
+
+async function ciGeocode() {
+  const addr = document.getElementById('ci-addr').value.trim();
+  if (!addr) return;
+  try {
+    const r = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(addr+', Haute-Savoie, France')}&limit=1`);
+    const d = await r.json();
+    if (d.length > 0) {
+      document.getElementById('ci-lat').value = d[0].lat;
+      document.getElementById('ci-lng').value = d[0].lon;
+      document.getElementById('ci-geocode-result').textContent = '✅ ' + d[0].display_name.split(',').slice(0,3).join(', ');
+    } else {
+      document.getElementById('ci-geocode-result').textContent = '⚠️ Niet gevonden';
+    }
+  } catch(e) { document.getElementById('ci-geocode-result').textContent = '⚠️ Fout'; }
+}
+
+async function submitCustomItem() {
+  const name = document.getElementById('ci-name').value.trim();
+  if (!name) { 
+    const err = document.getElementById('ci-error');
+    err.textContent = '⚠️ Naam is verplicht';
+    err.style.display = 'block';
+    return;
+  }
+  document.getElementById('ci-submit-btn').disabled = true;
+  document.getElementById('ci-submit-btn').textContent = '⏳ Opslaan...';
+
+  // Build links array
+  const wsUrl = document.getElementById('ci-website').value.trim();
+  const taUrl = document.getElementById('ci-tripadvisor').value.trim();
+  const links = [];
+  if (wsUrl) links.push({u:wsUrl,l:'🌐 Website',c:'btn-primary'});
+  if (taUrl) links.push({u:taUrl,l:'⭐ TripAdvisor',c:'btn-green'});
+
+  const payload = {
+    item_type: _ciType,
+    name: name,
+    emoji: document.getElementById('ci-emoji').value || '📍',
+    description: document.getElementById('ci-desc').value.trim() || null,
+    addr: document.getElementById('ci-addr').value.trim() || null,
+    parking: document.getElementById('ci-parking').value.trim() || null,
+    lat: parseFloat(document.getElementById('ci-lat').value) || null,
+    lng: parseFloat(document.getElementById('ci-lng').value) || null,
+    hours: document.getElementById('ci-hours').value.trim() || null,
+    website_url: wsUrl || null,
+    tripadvisor_url: taUrl || null,
+  };
+
+  if (_ciType === 'restaurant') {
+    payload.cat = document.getElementById('ci-rest-cat').value;
+    payload.price = document.getElementById('ci-price').value;
+    payload.stars = document.getElementById('ci-stars').value;
+    payload.closed = document.getElementById('ci-closed').value.trim() || null;
+    payload.tags = document.getElementById('ci-tags').value.trim() || null;
+  } else if (_ciType === 'activity') {
+    payload.act_cat = document.getElementById('ci-act-cat').value;
+    payload.distance = document.getElementById('ci-distance').value || null;
+    payload.elevation = document.getElementById('ci-elevation').value || null;
+    payload.duration = document.getElementById('ci-duration').value.trim() || null;
+    payload.difficulty = document.getElementById('ci-difficulty').value;
+  } else if (_ciType === 'bar') {
+    payload.bar_type = document.getElementById('ci-bar-type').value.trim() || null;
+    payload.vibe = document.getElementById('ci-vibe').value;
+    payload.tags = document.getElementById('ci-bar-tags').value.trim() || null;
+  } else if (_ciType === 'event') {
+    payload.event_day = document.getElementById('ci-event-day').value.trim() || null;
+    payload.event_month = document.getElementById('ci-event-month').value.trim() || null;
+  } else if (_ciType === 'shop') {
+    payload.bar_type = document.getElementById('ci-shop-type').value.trim() || null;
+  } else if (_ciType === 'rental') {
+    payload.price = document.getElementById('ci-rental-price').value.trim() || null;
+    payload.specs = document.getElementById('ci-specs').value.trim() || null;
+  }
+
+  try {
+    const res = await fetch(`${SUPA_URL}/rest/v1/custom_items`, {
+      method: 'POST',
+      headers: {...supaHeaders(), 'Prefer':'return=representation'},
+      body: JSON.stringify(payload)
+    });
+    if (!res.ok) throw new Error(await res.text());
+    closeModal('ci-modal');
+    await loadCustomItems();
+    showToast('✅ ' + name + ' toegevoegd!');
+  } catch(e) {
+    const err = document.getElementById('ci-error');
+    err.textContent = '⚠️ Fout: ' + e.message;
+    err.style.display = 'block';
+  }
+  document.getElementById('ci-submit-btn').disabled = false;
+  document.getElementById('ci-submit-btn').textContent = '💾 Opslaan';
+}
+
+async function deleteCustomItem(id, name, event) {
+  event.stopPropagation();
+  if (!confirm(`"${name}" verwijderen?`)) return;
+  try {
+    await fetch(`${SUPA_URL}/rest/v1/custom_items?id=eq.${id}`, {method:'DELETE', headers:supaHeaders()});
+    await loadCustomItems();
+    showToast('🗑️ Verwijderd');
+  } catch(e) { alert('Fout bij verwijderen'); }
+}
+
+// Helper: convert custom item to modal-compatible object
+function ciToModalObj(ci) {
+  const links = [];
+  if (ci.website_url) links.push({u:ci.website_url,l:'🌐 Website',c:'btn-primary'});
+  if (ci.tripadvisor_url) links.push({u:ci.tripadvisor_url,l:'⭐ TripAdvisor',c:'btn-green'});
+  return {
+    id: 'ci-'+ci.id, e: ci.emoji||'📍', ico:'ico-rest', name: ci.name,
+    desc: ci.description||'', addr: ci.addr||'', parking: ci.parking||'',
+    lat: ci.lat, lng: ci.lng, hours: ci.hours||'',
+    closed: ci.closed||'', stars: ci.stars||'', price: ci.price||'',
+    tags: ci.tags ? ci.tags.split(',').map(t=>t.trim()) : [],
+    cat: ci.cat||ci.act_cat||'', vibe: ci.vibe||'', vl: ci.vibe==='party'?'Party':ci.vibe==='busy'?'Druk':'Gezellig',
+    type: ci.bar_type||'', links: links, _custom: true, _ci_id: ci.id
+  };
+}
+
+function showToast(msg) {
+  let t = document.getElementById('ci-toast');
+  if (!t) {
+    t = document.createElement('div');
+    t.id = 'ci-toast';
+    t.style.cssText = 'position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);background:#1e293b;color:#f1f5f9;padding:.65rem 1.4rem;border-radius:10px;font-size:.88rem;font-weight:600;z-index:9999;box-shadow:0 4px 16px rgba(0,0,0,.4);pointer-events:none;transition:opacity .3s;';
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  t.style.opacity = '1';
+  clearTimeout(t._timer);
+  t._timer = setTimeout(()=>{t.style.opacity='0';}, 2500);
+}
+
 </script>
 
 <!-- ===== EXTRA MODALS (activity detail + generic) ===== -->
@@ -3096,5 +3340,220 @@ function initApp(){
     <button class="btn btn-accent" style="width:100%;margin-top:.5rem" onclick="confirmAddToDay()">✓ Toevoegen</button>
   </div>
 </div>
+
+<!-- ===== CUSTOM ITEM MODAL ===== -->
+<div class="modal-overlay" id="ci-modal">
+  <div class="modal" style="max-width:520px;">
+    <div class="modal-hdr">
+      <h2>➕ <span id="ci-modal-title">Eigen item toevoegen</span></h2>
+      <button class="modal-close" onclick="closeModal('ci-modal')">✕</button>
+    </div>
+    <div class="modal-body" style="max-height:75vh;overflow-y:auto;">
+      <!-- Type selector -->
+      <div class="form-group">
+        <label class="form-label">Type</label>
+        <select class="form-input" id="ci-type" onchange="ciTypeChange()">
+          <option value="activity">🎿 Activiteit</option>
+          <option value="restaurant">🍽️ Restaurant</option>
+          <option value="bar">🍸 Bar / Uitgaan</option>
+          <option value="event">🎪 Event</option>
+          <option value="shop">🛍️ Winkel</option>
+          <option value="rental">🚲 Verhuur</option>
+        </select>
+      </div>
+      <!-- Common fields -->
+      <div class="form-group">
+        <label class="form-label">Emoji</label>
+        <div style="display:flex;align-items:center;gap:.6rem;">
+          <button class="emo-trigger" id="ci-emoji-disp" onclick="openEmojiPicker('ci-emoji','ci-emoji-disp',this)">📍</button>
+          <span style="font-size:.75rem;color:var(--muted)">Klik om emoji te kiezen</span>
+        </div>
+        <input type="hidden" id="ci-emoji" value="📍">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Naam *</label>
+        <input class="form-input" id="ci-name" placeholder="Naam van het item">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Beschrijving</label>
+        <textarea class="form-input" id="ci-desc" rows="3" placeholder="Korte beschrijving..."></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Adres</label>
+        <div style="display:flex;gap:.5rem;">
+          <input class="form-input" id="ci-addr" placeholder="Straat, nr, gemeente" style="flex:1">
+          <button class="btn btn-sec" onclick="ciGeocode()" style="white-space:nowrap">📍 Zoek</button>
+        </div>
+        <div id="ci-geocode-result" style="font-size:.75rem;color:#22c55e;margin-top:.3rem;"></div>
+        <input type="hidden" id="ci-lat"><input type="hidden" id="ci-lng">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Parking / Hoe er raken</label>
+        <input class="form-input" id="ci-parking" placeholder="bijv. 🅿️ Parking Centre La Clusaz">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Openingsuren</label>
+        <input class="form-input" id="ci-hours" placeholder="bijv. Ma–Za 9u–18u">
+      </div>
+
+      <!-- Type-specific fields -->
+      <div id="ci-type-fields">
+        <!-- ACTIVITY -->
+        <div id="ci-fields-activity">
+          <div class="form-group">
+            <label class="form-label">Categorie activiteit</label>
+            <select class="form-input" id="ci-act-cat">
+              <option value="hiking">🥾 Wandelen</option>
+              <option value="downhill">🚵 Downhill</option>
+              <option value="emtb">⚡ eMTB</option>
+              <option value="ferrata">🧗 Via Ferrata</option>
+              <option value="water">💧 Water</option>
+            </select>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;">
+            <div class="form-group">
+              <label class="form-label">Afstand (km)</label>
+              <input class="form-input" id="ci-distance" placeholder="bijv. 12" type="number" min="0" step="0.5">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Hoogteverschil (m)</label>
+              <input class="form-input" id="ci-elevation" placeholder="bijv. 650" type="number" min="0">
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;">
+            <div class="form-group">
+              <label class="form-label">Duur</label>
+              <input class="form-input" id="ci-duration" placeholder="bijv. 3u30">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Moeilijkheidsgraad</label>
+              <select class="form-input" id="ci-difficulty">
+                <option value="E">Makkelijk</option>
+                <option value="M">Gemiddeld</option>
+                <option value="Z">Moeilijk</option>
+                <option value="ZZ">Zeer Moeilijk</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <!-- RESTAURANT -->
+        <div id="ci-fields-restaurant">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;">
+            <div class="form-group">
+              <label class="form-label">Categorie</label>
+              <select class="form-input" id="ci-rest-cat">
+                <option value="gastro">⭐ Gastronomisch</option>
+                <option value="savoyard">🧀 Savoyard</option>
+                <option value="pizza">🍕 Pizza</option>
+                <option value="casual">🍔 Casual</option>
+                <option value="bakkerij">🥐 Boulangerie</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Prijs</label>
+              <select class="form-input" id="ci-price">
+                <option value="€">€ (goedkoop)</option>
+                <option value="€€">€€ (gemiddeld)</option>
+                <option value="€€€">€€€ (duur)</option>
+                <option value="€€€€">€€€€ (luxe)</option>
+              </select>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;">
+            <div class="form-group">
+              <label class="form-label">Sterren (TA)</label>
+              <select class="form-input" id="ci-stars">
+                <option value="★★★★★">★★★★★ (5)</option>
+                <option value="★★★★☆">★★★★☆ (4)</option>
+                <option value="★★★☆☆">★★★☆☆ (3)</option>
+                <option value="★★☆☆☆">★★☆☆☆ (2)</option>
+                <option value="★☆☆☆☆">★☆☆☆☆ (1)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Gesloten op</label>
+              <input class="form-input" id="ci-closed" placeholder="bijv. Ma gesloten">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Tags (komma gescheiden)</label>
+            <input class="form-input" id="ci-tags" placeholder="bijv. Savoyard, Terras, Fondue">
+          </div>
+        </div>
+        <!-- BAR -->
+        <div id="ci-fields-bar">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;">
+            <div class="form-group">
+              <label class="form-label">Type</label>
+              <input class="form-input" id="ci-bar-type" placeholder="bijv. Cocktailbar, Club">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Sfeer</label>
+              <select class="form-input" id="ci-vibe">
+                <option value="quiet">😌 Gezellig</option>
+                <option value="busy">🔥 Druk</option>
+                <option value="party">💃 Party</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Tags (komma gescheiden)</label>
+            <input class="form-input" id="ci-bar-tags" placeholder="bijv. Cocktails, Terras, Live muziek">
+          </div>
+        </div>
+        <!-- EVENT -->
+        <div id="ci-fields-event">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;">
+            <div class="form-group">
+              <label class="form-label">Dag(en)</label>
+              <input class="form-input" id="ci-event-day" placeholder="bijv. Za/Zo, Elke dag">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Maand</label>
+              <input class="form-input" id="ci-event-month" placeholder="bijv. AUG">
+            </div>
+          </div>
+        </div>
+        <!-- SHOP -->
+        <div id="ci-fields-shop">
+          <div class="form-group">
+            <label class="form-label">Type winkel</label>
+            <input class="form-input" id="ci-shop-type" placeholder="bijv. Supermarkt, Kaaswinkel, Wijnwinkel">
+          </div>
+        </div>
+        <!-- RENTAL -->
+        <div id="ci-fields-rental">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;">
+            <div class="form-group">
+              <label class="form-label">Prijs / dag</label>
+              <input class="form-input" id="ci-rental-price" placeholder="bijv. eMTB ca. €60/dag">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Types (komma)</label>
+              <input class="form-input" id="ci-specs" placeholder="bijv. mtb, emtb, road">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Links section -->
+      <div class="form-group">
+        <label class="form-label">Website URL (optioneel)</label>
+        <input class="form-input" id="ci-website" placeholder="https://..." type="url">
+      </div>
+      <div class="form-group">
+        <label class="form-label">TripAdvisor URL (optioneel)</label>
+        <input class="form-input" id="ci-tripadvisor" placeholder="https://www.tripadvisor.com/..." type="url">
+      </div>
+
+      <div id="ci-error" style="color:var(--warn);font-size:.82rem;display:none;margin-bottom:.5rem;"></div>
+      <div style="display:flex;gap:.5rem;justify-content:flex-end;margin-top:.8rem;">
+        <button class="btn btn-sec" onclick="closeModal('ci-modal')">Annuleren</button>
+        <button class="btn btn-pri" id="ci-submit-btn" onclick="submitCustomItem()">💾 Opslaan</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
