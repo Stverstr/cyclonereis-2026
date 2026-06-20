@@ -26,6 +26,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 .chalet-link .logo{font-size:1.6rem;}.chalet-info h1{font-size:1.15rem;font-weight:800;color:#fff;}.chalet-info p{color:rgba(255,255,255,.75);font-size:.75rem;}
 .header-badges{display:flex;gap:.4rem;flex-wrap:wrap;margin-left:auto;}
 .badge{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:20px;padding:.2rem .7rem;font-size:.72rem;color:rgba(255,255,255,.9);}
+.modal-body .badge,.m-meta .badge{background:rgba(14,165,233,.1);border-color:rgba(14,165,233,.25);color:#0369a1;font-weight:600;}
 .badge.accent{border-color:rgba(255,255,255,.5);color:#fff;}
 .nav{background:#fff;border-bottom:1px solid var(--border);padding:0 1.5rem;overflow-x:auto;-webkit-overflow-scrolling:touch;box-shadow:0 1px 3px rgba(0,0,0,.06);}
 .nav-inner{max-width:1300px;margin:0 auto;display:flex;min-width:max-content;}
@@ -717,6 +718,22 @@ const activities_raw=[
    wp:[{lat:45.9203,lng:6.4154,l:'🏠 Chalet'},{lat:45.9031,lng:6.4239,l:'⚡ La Clusaz'},{lat:45.9437,lng:6.4826,l:'🎯 Grand-Bornand'}],
    prak:['Vertrek 8u30 naar La Clusaz','Ochtendpas 9u-13u','Lunch dorp','Namiddagpas 14u-17u30 GBornand'],
    tips:['Koop dagpas per park','Beenspieren = de bottleneck'],links:[]},
+  {id:16,cat:'emtb',e:'⚡',ico:'ico-dh',title:'eMTB Aravis Grand Tour',addr:'130 Impasse de la Clairière, 74450 Saint-Jean-de-Sixt',parking:'🅿️ Vertrek vanuit chalet — geen parkeerplaats nodig',sub:'55 km lus · 1400 hm · Vanuit chalet',diff:'medium',dl:'Gemiddeld',rtype:'drive',
+   stats:[{i:'⏱️',l:'5–7u'},{i:'📏',l:'55 km'},{i:'🔋',l:'Volle batterij'}],
+   desc:"Epische eMTB-lus vanuit het chalet: via Col des Aravis, La Clusaz, Col de la Croix-Fry en terug. Ideaal voor de eMTB — geen shuttle nodig.",
+   lat:45.9078,lng:6.5175,
+   wp:[{lat:45.9203,lng:6.4154,l:'🏠 Chalet'},{lat:45.9078,lng:6.5175,l:'⛰️ Col des Aravis'},{lat:45.9031,lng:6.4239,l:'🏘️ La Clusaz'},{lat:45.8781,lng:6.3642,l:'🏔️ Col Croix-Fry'},{lat:45.9203,lng:6.4154,l:'🏠 Chalet'}],
+   prak:['Vertrek vanuit chalet — geen auto nodig','Laad batterij volledig op (minstens 2 batterijen aanbevolen)','Meest technisch: afdaling Col de la Croix-Fry'],
+   tips:['Vroeg vertrekken (8u) voor de hitte','Reservebatterij of laadpunt in La Clusaz','Café de la Poste voor lunch in SJS bij terugkomst'],
+   links:[{u:'https://www.komoot.com/guide/1829/e-mtb-rides-in-aravis',l:'🗺️ Komoot eMTB Aravis',c:'btn-green'}]},
+  {id:17,cat:'emtb',e:'🌲',ico:'ico-dh',title:'eMTB La Clusaz Enduro trails',addr:'Route du Télécabine, 74220 La Clusaz',parking:'🅿️ Parking des Pistes La Clusaz — gratis',sub:'Enduro met lift · 30 km · La Clusaz',diff:'hard',dl:'Zwaar',rtype:'drive',
+   stats:[{i:'⏱️',l:'4–5u'},{i:'📏',l:'30 km'},{i:'🔋',l:'Minder verbruik'}],
+   desc:"Enduro-lus in La Clusaz: gondel omhoog, trails naar beneden. Batterij spaarzaam — lift doet het werk omhoog. Technische singletracks.",
+   lat:45.9031,lng:6.4239,
+   wp:[{lat:45.9203,lng:6.4154,l:'🏠 Chalet'},{lat:45.9031,lng:6.4239,l:'🅿️ Parking des Pistes'},{lat:45.9200,lng:6.4400,l:'🏔️ Top gondel'}],
+   prak:['10 min rijden van chalet','Gondelpas: ca. €32/dag (ook geldig voor eMTB)','Bescherming aangeraden'],
+   tips:['Enduro trail "Les Confins" is de beste','Batterij minder kritisch dankzij liften'],
+   links:[{u:'https://www.laclusaz.com/en/mountain-bike/',l:'🌐 La Clusaz MTB',c:'btn-primary'}]},
   {id:4,cat:'hiking',e:'🥾',ico:'ico-hike',title:'La Tournette — 2351m top',addr:'Col de Blénières, 74210 Montmin',parking:'🅿️ Parking Col de Blénières (Montmin) — gratis, 20 plaatsen, vroeg vol!',sub:'1200 hm · 8u · Ketting',diff:'hard',dl:'Zwaar',rtype:'hike',
    stats:[{i:'⏱️',l:'7–9u'},{i:'📏',l:'14 km'},{i:'🔼',l:'1200 hm'}],
    desc:"La Tournette (2351m) boven Lac d'Annecy. Vaste ketting naar panorama op meer en Mont Blanc. Één van de mooiste dagwandelingen van Haute-Savoie.",
@@ -1120,7 +1137,7 @@ function renderActivities(){
       </div>
     </div>`).join('');
   // filters
-  const cats=[['all','🗺️ Alles'],['downhill','🚵 Downhill'],['hiking','🥾 Wandelen'],['ferrata','🧗 Via Ferrata'],['water','💧 Water']];
+  const cats=[['all','🗺️ Alles'],['downhill','🚵 Downhill'],['emtb','⚡ eMTB'],['hiking','🥾 Wandelen'],['ferrata','🧗 Via Ferrata'],['water','💧 Water']];
   document.getElementById('act-filters').innerHTML=cats.map(([v,l])=>`<div class="fp ${activeFilter===v?'active':''}" onclick="setActFilter('${v}')">${l}</div>`).join('');
 }
 
@@ -1239,6 +1256,9 @@ function openActModal(id){
   const _amAddrHtml=(a.addr?`<div class="gm-addr-row"><span class="gm-addr-ico">🏠</span><span>${a.addr}</span></div>`:'')+(a.parking?`<div class="gm-addr-row"><span class="gm-addr-ico">🅿️</span><span>${a.parking.replace('🅿️ ','')}</span></div>`:'');
   const _amAddrEl=document.getElementById('am-addr');
   if(_amAddrEl){_amAddrEl.innerHTML=_amAddrHtml;_amAddrEl.style.display=_amAddrHtml?'flex':'none';}
+  // GPX section for hiking, ferrata, emtb
+  if(['hiking','ferrata','emtb'].includes(a.cat)){renderActGpxSection(a.id);}
+  else{const s=document.getElementById('am-gpx-section');if(s)s.style.display='none';}
   document.getElementById('am-cta').innerHTML=a.links.map(l=>`<a class="btn ${l.c}" href="${l.u}" target="_blank" rel="noopener">${l.l}</a>`).join('')+`<button class="btn btn-purple" onclick="quickAddToPlan(${a.id})">+ Dag toevoegen</button>`;
   // Map
   if(modalMapObj){modalMapObj.remove();modalMapObj=null;}
@@ -1344,6 +1364,63 @@ function openGenModal(item){
     }
   },100);
 }
+// ---- ACTIVITY GPX ----
+let _actGpxUrls={}; // {actId: url}
+let _currentActId=null;
+
+async function loadActivityGpxUrls(){
+  try{
+    const res=await fetch(`${SUPA_URL}/storage/v1/object/list/cyclonereis-gpx`,{
+      method:'POST',
+      headers:{...supaHeaders(),'Content-Type':'application/json'},
+      body:JSON.stringify({prefix:'predefined/',limit:100})
+    });
+    if(!res.ok) return;
+    const files=await res.json();
+    (files||[]).forEach(f=>{
+      const m=(f.name||'').match(/act-(\d+)\./);
+      if(m) _actGpxUrls[parseInt(m[1])]=`${SUPA_URL}/storage/v1/object/public/cyclonereis-gpx/predefined/${f.name}`;
+    });
+  }catch(e){console.warn('GPX load:',e);}
+}
+
+function renderActGpxSection(actId){
+  _currentActId=actId;
+  const sec=document.getElementById('am-gpx-section');
+  const dl=document.getElementById('am-gpx-download');
+  const status=document.getElementById('am-gpx-status');
+  if(!sec) return;
+  sec.style.display='block';
+  if(_actGpxUrls[actId]){
+    dl.innerHTML=`<a class="gpx-download-btn" href="${_actGpxUrls[actId]}" download="activiteit-${actId}.gpx" target="_blank">⬇️ Download GPX</a>`;
+    status.textContent='GPX beschikbaar';
+  } else {
+    dl.innerHTML='';
+    status.textContent='Nog geen GPX geüpload';
+  }
+}
+
+async function uploadActGpx(event){
+  const file=event.target.files[0];
+  if(!file||!_currentActId) return;
+  const status=document.getElementById('am-gpx-status');
+  status.textContent='⏳ Uploaden...';
+  try{
+    const path=`predefined/act-${_currentActId}.gpx`;
+    const res=await fetch(`${SUPA_URL}/storage/v1/object/cyclonereis-gpx/${path}`,{
+      method:'POST',
+      headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Content-Type':'application/gpx+xml','x-upsert':'true'},
+      body:file
+    });
+    if(!res.ok) throw new Error('Upload mislukt');
+    const url=`${SUPA_URL}/storage/v1/object/public/cyclonereis-gpx/${path}`;
+    _actGpxUrls[_currentActId]=url;
+    document.getElementById('am-gpx-download').innerHTML=`<a class="gpx-download-btn" href="${url}" download="activiteit-${_currentActId}.gpx" target="_blank">⬇️ Download GPX</a>`;
+    status.textContent='✅ GPX opgeslagen!';
+    showToast('✅ GPX geüpload!');
+  }catch(e){status.textContent='❌ Fout: '+e.message;}
+}
+
 function showToast(msg,dur=2500){
   let t=document.getElementById('toast-msg');
   if(!t){t=document.createElement('div');t.id='toast-msg';t.style.cssText='position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);background:#1e293b;color:#fff;padding:.6rem 1.2rem;border-radius:999px;font-size:.82rem;font-weight:600;z-index:9999;transition:opacity .3s;box-shadow:0 4px 20px rgba(0,0,0,.3)';document.body.appendChild(t);}
@@ -2751,6 +2828,7 @@ async function deleteCustomActivity(id){
 }
 
 function initApp(){
+  loadActivityGpxUrls();
   renderAll();
   initPlanning();
   loadCustomActivities();
@@ -2773,6 +2851,14 @@ function initApp(){
       <div class="m-route-info" id="am-route"></div>
       <div class="m-sections" id="am-sections"></div>
       <div class="gm-addr-block" id="am-addr" style="display:none;flex-direction:column;gap:.35rem;margin-bottom:.7rem"></div>
+      <div id="am-gpx-section" style="display:none;margin-bottom:.9rem">
+        <div style="font-size:.72rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.4rem">📁 GPX Route</div>
+        <div style="display:flex;gap:.5rem;flex-wrap:wrap;align-items:center">
+          <span id="am-gpx-download"></span>
+          <label class="gpx-upload-label">⬆️ GPX uploaden<input type="file" accept=".gpx,.fit" id="am-gpx-file" onchange="uploadActGpx(event)"></label>
+          <span id="am-gpx-status" style="font-size:.73rem;color:var(--muted)"></span>
+        </div>
+      </div>
       <div class="m-cta" id="am-cta"></div>
     </div>
   </div>
