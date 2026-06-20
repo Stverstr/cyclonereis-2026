@@ -914,12 +914,12 @@ const nightlife_raw=[
 ];
 
 const rentals_raw=[
-  {id:'rt1',e:'🚵',ico:'ico-rental',name:'La Clusaz Bike Park Rentals',loc:'La Clusaz',lat:45.9031,lng:6.4239,desc:'Officiële verhuur. DH-pakket: fiets + bescherming.',hours:'8u30–17u30',specs:['dh','mtb','emtb'],price:'DH ca. €55-70/dag'},
-  {id:'rt2',e:'🏔️',ico:'ico-rental',name:'Intersport La Clusaz',loc:'La Clusaz',lat:45.9033,lng:6.4242,desc:'DH, e-bike en koersfiets.',hours:'9u–19u',specs:['dh','mtb','emtb','road'],price:'MTB ca. €30-45/dag'},
-  {id:'rt3',e:'🚲',ico:'ico-rental',name:'Sport 2000 Grand-Bornand',loc:'Le Grand-Bornand',lat:45.9437,lng:6.4828,desc:'Specialisatie MTB en eMTB.',hours:'8u30–18u30',specs:['mtb','emtb','kids'],price:'MTB ca. €28-40/dag'},
-  {id:'rt4',e:'⛷️',ico:'ico-rental',name:'Saint-Jean Sport',loc:'Saint-Jean-de-Sixt',lat:45.9340,lng:6.4145,desc:'Vlakbij het chalet. Via ferrata + MTB.',hours:'9u–12u30 & 15u–19u30',specs:['mtb','emtb'],price:'MTB ca. €25-35/dag'},
-  {id:'rt5',e:'⚡',ico:'ico-rental',name:'Eco Bike — eMTB specialist',loc:'La Clusaz',lat:45.9028,lng:6.4242,desc:'Elektrische mountainbikes. Bosch-systemen.',hours:'9u–18u',specs:['emtb'],price:'eMTB ca. €60-75/dag incl. helm'},
-  {id:'rt6',e:'🚴',ico:'ico-rental',name:'Bikeworld Annecy',loc:'Annecy',lat:45.9050,lng:6.0900,desc:'Grootste verhuurder regio. eMTB, koersfiets, MTB.',hours:'9u–19u ma-za',specs:['mtb','emtb','road','kids'],price:'eBike ca. €35/dag'}
+  {id:'rt1',e:'🚵',ico:'ico-rental',name:'La Clusaz Bike Park Rentals',addr:'Route du Télécabine, 74220 La Clusaz',parking:'🅿️ Parking des Pistes La Clusaz — gratis',loc:'La Clusaz',lat:45.9031,lng:6.4239,desc:'Officiële verhuur. DH-pakket: fiets + bescherming.',hours:'8u30–17u30',specs:['dh','mtb','emtb'],price:'DH ca. €55-70/dag'},
+  {id:'rt2',e:'🏔️',ico:'ico-rental',name:'Intersport La Clusaz',addr:'Chef-Lieu, 74220 La Clusaz',parking:'🅿️ Parking Centre La Clusaz (200m)',loc:'La Clusaz',lat:45.9033,lng:6.4242,desc:'DH, e-bike en koersfiets.',hours:'9u–19u',specs:['dh','mtb','emtb','road'],price:'MTB ca. €30-45/dag'},
+  {id:'rt3',e:'🚲',ico:'ico-rental',name:'Sport 2000 Grand-Bornand',addr:'Place du Village, 74450 Le Grand-Bornand',parking:'🅿️ Dorpsplein Le Grand-Bornand',loc:'Le Grand-Bornand',lat:45.9437,lng:6.4828,desc:'Specialisatie MTB en eMTB.',hours:'8u30–18u30',specs:['mtb','emtb','kids'],price:'MTB ca. €28-40/dag'},
+  {id:'rt4',e:'⛷️',ico:'ico-rental',name:'Saint-Jean Sport',addr:'Route Nationale, 74450 Saint-Jean-de-Sixt',parking:'🅿️ Voor de winkel of dorpsplein SJS',loc:'Saint-Jean-de-Sixt',lat:45.9340,lng:6.4145,desc:'Vlakbij het chalet. Via ferrata + MTB.',hours:'9u–12u30 & 15u–19u30',specs:['mtb','emtb'],price:'MTB ca. €25-35/dag'},
+  {id:'rt5',e:'⚡',ico:'ico-rental',name:'Eco Bike — eMTB specialist',addr:'Route du Centre, 74220 La Clusaz',parking:'🅿️ Parking Centre La Clusaz',loc:'La Clusaz',lat:45.9028,lng:6.4242,desc:'Elektrische mountainbikes. Bosch-systemen.',hours:'9u–18u',specs:['emtb'],price:'eMTB ca. €60-75/dag incl. helm'},
+  {id:'rt6',e:'🚴',ico:'ico-rental',name:'Bikeworld Annecy',addr:'Route d\'Annecy, 74000 Annecy',parking:'🅿️ Eigen parking bij de winkel',loc:'Annecy',lat:45.9050,lng:6.0900,desc:'Grootste verhuurder regio. eMTB, koersfiets, MTB.',hours:'9u–19u ma-za',specs:['mtb','emtb','road','kids'],price:'eBike ca. €35/dag'}
 ];
 
 const shops_raw=[
@@ -936,30 +936,30 @@ const shops_raw=[
 // ===== LAADPALEN DATA =====
 const ev_raw=[
   // Saint-Jean-de-Sixt / direct omgeving
-  {id:'ev1',e:'⚡',name:'Freshmile — Rte du Danay',addr:'Saint-Jean-de-Sixt',lat:45.9235,lng:6.4178,type:'AC 22kW',connectors:['Type 2'],plugs:2,free:false,hours:'24/7',network:'Freshmile',notes:'Op Rte du Danay, vlakbij D909 kruispunt. App: Freshmile.'},
-  {id:'ev2',e:'⚡',name:'Freshmile — Centrum SJS',addr:'Saint-Jean-de-Sixt',lat:45.9222,lng:6.4108,type:'AC 22kW',connectors:['Type 2'],plugs:2,free:false,hours:'24/7',network:'Freshmile',notes:'In het dorpscentrum van Saint-Jean-de-Sixt. App: Freshmile.'},
+  {id:'ev1',e:'⚡',name:'Freshmile — Rte du Danay',addr:'Route du Danay, 74450 Saint-Jean-de-Sixt',parking:'🅿️ Straatparkeren langs Rte du Danay',lat:45.9235,lng:6.4178,type:'AC 22kW',connectors:['Type 2'],plugs:2,free:false,hours:'24/7',network:'Freshmile',notes:'Op Rte du Danay, vlakbij D909 kruispunt. App: Freshmile.'},
+  {id:'ev2',e:'⚡',name:'Freshmile — Centrum SJS',addr:'Place du Village, 74450 Saint-Jean-de-Sixt',parking:'🅿️ Dorpsplein Saint-Jean-de-Sixt',lat:45.9222,lng:6.4108,type:'AC 22kW',connectors:['Type 2'],plugs:2,free:false,hours:'24/7',network:'Freshmile',notes:'In het dorpscentrum van Saint-Jean-de-Sixt. App: Freshmile.'},
 
   // La Clusaz
-  {id:'ev3',e:'⚡',name:'Parking du Centre La Clusaz',addr:'La Clusaz',lat:45.9031,lng:6.4237,type:'AC 22kW',connectors:['Type 2'],plugs:4,free:false,hours:'24/7',network:'Lidl',dist:4.1,notes:'Centrum La Clusaz. €0.30/kWh.'},
-  {id:'ev4',e:'⚡',name:'Parking des Pistes La Clusaz',addr:'La Clusaz',lat:45.9048,lng:6.4290,type:'AC 22kW',connectors:['Type 2'],plugs:6,free:false,hours:'7u–22u',network:'ChargePoint',dist:4.3,notes:'Ski-parking, ook zomer bruikbaar. App vereist.'},
-  {id:'ev5',e:'🔋',name:'DC Schnelllader La Clusaz',addr:'La Clusaz — Aire de service',lat:45.9025,lng:6.4215,type:'DC 50kW',connectors:['CCS','CHAdeMO'],plugs:2,free:false,hours:'24/7',network:'Ionity',dist:4.5,notes:'Snellader 50kW. ~€0.69/kWh via Ionity.'},
+  {id:'ev3',e:'⚡',name:'Parking du Centre La Clusaz',addr:'Route du Centre, 74220 La Clusaz',parking:'🅿️ Parking du Centre — betaald €2/u',lat:45.9031,lng:6.4237,type:'AC 22kW',connectors:['Type 2'],plugs:4,free:false,hours:'24/7',network:'Lidl',dist:4.1,notes:'Centrum La Clusaz. €0.30/kWh.'},
+  {id:'ev4',e:'⚡',name:'Parking des Pistes La Clusaz',addr:'Route du Téléphérique, 74220 La Clusaz',parking:'🅿️ Parking des Pistes — gratis buiten skiseason',lat:45.9048,lng:6.4290,type:'AC 22kW',connectors:['Type 2'],plugs:6,free:false,hours:'7u–22u',network:'ChargePoint',dist:4.3,notes:'Ski-parking, ook zomer bruikbaar. App vereist.'},
+  {id:'ev5',e:'🔋',name:'DC Schnelllader La Clusaz',addr:'Aire de Service, Route du Centre, 74220 La Clusaz',parking:'🅿️ Parkeerplaats bij de snellader',lat:45.9025,lng:6.4215,type:'DC 50kW',connectors:['CCS','CHAdeMO'],plugs:2,free:false,hours:'24/7',network:'Ionity',dist:4.5,notes:'Snellader 50kW. ~€0.69/kWh via Ionity.'},
 
   // Le Grand-Bornand
-  {id:'ev6',e:'⚡',name:'Village Le Grand-Bornand',addr:'Le Grand-Bornand',lat:45.9437,lng:6.4825,type:'AC 22kW',connectors:['Type 2'],plugs:4,free:false,hours:'24/7',network:'Recharge+',dist:3.5,notes:'Centrum village. €0.25/kWh.'},
-  {id:'ev7',e:'⚡',name:'Parking Télécabine Bornand',addr:'Le Grand-Bornand',lat:45.9410,lng:6.4870,type:'AC 7kW',connectors:['Type 2','E/F schuko'],plugs:6,free:true,hours:'6u–22u',network:'Commune',dist:3.8,notes:'Aan de gondelbaan. Gratis maar beperkte tijd.'},
+  {id:'ev6',e:'⚡',name:'Village Le Grand-Bornand',addr:'Place du Village, 74450 Le Grand-Bornand',parking:'🅿️ Dorpsplein Le Grand-Bornand',lat:45.9437,lng:6.4825,type:'AC 22kW',connectors:['Type 2'],plugs:4,free:false,hours:'24/7',network:'Recharge+',dist:3.5,notes:'Centrum village. €0.25/kWh.'},
+  {id:'ev7',e:'⚡',name:'Parking Télécabine Bornand',addr:'La Joyère, 74450 Le Grand-Bornand',parking:'🅿️ Parking Télécabine La Joyère',lat:45.9410,lng:6.4870,type:'AC 7kW',connectors:['Type 2','E/F schuko'],plugs:6,free:true,hours:'6u–22u',network:'Commune',dist:3.8,notes:'Aan de gondelbaan. Gratis maar beperkte tijd.'},
 
   // Thônes
-  {id:'ev8',e:'⚡',name:'Parking Mairie Thônes',addr:'Thônes',lat:45.8885,lng:6.3267,type:'AC 22kW',connectors:['Type 2'],plugs:2,free:true,hours:'24/7',network:'Recharge+',dist:9.2,notes:'Gratis. Bij het gemeentehuis van Thônes.'},
-  {id:'ev9',e:'⚡',name:'Intermarché Thônes',addr:'Thônes',lat:45.8872,lng:6.3251,type:'AC 22kW',connectors:['Type 2'],plugs:4,free:false,hours:'8u–20u',network:'Intermarché',dist:9.4,notes:'Bij Intermarché. Gratis tijdens aankoop.'},
+  {id:'ev8',e:'⚡',name:'Parking Mairie Thônes',addr:'Place de la Mairie, 74230 Thônes',parking:'🅿️ Parking Mairie Thônes — gratis',lat:45.8885,lng:6.3267,type:'AC 22kW',connectors:['Type 2'],plugs:2,free:true,hours:'24/7',network:'Recharge+',dist:9.2,notes:'Gratis. Bij het gemeentehuis van Thônes.'},
+  {id:'ev9',e:'⚡',name:'Intermarché Thônes',addr:'Route d\'Annecy, 74230 Thônes',parking:'🅿️ Supermarktparkering Intermarché — gratis',lat:45.8872,lng:6.3251,type:'AC 22kW',connectors:['Type 2'],plugs:4,free:false,hours:'8u–20u',network:'Intermarché',dist:9.4,notes:'Bij Intermarché. Gratis tijdens aankoop.'},
 
   // Annecy (langere rit, snelladen)
-  {id:'ev10',e:'🔋',name:'Tesla Supercharger Annecy',addr:'Annecy — Centre commercial Courier',lat:45.9016,lng:6.1307,type:'DC 250kW',connectors:['Tesla (CCS adapter)'],plugs:8,free:false,hours:'24/7',network:'Tesla',dist:32,notes:'Tesla Supercharger V3. Snelst in regio. CCS-adapter voor niet-Tesla.'},
-  {id:'ev11',e:'🔋',name:'Ionity Annecy-Nord',addr:'Annecy — Seynod',lat:45.8821,lng:6.0975,type:'DC 350kW',connectors:['CCS','CHAdeMO'],plugs:6,free:false,hours:'24/7',network:'Ionity',dist:34,notes:'Ultra-snellader. €0.69/kWh of via abonnement goedkoper.'},
-  {id:'ev12',e:'⚡',name:'Parking Vieille Ville Annecy',addr:'Annecy — Vieille Ville',lat:45.9003,lng:6.1264,type:'AC 22kW',connectors:['Type 2'],plugs:8,free:false,hours:'24/7',network:'Annecy Mobilités',dist:33,notes:'Centrum Annecy. Combineer met bezoek stad.'},
+  {id:'ev10',e:'🔋',name:'Tesla Supercharger Annecy',addr:'Centre Commercial Courier, 74000 Annecy',parking:'🅿️ Parking Centre Courier — gratis tijdens laden',lat:45.9016,lng:6.1307,type:'DC 250kW',connectors:['Tesla (CCS adapter)'],plugs:8,free:false,hours:'24/7',network:'Tesla',dist:32,notes:'Tesla Supercharger V3. Snelst in regio. CCS-adapter voor niet-Tesla.'},
+  {id:'ev11',e:'🔋',name:'Ionity Annecy-Nord',addr:'Route de Seynod, 74600 Annecy',parking:'🅿️ Parkeerplaats bij Ionity station',lat:45.8821,lng:6.0975,type:'DC 350kW',connectors:['CCS','CHAdeMO'],plugs:6,free:false,hours:'24/7',network:'Ionity',dist:34,notes:'Ultra-snellader. €0.69/kWh of via abonnement goedkoper.'},
+  {id:'ev12',e:'⚡',name:'Parking Vieille Ville Annecy',addr:'Rue Sommeiller, 74000 Annecy',parking:'🅿️ Parking Vieille Ville — betaald',lat:45.9003,lng:6.1264,type:'AC 22kW',connectors:['Type 2'],plugs:8,free:false,hours:'24/7',network:'Annecy Mobilités',dist:33,notes:'Centrum Annecy. Combineer met bezoek stad.'},
 
   // Megève richting
-  {id:'ev13',e:'⚡',name:'Megève — Parking des Écoles',addr:'Megève',lat:45.8572,lng:6.6175,type:'AC 22kW',connectors:['Type 2'],plugs:4,free:false,hours:'24/7',network:'Schneider',dist:28,notes:'Handig als je richting Megève gaat.'},
-  {id:'ev14',e:'⚡',name:'Flumet — Parking central',addr:'Flumet',lat:45.8212,lng:6.5133,type:'AC 11kW',connectors:['Type 2'],plugs:2,free:true,hours:'24/7',network:'Commune',dist:14,notes:'Gratis AC-lader in Flumet, richting Mont-Blanc.'},
+  {id:'ev13',e:'⚡',name:'Megève — Parking des Écoles',addr:'Allée des Écoles, 74120 Megève',parking:'🅿️ Parking des Écoles Megève',lat:45.8572,lng:6.6175,type:'AC 22kW',connectors:['Type 2'],plugs:4,free:false,hours:'24/7',network:'Schneider',dist:28,notes:'Handig als je richting Megève gaat.'},
+  {id:'ev14',e:'⚡',name:'Flumet — Parking central',addr:'Place de l\'Église, 73590 Flumet',parking:'🅿️ Parking central Flumet — gratis',lat:45.8212,lng:6.5133,type:'AC 11kW',connectors:['Type 2'],plugs:2,free:true,hours:'24/7',network:'Commune',dist:14,notes:'Gratis AC-lader in Flumet, richting Mont-Blanc.'},
 ];
 const evStations=ev_raw.map(x=>({...x,dist:x.dist||hav(CHALET.lat,CHALET.lng,x.lat,x.lng)}));
 
