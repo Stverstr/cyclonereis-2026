@@ -84,6 +84,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 .lc-body p{font-size:.73rem;color:var(--muted);line-height:1.4;}
 .lc-tags{display:flex;gap:.25rem;flex-wrap:wrap;margin-top:.3rem;}
 .rest-hours-row{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0;font-size:0.78rem}
+.atd-day-btn{background:var(--card);border:1px solid var(--border);border-radius:9px;padding:.4rem .6rem;cursor:pointer;display:flex;flex-direction:column;align-items:center;font-size:.75rem;color:var(--muted);min-width:42px;transition:all .15s;}
+.atd-day-btn.active{border-color:var(--accent);background:rgba(14,165,233,.1);color:var(--accent);font-weight:700;}
+.atd-group-btn{flex:1;padding:.5rem;border:1px solid var(--border);border-radius:9px;background:var(--card);font-size:.82rem;cursor:pointer;transition:all .15s;}
+.atd-meal-btn{flex:1;padding:.45rem;border:1px solid var(--border);border-radius:9px;background:var(--card);font-size:.8rem;cursor:pointer;transition:all .15s;}
+.atd-meal-btn.active{border-color:#f97316;background:rgba(249,115,22,.1);font-weight:700;}
 .rest-hours{color:var(--muted)}
 .rest-closed{color:#ef4444;font-weight:500}
 .tag{background:#f1f5f9;border:1px solid var(--border);border-radius:20px;padding:.08rem .45rem;font-size:.65rem;color:var(--muted);}
@@ -1293,9 +1298,13 @@ function openGenModal(item){
   // Show "add to plan note" for plannable items
   const gmCta=document.getElementById('gm-cta');
   if(gmCta){
-    const hasNote=item.hours||item.price;
-    const noteText=hasNote?`<span style="font-size:.72rem;color:var(--muted)">${item.hours?'🕐 '+item.hours+' ':''} ${item.price||''}</span>`:'';
-    gmCta.innerHTML=noteText;
+    // Determine item type for "add to day" 
+    let itemType='other';
+    if(item.tags&&(item.tags.includes('Bakkerij')||item.tags.includes('Gastronomisch')||item.tags.includes('Savoyard')||item.tags.includes('Pizza')||item.tags.includes('Casual')||item.tags.includes('Crêpes')||item.tags.includes('Café')||item.cat)) itemType='restaurant';
+    else if(item.vibe||item.type?.includes('Bar')||item.type?.includes('Club')||item.type?.includes('Casino')||item.type?.includes('Wijn')) itemType='bar';
+    else if(item.day||item.mo) itemType='event';
+    const addBtn=`<button class="btn btn-purple" onclick="openAddToDayModal(${JSON.stringify(item).replace(/"/g,'&quot;')})">📅 Dag toevoegen</button>`;
+    gmCta.innerHTML=addBtn;
   }
   if(genModalMapObj){genModalMapObj.remove();genModalMapObj=null;}
   document.getElementById('gm-loading').style.display='flex';
@@ -1323,6 +1332,12 @@ function openGenModal(item){
       document.getElementById('gm-route').innerHTML=`<span class="route-chip">~${km} km (rechte lijn)</span><span style="font-size:.68rem;color:#fbbf24">⚠️ Route tijdelijk niet beschikbaar</span>`;
     }
   },100);
+}
+function showToast(msg,dur=2500){
+  let t=document.getElementById('toast-msg');
+  if(!t){t=document.createElement('div');t.id='toast-msg';t.style.cssText='position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);background:#1e293b;color:#fff;padding:.6rem 1.2rem;border-radius:999px;font-size:.82rem;font-weight:600;z-index:9999;transition:opacity .3s;box-shadow:0 4px 20px rgba(0,0,0,.3)';document.body.appendChild(t);}
+  t.textContent=msg;t.style.opacity='1';
+  clearTimeout(t._tid);t._tid=setTimeout(()=>t.style.opacity='0',dur);
 }
 function closeGenModal(){
   document.getElementById('gen-modal').classList.remove('open');
@@ -1613,10 +1628,85 @@ function addCustomActToGroup(customId){
 }
 function timeToMins(t){const[h,m]=t.split(':').map(Number);return h*60+m;}
 function minsToTime(m){m=Math.min(m,23*60+59);return String(Math.floor(m/60)).padStart(2,'0')+':'+String(m%60).padStart(2,'0');}
+// ---- ADD TO DAY MODAL ----
+let _atdItem=null;
+let _atdDay=null;
+let _atdGroup=0;
+let _atdMeal=null;
+
+function openAddToDayModal(item){
+  _atdItem=item;
+  _atdDay=selectedDay||TRIP_DAYS[0];
+  _atdGroup=0;
+  _atdMeal=null;
+  renderAtdModal();
+  document.getElementById('add-to-day-modal').classList.add('open');
+}
+
+function renderAtdModal(){
+  const isRest=_atdItem.cat||(_atdItem.tags&&(_atdItem.tags.includes('Gastronomisch')||_atdItem.tags.includes('Savoyard')||_atdItem.tags.includes('Pizza')||_atdItem.tags.includes('Casual')||_atdItem.tags.includes('Bakkerij')||_atdItem.tags.includes('Crêpes')||_atdItem.tags.includes('Café')));
+  const isBar=_atdItem.vibe!==undefined||(_atdItem.type&&(_atdItem.type.includes('Bar')||_atdItem.type.includes('Club')||_atdItem.type.includes('Casino')||_atdItem.type.includes('Wijn')));
+  const isEvent=_atdItem.day!==undefined||_atdItem.mo!==undefined;
+  const needsMeal=isRest||isBar;
+  document.getElementById('atd-item-label').textContent=((_atdItem.e||''))+' '+(_atdItem.name||_atdItem.title||'');
+  // Days
+  document.getElementById('atd-days').innerHTML=TRIP_DAYS.map((d,i)=>`
+    <button class="atd-day-btn${_atdDay===d?' active':''}" onclick="_atdDay='${d}';renderAtdModal()">
+      <span>${DAY_NAMES[i]}</span><span style="font-size:.95rem;font-weight:800">${parseInt(d.split('-')[2])}</span>
+    </button>`).join('');
+  // Groups
+  document.getElementById('atd-groups').innerHTML=DEFAULT_GROUPS.map((g,gi)=>`
+    <button class="atd-group-btn${_atdGroup===gi?' active':''}" style="border-color:${_atdGroup===gi?g.color:'var(--border)'};${_atdGroup===gi?'background:'+g.color+'18':''}" onclick="_atdGroup=${gi};renderAtdModal()">
+      ${g.emoji} ${g.name}
+    </button>`).join('');
+  // Meal row (for restaurants/bars)
+  const mealRow=document.getElementById('atd-meal-row');
+  if(needsMeal){
+    if(!_atdMeal) _atdMeal='dinner';
+    mealRow.style.display='flex';
+    mealRow.innerHTML=[['lunch','🥗 Lunch'],['dinner','🍽️ Diner'],['evening','🌙 Avond']].map(([v,l])=>`
+      <button class="atd-meal-btn${_atdMeal===v?' active':''}" onclick="_atdMeal='${v}';renderAtdModal()">${l}</button>`).join('');
+  } else {
+    mealRow.style.display='none';
+    _atdMeal=null;
+  }
+}
+
+function confirmAddToDay(){
+  if(!_atdItem||!_atdDay) return;
+  const g=dayPlans[_atdDay]?.groups?.[_atdGroup];
+  if(!g){alert('Dag niet gevonden');return;}
+  const isRest=_atdItem.cat||(_atdItem.tags&&(_atdItem.tags.includes('Gastronomisch')||_atdItem.tags.includes('Savoyard')||_atdItem.tags.includes('Pizza')||_atdItem.tags.includes('Casual')||_atdItem.tags.includes('Bakkerij')||_atdItem.tags.includes('Crêpes')||_atdItem.tags.includes('Café')));
+  const isBar=_atdItem.vibe!==undefined||(_atdItem.type&&(_atdItem.type.includes('Bar')||_atdItem.type.includes('Club')||_atdItem.type.includes('Casino')||_atdItem.type.includes('Wijn')));
+  const needsMeal=isRest||isBar;
+  if(needsMeal&&_atdMeal){
+    g[_atdMeal]=(_atdItem.name||_atdItem.title||'');
+  } else if(_atdItem.id){
+    // Activity or event: add to slots
+    const dur=_atdItem.duration||120;
+    g.activities.push({id:_atdItem.id,start:'09:00',end:minsToTime(timeToMins('09:00')+dur)});
+  } else {
+    // Event/other: add as note
+    const cur=dayPlans[_atdDay].notes||'';
+    dayPlans[_atdDay].notes=(cur?cur+'\n':'')+(_atdItem.e||'')+' '+(_atdItem.name||_atdItem.title||'');
+  }
+  saveDayPlan(_atdDay);
+  renderWeekStrip();
+  renderDayDetail(_atdDay);
+  document.getElementById('add-to-day-modal').classList.remove('open');
+  // Show confirmation
+  const d=TRIP_DAYS.indexOf(_atdDay);
+  showToast('✅ Toegevoegd aan '+DAY_NAMES[d]+' '+parseInt(_atdDay.split('-')[2])+' aug');
+}
+
+function closeAddToDayModal(){
+  document.getElementById('add-to-day-modal').classList.remove('open');
+  _atdItem=null;
+}
+
 function quickAddToPlan(actId){
-  if(!selectedDay){selectPlanDay(TRIP_DAYS[0]);showSec('planning',document.getElementById('tab-planning'));}
-  const g=dayPlans[selectedDay]?.groups?.[0];
-  if(g){g.activities.push({id:actId,start:'09:00',end:'17:00'});renderWeekStrip();renderDayDetail(selectedDay);}
+  const act=activities.find(a=>a.id===actId);
+  if(act) openAddToDayModal(act);
 }
 
 function openRestPicker(date,field,gi=0){
@@ -2359,6 +2449,7 @@ document.addEventListener('keydown',e=>{
       const id=open.id;
       if(id==='act-modal') closeActModal();
       else if(id==='gen-modal') closeGenModal();
+    else if(id==='add-to-day-modal') closeAddToDayModal();
       else closeModal(id);
     }
     return;
@@ -2887,5 +2978,24 @@ function initApp(){
   <div class="emo-grid" id="emo-grid"></div>
 </div>
 
+
+<!-- ===== ADD TO DAY MODAL ===== -->
+<div class="modal-overlay" id="add-to-day-modal" onclick="if(event.target===this)closeAddToDayModal()">
+  <div class="modal-box" style="max-width:420px">
+    <button class="modal-close" onclick="closeAddToDayModal()">✕</button>
+    <h3 style="font-size:1rem;font-weight:800;margin-bottom:.3rem">📅 Toevoegen aan dagplanning</h3>
+    <div id="atd-item-label" style="font-size:.85rem;color:var(--muted);margin-bottom:1rem;padding:.4rem .7rem;background:var(--bg);border-radius:8px;font-weight:600"></div>
+    <div style="margin-bottom:.75rem">
+      <div style="font-size:.72rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.4rem">Dag</div>
+      <div id="atd-days" style="display:flex;gap:.4rem;flex-wrap:wrap"></div>
+    </div>
+    <div style="margin-bottom:.75rem">
+      <div style="font-size:.72rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.4rem">Groep</div>
+      <div id="atd-groups" style="display:flex;gap:.5rem"></div>
+    </div>
+    <div id="atd-meal-row" style="display:none;gap:.4rem;margin-bottom:.75rem;flex-wrap:wrap"></div>
+    <button class="btn btn-accent" style="width:100%;margin-top:.5rem" onclick="confirmAddToDay()">✓ Toevoegen</button>
+  </div>
+</div>
 </body>
 </html>
