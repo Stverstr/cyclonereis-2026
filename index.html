@@ -394,6 +394,22 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 /* Mobile */
 @media(max-width:560px){.main{padding:.8rem;}.header{padding:.7rem 1rem;}.header-badges{display:none;}.nav{padding:0 .3rem;}.nav-tab{padding:.7rem .6rem;font-size:.73rem;}.gallery-grid{grid-template-columns:repeat(auto-fill,minmax(80px,1fr));}}
 ::-webkit-scrollbar{width:5px;}::-webkit-scrollbar-track{background:#f1f5f9;}::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:2px;}
+
+/* ===== EMOJI PICKER ===== */
+.emo-trigger{font-size:1.6rem;background:var(--bg);border:2px solid var(--border);border-radius:10px;cursor:pointer;padding:.3rem .6rem;min-width:3rem;text-align:center;transition:border-color .15s;}
+.emo-trigger:hover{border-color:var(--accent);}
+.emo-popup{display:none;position:fixed;z-index:9999;background:#fff;border:1px solid var(--border);border-radius:14px;box-shadow:0 8px 32px rgba(0,0,0,.18);width:320px;max-width:95vw;flex-direction:column;overflow:hidden;}
+.emo-popup.open{display:flex;}
+.emo-search{padding:.5rem .6rem;border:none;border-bottom:1px solid var(--border);font-size:.85rem;outline:none;width:100%;box-sizing:border-box;}
+.emo-cats{display:flex;gap:0;overflow-x:auto;border-bottom:1px solid var(--border);scrollbar-width:none;}
+.emo-cats::-webkit-scrollbar{display:none;}
+.emo-cat-btn{flex-shrink:0;padding:.35rem .5rem;font-size:1rem;background:none;border:none;cursor:pointer;border-bottom:2px solid transparent;opacity:.6;}
+.emo-cat-btn.active{border-bottom-color:var(--accent);opacity:1;}
+.emo-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:1px;padding:.4rem;max-height:220px;overflow-y:auto;}
+.emo-item{font-size:1.3rem;padding:.25rem;background:none;border:none;cursor:pointer;border-radius:6px;text-align:center;line-height:1.3;}
+.emo-item:hover{background:var(--bg);}
+.emo-cat-label{grid-column:1/-1;font-size:.62rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;padding:.3rem .2rem .1rem;pointer-events:none;}
+
 </style>
 </head>
 <body>
@@ -630,7 +646,7 @@ const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJ
 const PHOTO_BUCKET='cyclonereis-photos';
 const TRIP_DAYS=['2026-08-08','2026-08-09','2026-08-10','2026-08-11','2026-08-12','2026-08-13','2026-08-14'];
 const DAY_NAMES=['Za','Zo','Ma','Di','Wo','Do','Vr'];
-const DIARY_EMOJIS=['🏔️','🚵','🥾','🧗','🌊','🏊','🚴','🍽️','🎉','🌅','🌄','🎪','🍺','💦','🎯','⭐','🔥','✨'];
+
 
 // ---- HAVERSINE ----
 function hav(lat1,lng1,lat2,lng2){const R=6371,dL=(lat2-lat1)*Math.PI/180,dN=(lng2-lng1)*Math.PI/180;const a=Math.sin(dL/2)**2+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dN/2)**2;return+(R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a))).toFixed(1);}
@@ -1766,7 +1782,7 @@ let expandedActId=null;
 let commentPendingPhotos={}; // {actId: [File,...]}
 let lbPhotos=[];
 let lbIndex=0;
-const DIARY_EMOJIS_LIST=['🏔️','🚵','🥾','🧗','🌊','🏊','🚴','🍽️','🎉','🌅','🌄','🎪','🍺','💦','🎯','⭐','🔥','✨'];
+
 
 function getAuthorName(){return localStorage.getItem('diary_author')||'';}
 function setAuthorName(n){localStorage.setItem('diary_author',n);}
@@ -1955,18 +1971,11 @@ function openNewActModal(date){
   document.getElementById('new-act-group').value='';
   document.getElementById('new-act-author').value=getAuthorName();
   document.getElementById('new-act-emoji').value='🏔️';
-  // Emoji picker
-  document.getElementById('emoji-picker-row').innerHTML=DIARY_EMOJIS_LIST.map(em=>
-    `<button class="ep-btn ${em==='🏔️'?'selected':''}" onclick="selectEmoji('${em}',this)">${em}</button>`
-  ).join('');
+  document.getElementById('diary-emo-disp').textContent='🏔️';
   document.getElementById('diary-new-act-modal').classList.add('open');
 }
 
-function selectEmoji(em,btn){
-  document.getElementById('new-act-emoji').value=em;
-  document.querySelectorAll('.ep-btn').forEach(b=>b.classList.remove('selected'));
-  btn.classList.add('selected');
-}
+
 
 async function submitNewDiaryAct(){
   const title=document.getElementById('new-act-title').value.trim();
@@ -2222,6 +2231,94 @@ function showSec(name,el){
 
 // ---- INIT ----
 
+
+// ===== EMOJI PICKER DATA =====
+const EMOJI_CATS=[
+  {id:'sport', lbl:'Sport', ico:'🏔️', emojis:['🏔️','⛰️','🌋','🗻','🏕️','🏖️','🏜️','🏝️','🏞️','🏄','🚵','🚴','🥾','🧗','🏊','🤽','🚣','🤿','🎿','⛷️','🛷','🏂','🏋️','🤸','⛹️','🏇','🧘','🤺','🏌️','🤾','🏹','🎣','🎯','🎳','🏓','🏸','🥊','🥋','⛳','🤼','🧗','🪂','🏄','🏇','🛹','🛼','🪁','🎖️','🏆','🥇','🥈','🥉','🏅','🎽','🧤','🦺','⛑️','🪖','🧢','🏊','🤽','🚣','🛶','⛵','⛺']},
+  {id:'natuur', lbl:'Natuur', ico:'🌿', emojis:['🌿','🍃','🍂','🍁','🌸','🌺','🌻','🌹','🌷','💐','🌱','🌾','☘️','🍀','🎋','🎍','🍄','🌰','🦔','🦡','🦦','🦥','🐿️','🐇','🦌','🐺','🦊','🐻','🐼','🦁','🐯','🐮','🐷','🐗','🐴','🦒','🦓','🐘','🦏','🦛','🦊','🦅','🦆','🦉','🦇','🐦','🐧','🕊️','🦚','🦜','🦩','🦢','🦋','🐛','🐝','🪲','🐞','🐌','🦗','🕷️','🦂']},
+  {id:'weer', lbl:'Weer', ico:'☀️', emojis:['☀️','🌤️','⛅','🌥️','🌦️','🌧️','⛈️','🌩️','🌨️','❄️','☃️','⛄','🌬️','🌀','🌈','🌊','💧','💦','🔥','🌫️','🌁','🌌','🌠','⭐','🌟','💫','✨','☄️','🌙','🌛','🌜','🌚','🌕','🌖','🌗','🌘','🌑','🌒','🌓','🌔','🌙','🪐','☁️','⚡','🌪️','🌈']},
+  {id:'eten', lbl:'Eten', ico:'🍕', emojis:['🍕','🍔','🌭','🌮','🌯','🥙','🧆','🥚','🍳','🥘','🍲','🫕','🍜','🍝','🍛','🍣','🍱','🥟','🦪','🍤','🍙','🍚','🍘','🧁','🍰','🎂','🍮','🍭','🍬','🍫','🍿','🍩','🍪','🥐','🥖','🥨','🧀','🥗','🥩','🥓','🫔','🫙','🥜','🌰','🍯','🥞','🧇','🫓','🌽','🥕','🧅','🧄','🥔','🫑','🥦','🥬','🥒','🍆','🥑']},
+  {id:'drinken', lbl:'Drinken', ico:'🍺', emojis:['🍺','🍻','🥂','🍷','🥃','🍸','🍹','🧉','🍾','🫗','☕','🍵','🧃','🥛','🧊','🫖','🍶','🧋','🥤','🫙']},
+  {id:'transport', lbl:'Vervoer', ico:'🚗', emojis:['🚗','🚕','🚙','🏎️','🚓','🚑','🚒','🚐','🛻','🚚','🚛','🚜','🏍️','🛵','🚲','🛴','🛹','🛼','🚁','✈️','🛸','🚀','🛶','⛵','🚢','🛥️','🚤','⛴️','🚞','🚝','🚄','🚃','🚂','🚆','🚇','🚊','🚉','🛤️','🛣️','🗺️','🧭','⛽','🅿️','🚦','🚥']},
+  {id:'locaties', lbl:'Locaties', ico:'🏠', emojis:['🏠','🏡','🏘️','🏚️','🏗️','🏢','🏣','🏤','🏥','🏦','🏨','🏩','🏪','🏫','🏬','🏭','🏯','🏰','💒','🗼','🗽','⛪','🕌','⛩️','🕍','🕋','⛲','⛺','🏕️','🌁','🌃','🏙️','🌆','🌇','🌉','🗺️','🏔️','⛰️','🌋']},
+  {id:'objecten', lbl:'Objecten', ico:'🎒', emojis:['🎒','🧳','👜','👝','💼','👛','🎽','🧥','👗','👘','🥻','👚','👕','👖','🩱','👙','🩲','🩳','👒','🎩','🧢','⛑️','🪖','👑','💍','👓','🕶️','🥽','🌂','☂️','🔦','💡','🕯️','🪔','🔋','🔌','💻','📱','📷','📸','📹','🎥','📺','📻','🎙️','🎚️','🎛️','📡','🔭','🔬','🧪','🧫','🧬','💊','🩺','🩹','🔧','🔨','⛏️','🛠️','🗡️','⚔️','🛡️','🔑','🗝️','🪝','🧰','🪣','🧲','🔦','🕯️']},
+  {id:'gezichten', lbl:'Emoji', ico:'😀', emojis:['😀','😃','😄','😁','😆','😅','🤣','😂','🙂','🙃','😉','😊','😇','🥰','😍','🤩','😘','😗','☺️','😚','😙','🥲','😋','😛','😜','🤪','😝','🤑','🤗','🤭','🫢','🫣','🤫','🤔','🫡','🤐','🥴','😐','😑','😶','🫥','😶‍🌫️','😏','😒','🙄','😬','🤥','🫨','😌','😔','😪','🤤','😴','😷','🤒','🤕','🤢','🤮','🤧','🥵','🥶','🥱','😵','🤯','🤠','🥸','🥳','😎','🤓','🧐','😕','🫤','😟','🙁','😮','😯','😲','😳','🥺','🥹','😦','😧','😨','😰','😥','😢','😭','😱','😖','😣','😞','😓','😩','😫','🥱','😤','😡','😠','🤬','😈','👿','💀','☠️','💩','🤡','👹','👺','👻','👽','👾','🤖']},
+  {id:'harten', lbl:'Symbolen', ico:'❤️', emojis:['❤️','🧡','💛','💚','💙','💜','🖤','🤍','🤎','💔','❤️‍🔥','❤️‍🩹','💕','💞','💓','💗','💖','💘','💝','💟','☮️','✝️','☪️','🕉️','✡️','🔯','☯️','🛐','⛎','♈','♉','♊','♋','♌','♍','♎','♏','♐','♑','♒','♓','🆗','🆙','🆒','🆕','🆓','🔞','📵','🚫','⛔','🚳','🚭','🚯','🚱','🚷','📳','📴','✅','☑️','❎','🔴','🟠','🟡','🟢','🔵','🟣','🔶','🔷','🔸','🔹','🔺','🔻','💠','🔘','🔲','🔳','⬛','⬜','◼️','◻️','▪️','▫️']}
+];
+const EMOJI_ALL=EMOJI_CATS.flatMap(c=>c.emojis);
+
+// Emoji picker state
+let _emoTarget=null; // {inputId, displayId}
+let _emoActiveCat='sport';
+
+function openEmojiPicker(inputId, displayId, triggerEl){
+  _emoTarget={inputId,displayId};
+  _emoActiveCat=_emoActiveCat||'sport';
+  const popup=document.getElementById('emoji-popup');
+  document.getElementById('emo-search-inp').value='';
+  _renderEmoGrid('');
+  // Position near trigger
+  if(triggerEl){
+    const r=triggerEl.getBoundingClientRect();
+    const pw=320;
+    let left=r.left;
+    if(left+pw>window.innerWidth) left=window.innerWidth-pw-8;
+    let top=r.bottom+6;
+    if(top+300>window.innerHeight) top=r.top-310;
+    popup.style.left=left+'px';
+    popup.style.top=top+'px';
+  }
+  popup.classList.add('open');
+}
+
+function closeEmojiPicker(){
+  document.getElementById('emoji-popup')?.classList.remove('open');
+}
+
+function _renderEmoGrid(search){
+  const grid=document.getElementById('emo-grid');
+  const catBar=document.getElementById('emo-cat-bar');
+  if(!grid) return;
+  if(search){
+    const q=search.toLowerCase();
+    const matches=EMOJI_ALL.filter(e=>e.toLowerCase().includes(q));
+    grid.innerHTML=matches.map(e=>`<button class="emo-item" onclick="_pickEmoji('${e}')">${e}</button>`).join('');
+  } else {
+    catBar.innerHTML=EMOJI_CATS.map(c=>`<button class="emo-cat-btn${_emoActiveCat===c.id?' active':''}" onclick="_setEmoCat('${c.id}')" title="${c.lbl}">${c.ico}</button>`).join('');
+    const cat=EMOJI_CATS.find(c=>c.id===_emoActiveCat)||EMOJI_CATS[0];
+    grid.innerHTML=cat.emojis.map(e=>`<button class="emo-item" onclick="_pickEmoji('${e}')">${e}</button>`).join('');
+  }
+}
+
+function _setEmoCat(id){
+  _emoActiveCat=id;
+  document.getElementById('emo-search-inp').value='';
+  _renderEmoGrid('');
+}
+
+function _pickEmoji(em){
+  if(!_emoTarget) return;
+  const inp=document.getElementById(_emoTarget.inputId);
+  const disp=document.getElementById(_emoTarget.displayId);
+  if(inp) inp.value=em;
+  if(disp) disp.textContent=em;
+  closeEmojiPicker();
+}
+
+function _emoSearchInput(q){
+  _renderEmoGrid(q);
+}
+
+// Close on outside click
+document.addEventListener('click',e=>{
+  const popup=document.getElementById('emoji-popup');
+  if(popup&&popup.classList.contains('open')){
+    if(!popup.contains(e.target)&&!e.target.classList.contains('emo-trigger')){
+      closeEmojiPicker();
+    }
+  }
+});
+
 // ---- EIGEN ACTIVITEITEN ----
 let customActGpxFile=null;
 let customActGeocodedLat=null;
@@ -2237,7 +2334,7 @@ async function loadCustomActivities(){
 function openCustomActForm(){
   // Reset form
   document.getElementById('cam-title').value='';
-  document.getElementById('cam-emoji').value='🏔️';
+  document.getElementById('cam-emoji').value='🏔️';document.getElementById('cam-emoji-disp').textContent='🏔️';
   document.getElementById('cam-place').value='';
   document.getElementById('cam-desc').value='';
   document.getElementById('cam-dur').value='';
@@ -2403,7 +2500,11 @@ function initApp(){
     <div class="modal-body">
       <div class="form-group">
         <label class="form-label">Emoji</label>
-        <input class="form-input" id="cam-emoji" value="🏔️" style="width:4rem;font-size:1.3rem;text-align:center;">
+        <div style="display:flex;align-items:center;gap:.6rem;">
+          <button class="emo-trigger" id="cam-emoji-disp" onclick="openEmojiPicker('cam-emoji','cam-emoji-disp',this)">🏔️</button>
+          <span style="font-size:.75rem;color:var(--muted)">Klik om emoji te kiezen</span>
+        </div>
+        <input type="hidden" id="cam-emoji" value="🏔️">
       </div>
       <div class="form-group">
         <label class="form-label">Titel *</label>
@@ -2460,7 +2561,10 @@ function initApp(){
     <div class="modal-body">
       <div class="form-field">
         <label>Emoji icoon</label>
-        <div class="emoji-picker-row" id="emoji-picker-row"></div>
+        <div style="display:flex;align-items:center;gap:.6rem;margin-top:.3rem;">
+          <button class="emo-trigger" id="diary-emo-disp" onclick="openEmojiPicker('new-act-emoji','diary-emo-disp',this)">🏔️</button>
+          <span style="font-size:.75rem;color:var(--muted)">Klik om emoji te kiezen</span>
+        </div>
         <input type="hidden" id="new-act-emoji" value="🏔️"/>
       </div>
       <div class="form-field"><label>Titel *</label><input type="text" id="new-act-title" placeholder="bv. Downhillen La Clusaz"/></div>
@@ -2553,6 +2657,14 @@ function initApp(){
 .plan-detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
 @media(max-width:860px){.plan-detail-grid{grid-template-columns:1fr;}}
 </style>
+
+
+<!-- ===== EMOJI PICKER POPUP ===== -->
+<div id="emoji-popup" class="emo-popup">
+  <input class="emo-search" id="emo-search-inp" placeholder="🔍 Zoek emoji..." oninput="_emoSearchInput(this.value)">
+  <div class="emo-cats" id="emo-cat-bar"></div>
+  <div class="emo-grid" id="emo-grid"></div>
+</div>
 
 </body>
 </html>
