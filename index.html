@@ -7,191 +7,248 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <style>
-:root{--bg:#0d1117;--card:#161b22;--border:#21262d;--accent:#2dd4bf;--accent2:#f97316;--accent3:#a855f7;--text:#e6edf3;--muted:#8b949e;--success:#22c55e;}
+:root{--bg:#0d1117;--card:#161b22;--border:#21262d;--accent:#2dd4bf;--text:#e6edf3;--muted:#8b949e;--success:#22c55e;--warn:#f97316;--purple:#a855f7;}
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+/* GATE */
 #gate{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(135deg,#0d1117 0%,#1a1f2e 100%);}
-.gate-logo{font-size:3rem;margin-bottom:.5rem;}
-.gate-title{font-size:1.6rem;font-weight:800;color:var(--text);margin-bottom:.3rem;}
-.gate-sub{color:var(--muted);margin-bottom:2rem;font-size:.9rem;}
+.gate-logo{font-size:3rem;}
+.gate-title{font-size:1.6rem;font-weight:800;margin:.4rem 0 .2rem;}
+.gate-sub{color:var(--muted);font-size:.9rem;margin-bottom:2rem;}
 .gate-box{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:2rem;width:340px;text-align:center;}
-.gate-box h2{color:var(--text);margin-bottom:1.2rem;font-size:1.1rem;}
+.gate-box h2{margin-bottom:1rem;font-size:1.1rem;}
 #pwInput{width:100%;padding:.85rem;border:1px solid #333;border-radius:10px;background:#0d1117;color:var(--text);font-size:1rem;margin-bottom:.5rem;outline:none;transition:border-color .2s;}
 #pwInput:focus{border-color:var(--accent);}
-#pwError{color:#ef4444;font-size:.8rem;margin-bottom:.5rem;display:none;}
-.gate-btn{width:100%;padding:.85rem;background:linear-gradient(135deg,var(--accent),#0ea5e9);color:#000;border:none;border-radius:10px;font-size:1rem;font-weight:700;cursor:pointer;transition:opacity .2s;}
-.gate-btn:hover{opacity:.9;}
+#pwError{color:#ef4444;font-size:.8rem;display:none;margin-bottom:.5rem;}
+.gate-btn{width:100%;padding:.85rem;background:linear-gradient(135deg,var(--accent),#0ea5e9);color:#000;border:none;border-radius:10px;font-size:1rem;font-weight:700;cursor:pointer;}
+/* APP */
 #app{display:none;}
-.header{background:linear-gradient(135deg,#0d1117 0%,#1a1f2e 100%);border-bottom:1px solid var(--border);padding:1.2rem 2rem;position:sticky;top:0;z-index:100;}
-.header-inner{max-width:1300px;margin:0 auto;display:flex;align-items:center;gap:1.2rem;flex-wrap:wrap;}
-.header-logo{font-size:1.8rem;}
-.header-info h1{font-size:1.3rem;font-weight:800;}
-.header-info p{color:var(--muted);font-size:.82rem;margin-top:.15rem;}
+/* HEADER */
+.header{background:linear-gradient(135deg,#0d1117,#1a1f2e);border-bottom:1px solid var(--border);padding:1rem 1.5rem;position:sticky;top:0;z-index:200;}
+.header-inner{max-width:1300px;margin:0 auto;display:flex;align-items:center;gap:1rem;flex-wrap:wrap;}
+.chalet-link{text-decoration:none;display:flex;align-items:center;gap:.7rem;background:rgba(45,212,191,.08);border:1px solid rgba(45,212,191,.2);border-radius:10px;padding:.5rem .9rem;transition:background .2s;}
+.chalet-link:hover{background:rgba(45,212,191,.15);}
+.chalet-link .logo{font-size:1.6rem;}
+.chalet-info h1{font-size:1.15rem;font-weight:800;color:var(--text);}
+.chalet-info p{color:var(--muted);font-size:.75rem;}
 .header-badges{display:flex;gap:.4rem;flex-wrap:wrap;margin-left:auto;}
-.badge{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:.25rem .8rem;font-size:.75rem;color:var(--muted);display:flex;align-items:center;gap:.3rem;}
+.badge{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:.2rem .7rem;font-size:.72rem;color:var(--muted);}
 .badge.accent{border-color:var(--accent);color:var(--accent);}
-.nav{background:var(--card);border-bottom:1px solid var(--border);padding:0 2rem;overflow-x:auto;}
+/* NAV */
+.nav{background:var(--card);border-bottom:1px solid var(--border);padding:0 1.5rem;overflow-x:auto;-webkit-overflow-scrolling:touch;}
 .nav-inner{max-width:1300px;margin:0 auto;display:flex;min-width:max-content;}
-.nav-tab{padding:.9rem 1.1rem;font-size:.83rem;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;display:flex;align-items:center;gap:.35rem;white-space:nowrap;}
+.nav-tab{padding:.85rem 1rem;font-size:.8rem;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;white-space:nowrap;display:flex;align-items:center;gap:.3rem;}
 .nav-tab:hover{color:var(--text);}
 .nav-tab.active{color:var(--accent);border-bottom-color:var(--accent);}
-.main{max-width:1300px;margin:0 auto;padding:1.5rem 2rem;}
+.nav-tab.plan-tab{color:#818cf8;}
+.nav-tab.plan-tab.active{color:#818cf8;border-bottom-color:#818cf8;}
+/* MAIN */
+.main{max-width:1300px;margin:0 auto;padding:1.2rem 1.5rem;}
 .section{display:none;}
 .section.active{display:block;}
-.split-layout{display:grid;grid-template-columns:1fr 1.4fr;gap:1.2rem;align-items:start;}
-@media(max-width:900px){.split-layout{grid-template-columns:1fr;}}
-.map-panel{position:sticky;top:80px;}
-.tab-map{height:420px;border-radius:14px;overflow:hidden;border:1px solid var(--border);}
-@media(max-width:900px){.map-panel{position:static;}.tab-map{height:280px;}}
-.section-header{margin-bottom:1rem;}
-.section-header h2{font-size:1.3rem;font-weight:800;margin-bottom:.2rem;}
-.section-header p{color:var(--muted);font-size:.83rem;}
-.filter-bar{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:1rem;}
-.filter-pill{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:.3rem .85rem;font-size:.78rem;color:var(--muted);cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:.3rem;}
-.filter-pill:hover,.filter-pill.active{background:rgba(45,212,191,.1);border-color:var(--accent);color:var(--accent);}
-.activity-grid{display:flex;flex-direction:column;gap:.8rem;}
-.activity-card{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;cursor:pointer;transition:all .2s;display:flex;align-items:center;}
-.activity-card:hover{border-color:var(--accent);transform:translateX(3px);box-shadow:0 4px 16px rgba(45,212,191,.08);}
-.card-icon{width:72px;height:72px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;flex-shrink:0;}
-.icon-downhill{background:linear-gradient(135deg,#064e3b,#065f46);}
-.icon-hiking{background:linear-gradient(135deg,#1e3a5f,#1e40af);}
-.icon-ferrata{background:linear-gradient(135deg,#4c1d95,#6d28d9);}
-.icon-water{background:linear-gradient(135deg,#0c4a6e,#0369a1);}
-.icon-lake{background:linear-gradient(135deg,#0e4f6e,#0284c7);}
-.icon-canyon{background:linear-gradient(135deg,#7c2d12,#9a3412);}
-.icon-restaurant{background:linear-gradient(135deg,#713f12,#92400e);}
-.icon-event{background:linear-gradient(135deg,#312e81,#4338ca);}
-.icon-shop{background:linear-gradient(135deg,#134e4a,#115e59);}
-.icon-bar{background:linear-gradient(135deg,#4a1d5e,#7c3aed);}
-.icon-rental{background:linear-gradient(135deg,#1a3a1a,#166534);}
-.card-body{padding:.7rem 1rem;flex:1;}
-.card-body h3{font-size:.9rem;font-weight:700;color:var(--text);margin-bottom:.15rem;}
-.card-body p{font-size:.76rem;color:var(--muted);line-height:1.4;}
-.card-stats{display:flex;gap:.5rem;margin-top:.4rem;flex-wrap:wrap;}
-.stat{display:flex;align-items:center;gap:.2rem;font-size:.7rem;color:var(--muted);background:rgba(255,255,255,.04);border-radius:5px;padding:.15rem .4rem;}
-.card-right{padding:.7rem .9rem;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-end;gap:.3rem;}
-.diff-badge{border-radius:6px;padding:.15rem .55rem;font-size:.68rem;font-weight:700;letter-spacing:.4px;text-transform:uppercase;}
-.diff-easy{background:rgba(34,197,94,.15);color:#22c55e;border:1px solid rgba(34,197,94,.25);}
-.diff-medium{background:rgba(249,115,22,.15);color:#f97316;border:1px solid rgba(249,115,22,.25);}
-.diff-hard{background:rgba(239,68,68,.15);color:#ef4444;border:1px solid rgba(239,68,68,.25);}
-.diff-extreme{background:rgba(168,85,247,.15);color:#a855f7;border:1px solid rgba(168,85,247,.25);}
-.card-arrow{color:var(--muted);font-size:.9rem;}
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:500;align-items:center;justify-content:center;padding:1rem;backdrop-filter:blur(4px);}
-.modal-overlay.open{display:flex;}
-.modal{background:var(--card);border:1px solid var(--border);border-radius:18px;width:100%;max-width:820px;max-height:92vh;overflow-y:auto;}
-.modal-header{padding:1.4rem 1.4rem 0;display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;}
-.modal-header h2{font-size:1.2rem;font-weight:800;display:flex;align-items:center;gap:.6rem;}
-.modal-icon-lg{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;}
-.modal-close{background:rgba(255,255,255,.08);border:none;border-radius:8px;color:var(--muted);font-size:1.1rem;width:30px;height:30px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.modal-close:hover{background:rgba(255,255,255,.15);color:var(--text);}
-.modal-body{padding:1rem 1.4rem 1.4rem;}
-.modal-meta{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem;}
-.modal-desc{color:var(--muted);font-size:.85rem;line-height:1.65;margin-bottom:1rem;}
-.modal-map{height:280px;border-radius:12px;overflow:hidden;margin-bottom:1rem;border:1px solid var(--border);position:relative;}
-.map-loading{position:absolute;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:.85rem;z-index:10;}
-.route-info{display:flex;gap:.6rem;margin-bottom:1rem;flex-wrap:wrap;}
-.route-chip{background:rgba(45,212,191,.1);border:1px solid rgba(45,212,191,.2);border-radius:8px;padding:.3rem .7rem;font-size:.75rem;color:var(--accent);display:flex;align-items:center;gap:.3rem;}
-.modal-sections{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;}
-@media(max-width:600px){.modal-sections{grid-template-columns:1fr;}}
-.modal-section{background:var(--bg);border-radius:10px;padding:.9rem;}
-.modal-section h4{font-size:.75rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:.5rem;}
-.modal-section ul{list-style:none;}
-.modal-section ul li{font-size:.79rem;color:var(--muted);padding:.18rem 0;display:flex;align-items:flex-start;gap:.35rem;line-height:1.4;}
-.modal-section ul li::before{content:"→";color:var(--accent);flex-shrink:0;margin-top:.1rem;}
-.modal-cta{margin-top:1rem;display:flex;gap:.6rem;flex-wrap:wrap;}
-.btn{display:inline-flex;align-items:center;gap:.35rem;padding:.55rem 1rem;border-radius:9px;font-size:.82rem;font-weight:600;cursor:pointer;text-decoration:none;border:none;transition:opacity .2s;}
-.btn-primary{background:linear-gradient(135deg,var(--accent),#0ea5e9);color:#000;}
-.btn-secondary{background:rgba(255,255,255,.07);color:var(--text);border:1px solid var(--border);}
-.btn-green{background:rgba(34,197,94,.15);color:#22c55e;border:1px solid rgba(34,197,94,.25);}
-.btn-purple{background:rgba(168,85,247,.15);color:#a855f7;border:1px solid rgba(168,85,247,.25);}
-.btn:hover{opacity:.82;}
-.content-list{display:flex;flex-direction:column;gap:.75rem;}
-.rest-card{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;cursor:pointer;transition:all .2s;display:flex;align-items:stretch;}
-.rest-card:hover{border-color:var(--accent);transform:translateX(3px);}
-.rest-icon{width:64px;display:flex;align-items:center;justify-content:center;font-size:1.6rem;flex-shrink:0;}
-.rest-body{padding:.75rem 1rem;flex:1;}
-.rest-body h3{font-size:.88rem;font-weight:700;margin-bottom:.15rem;display:flex;align-items:center;gap:.4rem;flex-wrap:wrap;}
-.stars{color:#fbbf24;font-size:.78rem;}
-.rest-loc{font-size:.72rem;color:var(--muted);margin-bottom:.3rem;display:flex;align-items:center;gap:.2rem;}
-.rest-body p{font-size:.76rem;color:var(--muted);line-height:1.45;}
-.rest-tags{display:flex;gap:.3rem;flex-wrap:wrap;margin-top:.4rem;}
-.rtag{background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:20px;padding:.12rem .5rem;font-size:.68rem;color:var(--muted);}
-.rest-right{padding:.75rem .9rem;text-align:right;display:flex;flex-direction:column;justify-content:center;gap:.2rem;flex-shrink:0;}
-.rest-dist{font-size:.78rem;color:var(--accent);font-weight:600;}
-.rest-price{font-size:.78rem;color:var(--muted);}
+/* SPLIT */
+.split-layout{display:grid;grid-template-columns:1fr 1.5fr;gap:1.2rem;align-items:start;}
+@media(max-width:860px){.split-layout{grid-template-columns:1fr;}}
+.map-panel{position:sticky;top:72px;}
+.tab-map{height:380px;border-radius:12px;overflow:hidden;border:1px solid var(--border);}
+/* ROUTE BAR */
+.route-bar{background:rgba(249,115,22,.08);border:1px solid rgba(249,115,22,.2);border-radius:9px;padding:.55rem .9rem;margin-top:.5rem;display:none;align-items:center;justify-content:space-between;gap:.5rem;font-size:.8rem;}
+.route-bar.visible{display:flex;}
+.route-bar .rb-info{display:flex;gap:.6rem;flex-wrap:wrap;}
+.route-chip{background:rgba(249,115,22,.15);border:1px solid rgba(249,115,22,.25);border-radius:6px;padding:.15rem .5rem;font-size:.72rem;color:var(--warn);}
+.rb-reset{background:none;border:1px solid var(--border);border-radius:6px;color:var(--muted);font-size:.75rem;padding:.15rem .55rem;cursor:pointer;}
+.rb-reset:hover{border-color:var(--warn);color:var(--warn);}
+/* SECTION HEADER */
+.sec-hdr{margin-bottom:.9rem;}
+.sec-hdr h2{font-size:1.2rem;font-weight:800;margin-bottom:.15rem;}
+.sec-hdr p{color:var(--muted);font-size:.8rem;}
+/* FILTERS */
+.filter-bar{display:flex;gap:.35rem;flex-wrap:wrap;margin-bottom:.9rem;}
+.fp{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:.25rem .75rem;font-size:.75rem;color:var(--muted);cursor:pointer;transition:all .15s;}
+.fp:hover,.fp.active{background:rgba(45,212,191,.1);border-color:var(--accent);color:var(--accent);}
+/* CARDS - ACTIVITIES */
+.act-grid{display:flex;flex-direction:column;gap:.65rem;}
+.act-card{background:var(--card);border:1px solid var(--border);border-radius:11px;overflow:hidden;cursor:pointer;transition:all .2s;display:flex;align-items:center;}
+.act-card:hover{border-color:var(--accent);transform:translateX(2px);}
+.act-card.favd{border-color:rgba(251,191,36,.3);}
+.card-ico{width:66px;height:66px;display:flex;align-items:center;justify-content:center;font-size:1.7rem;flex-shrink:0;}
+.ico-dh{background:linear-gradient(135deg,#064e3b,#065f46);}
+.ico-hike{background:linear-gradient(135deg,#1e3a5f,#1e40af);}
+.ico-ferrata{background:linear-gradient(135deg,#4c1d95,#6d28d9);}
+.ico-water{background:linear-gradient(135deg,#0c4a6e,#0369a1);}
+.ico-river{background:linear-gradient(135deg,#0e4f6e,#0891b2);}
+.ico-lake{background:linear-gradient(135deg,#0e4f6e,#0284c7);}
+.ico-canyon{background:linear-gradient(135deg,#7c2d12,#9a3412);}
+.ico-rest{background:linear-gradient(135deg,#713f12,#92400e);}
+.ico-bar{background:linear-gradient(135deg,#4a1d5e,#7c3aed);}
+.ico-shop{background:linear-gradient(135deg,#134e4a,#115e59);}
+.ico-rental{background:linear-gradient(135deg,#1a3a1a,#166534);}
+.card-body{padding:.6rem .9rem;flex:1;min-width:0;}
+.card-body h3{font-size:.85rem;font-weight:700;margin-bottom:.1rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.card-body p{font-size:.73rem;color:var(--muted);}
+.card-stats{display:flex;gap:.35rem;margin-top:.3rem;flex-wrap:wrap;}
+.cs{font-size:.68rem;color:var(--muted);background:rgba(255,255,255,.04);border-radius:4px;padding:.1rem .35rem;}
+.dist-badge{font-size:.68rem;color:var(--accent);font-weight:700;}
+.card-right{padding:.6rem .75rem;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-end;gap:.35rem;}
+.diff{border-radius:5px;padding:.12rem .45rem;font-size:.65rem;font-weight:700;letter-spacing:.3px;text-transform:uppercase;}
+.d-easy{background:rgba(34,197,94,.12);color:#22c55e;border:1px solid rgba(34,197,94,.2);}
+.d-medium{background:rgba(249,115,22,.12);color:var(--warn);border:1px solid rgba(249,115,22,.2);}
+.d-hard{background:rgba(239,68,68,.12);color:#ef4444;border:1px solid rgba(239,68,68,.2);}
+.fav-btn{background:none;border:none;cursor:pointer;font-size:1rem;padding:0;line-height:1;transition:transform .15s;}
+.fav-btn:hover{transform:scale(1.3);}
+.add-plan-btn{background:rgba(129,140,248,.1);border:1px solid rgba(129,140,248,.2);border-radius:6px;color:#818cf8;font-size:.65rem;padding:.12rem .45rem;cursor:pointer;white-space:nowrap;}
+.add-plan-btn:hover{background:rgba(129,140,248,.2);}
+/* GENERIC LIST CARDS */
+.list-card{background:var(--card);border:1px solid var(--border);border-radius:11px;overflow:hidden;cursor:pointer;transition:all .2s;display:flex;align-items:stretch;}
+.list-card:hover{border-color:var(--accent);transform:translateX(2px);}
+.lc-ico{width:60px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0;}
+.lc-body{padding:.65rem .9rem;flex:1;min-width:0;}
+.lc-body h3{font-size:.85rem;font-weight:700;margin-bottom:.1rem;}
+.lc-body p{font-size:.73rem;color:var(--muted);line-height:1.4;}
+.lc-tags{display:flex;gap:.25rem;flex-wrap:wrap;margin-top:.3rem;}
+.tag{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:20px;padding:.08rem .45rem;font-size:.65rem;color:var(--muted);}
+.lc-right{padding:.65rem .8rem;text-align:right;display:flex;flex-direction:column;justify-content:center;gap:.2rem;flex-shrink:0;}
+.lc-dist{font-size:.73rem;color:var(--accent);font-weight:600;}
+.lc-sub{font-size:.7rem;color:var(--muted);}
 /* EVENTS */
-.event-card{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;cursor:pointer;transition:all .2s;display:flex;align-items:stretch;}
-.event-card:hover{border-color:var(--accent);transform:translateX(3px);}
-.event-card.during{border-color:rgba(45,212,191,.3);}
-.event-date-box{width:64px;background:linear-gradient(135deg,var(--accent),#0ea5e9);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;color:#000;font-weight:900;}
-.event-day{font-size:1.3rem;line-height:1;}
-.event-month{font-size:.6rem;text-transform:uppercase;letter-spacing:.5px;}
-.event-body{padding:.75rem 1rem;flex:1;}
-.event-body h3{font-size:.88rem;font-weight:700;margin-bottom:.2rem;display:flex;align-items:center;gap:.4rem;flex-wrap:wrap;}
-.during-badge{background:rgba(45,212,191,.15);color:var(--accent);border:1px solid rgba(45,212,191,.3);border-radius:5px;padding:.1rem .45rem;font-size:.65rem;font-weight:700;}
-.event-body p{font-size:.76rem;color:var(--muted);line-height:1.45;}
-.event-loc{font-size:.72rem;color:var(--accent);margin-top:.3rem;display:flex;align-items:center;gap:.2rem;}
-/* SHOPS */
-.shop-card{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;cursor:pointer;transition:all .2s;display:flex;align-items:stretch;}
-.shop-card:hover{border-color:var(--accent);transform:translateX(3px);}
-.shop-icon{width:64px;display:flex;align-items:center;justify-content:center;font-size:1.6rem;flex-shrink:0;}
-.shop-body{padding:.75rem 1rem;flex:1;}
-.shop-body h3{font-size:.88rem;font-weight:700;margin-bottom:.1rem;}
-.shop-type{font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:.3rem;}
-.shop-body p{font-size:.76rem;color:var(--muted);line-height:1.45;}
-.shop-right{padding:.75rem .9rem;text-align:right;display:flex;flex-direction:column;justify-content:center;gap:.2rem;flex-shrink:0;}
-.shop-hours{font-size:.72rem;color:var(--success);}
-.shop-dist{font-size:.72rem;color:var(--accent);}
-/* NIGHTLIFE */
-.bar-card{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;cursor:pointer;transition:all .2s;display:flex;align-items:stretch;}
-.bar-card:hover{border-color:#a855f7;transform:translateX(3px);box-shadow:0 4px 16px rgba(168,85,247,.08);}
-.bar-icon{width:64px;display:flex;align-items:center;justify-content:center;font-size:1.6rem;flex-shrink:0;}
-.bar-body{padding:.75rem 1rem;flex:1;}
-.bar-body h3{font-size:.88rem;font-weight:700;margin-bottom:.1rem;}
-.bar-type{font-size:.68rem;color:#a855f7;text-transform:uppercase;letter-spacing:.4px;margin-bottom:.2rem;font-weight:700;}
-.bar-body p{font-size:.76rem;color:var(--muted);line-height:1.45;}
-.bar-right{padding:.75rem .9rem;text-align:right;display:flex;flex-direction:column;justify-content:center;gap:.3rem;flex-shrink:0;}
-.bar-hours{font-size:.72rem;color:#a855f7;}
-.bar-dist{font-size:.72rem;color:var(--accent);}
-.vibe-badge{border-radius:6px;padding:.12rem .5rem;font-size:.66rem;font-weight:700;letter-spacing:.3px;}
-.vibe-quiet{background:rgba(34,197,94,.12);color:#22c55e;border:1px solid rgba(34,197,94,.2);}
-.vibe-busy{background:rgba(249,115,22,.12);color:#f97316;border:1px solid rgba(249,115,22,.2);}
-.vibe-party{background:rgba(168,85,247,.15);color:#a855f7;border:1px solid rgba(168,85,247,.25);}
-/* RENTAL */
-.rental-card{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;cursor:pointer;transition:all .2s;display:flex;align-items:stretch;}
-.rental-card:hover{border-color:#22c55e;transform:translateX(3px);box-shadow:0 4px 16px rgba(34,197,94,.08);}
-.rental-icon{width:64px;display:flex;align-items:center;justify-content:center;font-size:1.6rem;flex-shrink:0;}
-.rental-body{padding:.75rem 1rem;flex:1;}
-.rental-body h3{font-size:.88rem;font-weight:700;margin-bottom:.15rem;}
-.rental-body p{font-size:.76rem;color:var(--muted);line-height:1.45;margin-bottom:.3rem;}
-.rental-spec{display:flex;gap:.3rem;flex-wrap:wrap;margin-top:.3rem;}
-.spec-tag{border-radius:20px;padding:.1rem .55rem;font-size:.67rem;font-weight:600;}
-.spec-dh{background:rgba(34,197,94,.12);color:#22c55e;border:1px solid rgba(34,197,94,.2);}
-.spec-mtb{background:rgba(59,130,246,.12);color:#60a5fa;border:1px solid rgba(59,130,246,.2);}
-.spec-emtb{background:rgba(251,191,36,.1);color:#fbbf24;border:1px solid rgba(251,191,36,.2);}
-.spec-road{background:rgba(239,68,68,.1);color:#f87171;border:1px solid rgba(239,68,68,.2);}
-.spec-kids{background:rgba(168,85,247,.1);color:#c084fc;border:1px solid rgba(168,85,247,.2);}
-.rental-right{padding:.75rem .9rem;text-align:right;flex-shrink:0;display:flex;flex-direction:column;justify-content:center;gap:.25rem;}
-.rental-hours{font-size:.72rem;color:#22c55e;}
-.rental-dist{font-size:.72rem;color:var(--accent);}
-.rental-price{font-size:.72rem;color:var(--muted);}
+.ev-card{background:var(--card);border:1px solid var(--border);border-radius:11px;overflow:hidden;cursor:pointer;transition:all .2s;display:flex;}
+.ev-card:hover{border-color:var(--accent);transform:translateX(2px);}
+.ev-card.during{border-color:rgba(45,212,191,.25);}
+.ev-date{width:60px;background:linear-gradient(135deg,var(--accent),#0ea5e9);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;color:#000;font-weight:900;}
+.ev-day{font-size:1.2rem;line-height:1;}
+.ev-mo{font-size:.58rem;text-transform:uppercase;letter-spacing:.5px;}
+.ev-body{padding:.65rem .9rem;flex:1;}
+.ev-body h3{font-size:.85rem;font-weight:700;margin-bottom:.15rem;display:flex;align-items:center;gap:.35rem;flex-wrap:wrap;}
+.during-tag{background:rgba(45,212,191,.12);color:var(--accent);border:1px solid rgba(45,212,191,.25);border-radius:4px;padding:.08rem .4rem;font-size:.62rem;font-weight:700;}
+.ev-body p{font-size:.73rem;color:var(--muted);line-height:1.4;}
+.ev-loc{font-size:.7rem;color:var(--accent);margin-top:.2rem;}
+/* NIGHTLIFE CARDS */
+.bar-card{background:var(--card);border:1px solid var(--border);border-radius:11px;overflow:hidden;cursor:pointer;transition:all .2s;display:flex;}
+.bar-card:hover{border-color:var(--purple);transform:translateX(2px);}
+.bar-body{padding:.65rem .9rem;flex:1;}
+.bar-body h3{font-size:.85rem;font-weight:700;margin-bottom:.05rem;}
+.bar-type{font-size:.65rem;color:var(--purple);text-transform:uppercase;font-weight:700;letter-spacing:.4px;margin-bottom:.2rem;}
+.bar-body p{font-size:.73rem;color:var(--muted);line-height:1.4;}
+.bar-right{padding:.65rem .8rem;text-align:right;flex-shrink:0;display:flex;flex-direction:column;justify-content:center;gap:.25rem;}
+.vibe{border-radius:5px;padding:.1rem .45rem;font-size:.65rem;font-weight:700;}
+.v-quiet{background:rgba(34,197,94,.12);color:#22c55e;border:1px solid rgba(34,197,94,.2);}
+.v-busy{background:rgba(249,115,22,.12);color:var(--warn);border:1px solid rgba(249,115,22,.2);}
+.v-party{background:rgba(168,85,247,.15);color:var(--purple);border:1px solid rgba(168,85,247,.25);}
+/* RENTAL CARDS */
+.rental-card{background:var(--card);border:1px solid var(--border);border-radius:11px;overflow:hidden;cursor:pointer;transition:all .2s;display:flex;}
+.rental-card:hover{border-color:var(--success);transform:translateX(2px);}
+.rental-body{padding:.65rem .9rem;flex:1;}
+.rental-body h3{font-size:.85rem;font-weight:700;margin-bottom:.15rem;}
+.rental-body p{font-size:.73rem;color:var(--muted);line-height:1.4;margin-bottom:.25rem;}
+.spec-tags{display:flex;gap:.25rem;flex-wrap:wrap;}
+.st{border-radius:20px;padding:.08rem .45rem;font-size:.65rem;font-weight:600;}
+.st-dh{background:rgba(34,197,94,.12);color:#22c55e;border:1px solid rgba(34,197,94,.2);}
+.st-mtb{background:rgba(59,130,246,.12);color:#60a5fa;border:1px solid rgba(59,130,246,.2);}
+.st-emtb{background:rgba(251,191,36,.1);color:#fbbf24;border:1px solid rgba(251,191,36,.2);}
+.st-road{background:rgba(239,68,68,.1);color:#f87171;border:1px solid rgba(239,68,68,.2);}
+.st-kids{background:rgba(168,85,247,.1);color:#c084fc;border:1px solid rgba(168,85,247,.2);}
 /* INFO BANNERS */
-.info-banner{background:rgba(45,212,191,.07);border:1px solid rgba(45,212,191,.15);border-radius:9px;padding:.65rem .9rem;font-size:.8rem;color:var(--accent);margin-bottom:1rem;display:flex;align-items:center;gap:.5rem;}
+.info-banner{background:rgba(45,212,191,.07);border:1px solid rgba(45,212,191,.15);border-radius:8px;padding:.55rem .8rem;font-size:.78rem;color:var(--accent);margin-bottom:.9rem;}
 .info-banner.purple{background:rgba(168,85,247,.07);border-color:rgba(168,85,247,.2);color:#c084fc;}
 .info-banner.green{background:rgba(34,197,94,.07);border-color:rgba(34,197,94,.2);color:#4ade80;}
-/* LEAFLET POPUPS */
-.leaflet-popup-content-wrapper{background:var(--card);color:var(--text);border:1px solid var(--border);border-radius:10px;box-shadow:0 4px 20px rgba(0,0,0,.5);}
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:500;align-items:center;justify-content:center;padding:1rem;backdrop-filter:blur(4px);}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--card);border:1px solid var(--border);border-radius:16px;width:100%;max-width:800px;max-height:92vh;overflow-y:auto;}
+.modal-hdr{padding:1.2rem 1.2rem 0;display:flex;align-items:flex-start;justify-content:space-between;gap:.8rem;}
+.modal-hdr h2{font-size:1.1rem;font-weight:800;display:flex;align-items:center;gap:.5rem;}
+.m-ico{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;}
+.modal-close{background:rgba(255,255,255,.07);border:none;border-radius:7px;color:var(--muted);font-size:1rem;width:28px;height:28px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.modal-close:hover{background:rgba(255,255,255,.14);}
+.modal-body{padding:.9rem 1.2rem 1.2rem;}
+.m-desc{color:var(--muted);font-size:.83rem;line-height:1.6;margin-bottom:.9rem;}
+.m-map{height:260px;border-radius:10px;overflow:hidden;margin-bottom:.9rem;border:1px solid var(--border);position:relative;}
+.map-loading{position:absolute;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:.82rem;z-index:10;}
+.m-route-info{display:flex;gap:.5rem;margin-bottom:.9rem;flex-wrap:wrap;}
+.m-sections{display:grid;grid-template-columns:1fr 1fr;gap:.7rem;}
+@media(max-width:560px){.m-sections{grid-template-columns:1fr;}}
+.m-section{background:var(--bg);border-radius:9px;padding:.8rem;}
+.m-section h4{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:.4rem;}
+.m-section ul{list-style:none;}
+.m-section li{font-size:.76rem;color:var(--muted);padding:.14rem 0;display:flex;gap:.3rem;line-height:1.4;}
+.m-section li::before{content:"→";color:var(--accent);flex-shrink:0;}
+.m-cta{margin-top:.9rem;display:flex;gap:.5rem;flex-wrap:wrap;}
+.btn{display:inline-flex;align-items:center;gap:.3rem;padding:.5rem .9rem;border-radius:8px;font-size:.79rem;font-weight:600;cursor:pointer;text-decoration:none;border:none;transition:opacity .2s;}
+.btn:hover{opacity:.82;}
+.btn-primary{background:linear-gradient(135deg,var(--accent),#0ea5e9);color:#000;}
+.btn-sec{background:rgba(255,255,255,.07);color:var(--text);border:1px solid var(--border);}
+.btn-green{background:rgba(34,197,94,.12);color:#22c55e;border:1px solid rgba(34,197,94,.2);}
+.btn-purple{background:rgba(168,85,247,.12);color:var(--purple);border:1px solid rgba(168,85,247,.2);}
+/* DAGPLANNING */
+.week-strip{display:grid;grid-template-columns:repeat(7,1fr);gap:.5rem;margin-bottom:1.2rem;}
+@media(max-width:700px){.week-strip{grid-template-columns:repeat(4,1fr);}}
+.day-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:.6rem .5rem;cursor:pointer;transition:all .2s;text-align:center;}
+.day-card:hover{border-color:var(--accent);}
+.day-card.selected{border-color:#818cf8;background:rgba(129,140,248,.08);}
+.day-card.has-items{border-color:rgba(45,212,191,.3);}
+.dc-name{font-size:.68rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.3px;}
+.dc-date{font-size:1.1rem;font-weight:800;margin:.1rem 0;}
+.dc-icons{font-size:.85rem;min-height:1.2rem;}
+.dc-meals{display:flex;gap:.2rem;justify-content:center;margin-top:.2rem;font-size:.7rem;}
+/* DAY DETAIL */
+.day-detail{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+@media(max-width:860px){.day-detail{grid-template-columns:1fr;}}
+.day-left{}
+.day-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:.8rem;}
+.day-hdr h3{font-size:1rem;font-weight:800;}
+.day-add-btn{background:rgba(129,140,248,.1);border:1px solid rgba(129,140,248,.2);border-radius:8px;color:#818cf8;font-size:.78rem;padding:.35rem .7rem;cursor:pointer;display:flex;align-items:center;gap:.3rem;}
+.day-add-btn:hover{background:rgba(129,140,248,.2);}
+.plan-slot{background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:.6rem .8rem;margin-bottom:.5rem;display:flex;align-items:center;gap:.6rem;}
+.slot-times{display:flex;flex-direction:column;gap:.2rem;flex-shrink:0;}
+.time-input{background:var(--card);border:1px solid var(--border);border-radius:5px;color:var(--text);font-size:.72rem;padding:.15rem .3rem;width:58px;outline:none;}
+.time-input:focus{border-color:var(--accent);}
+.slot-ico{font-size:1.2rem;flex-shrink:0;}
+.slot-name{flex:1;font-size:.8rem;font-weight:600;}
+.slot-actions{display:flex;gap:.3rem;flex-shrink:0;}
+.slot-del{background:none;border:none;cursor:pointer;color:var(--muted);font-size:.85rem;}
+.slot-del:hover{color:#ef4444;}
+.meals-section{margin-top:.9rem;}
+.meal-row{display:flex;align-items:center;gap:.5rem;margin-bottom:.5rem;}
+.meal-label{font-size:.75rem;color:var(--muted);width:55px;flex-shrink:0;}
+.meal-input{flex:1;background:var(--bg);border:1px solid var(--border);border-radius:7px;color:var(--text);font-size:.78rem;padding:.4rem .6rem;outline:none;}
+.meal-input:focus{border-color:var(--accent);}
+.meal-rest-btn{background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.2);border-radius:6px;color:var(--warn);font-size:.65rem;padding:.2rem .5rem;cursor:pointer;white-space:nowrap;}
+.plan-save-bar{display:flex;align-items:center;gap:.6rem;margin-top:.9rem;}
+.save-indicator{font-size:.75rem;color:var(--success);}
+.day-right .plan-map{height:320px;border-radius:10px;overflow:hidden;border:1px solid var(--border);}
+.route-day-info{margin-top:.5rem;display:flex;gap:.4rem;flex-wrap:wrap;}
+/* ACTIVITY PICKER MODAL */
+.picker-modal{background:var(--card);border:1px solid var(--border);border-radius:16px;width:100%;max-width:600px;max-height:88vh;overflow-y:auto;}
+.picker-hdr{padding:1rem 1rem .5rem;display:flex;align-items:center;justify-content:space-between;}
+.picker-hdr h3{font-size:1rem;font-weight:800;}
+.picker-search{width:100%;margin:.5rem 1rem;width:calc(100% - 2rem);background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:.82rem;padding:.5rem .7rem;outline:none;}
+.picker-search:focus{border-color:var(--accent);}
+.picker-list{padding:.5rem .8rem 1rem;}
+.picker-item{display:flex;align-items:center;gap:.6rem;padding:.5rem .6rem;border-radius:8px;cursor:pointer;transition:background .15s;}
+.picker-item:hover{background:rgba(255,255,255,.05);}
+.picker-item .pi-icon{font-size:1.2rem;width:30px;text-align:center;flex-shrink:0;}
+.picker-item .pi-name{font-size:.82rem;font-weight:600;flex:1;}
+.picker-item .pi-dist{font-size:.7rem;color:var(--accent);}
+.picker-item .pi-add{background:rgba(129,140,248,.1);border:1px solid rgba(129,140,248,.2);border-radius:6px;color:#818cf8;font-size:.7rem;padding:.15rem .5rem;cursor:pointer;}
+/* RESTAURANT PICKER */
+.rest-pick-item{display:flex;align-items:center;gap:.5rem;padding:.4rem .6rem;border-radius:7px;cursor:pointer;transition:background .15s;}
+.rest-pick-item:hover{background:rgba(255,255,255,.05);}
+/* LEAFLET */
+.leaflet-popup-content-wrapper{background:var(--card);color:var(--text);border:1px solid var(--border);border-radius:9px;box-shadow:0 4px 20px rgba(0,0,0,.5);}
 .leaflet-popup-tip{background:var(--card);}
-.leaflet-popup-content{margin:.6rem .8rem;font-size:.8rem;}
+.leaflet-popup-content{margin:.5rem .7rem;font-size:.78rem;}
 .leaflet-popup-content b{color:var(--accent);}
-::-webkit-scrollbar{width:5px;}
+/* STARS */
+.stars-row{color:#fbbf24;font-size:.75rem;}
+/* SCROLL */
+::-webkit-scrollbar{width:4px;}
 ::-webkit-scrollbar-track{background:var(--bg);}
-::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
-@media(max-width:600px){.main{padding:1rem;}.header{padding:.8rem 1rem;}.header-badges{display:none;}.nav{padding:0 .5rem;}.nav-tab{padding:.75rem .6rem;font-size:.76rem;}}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+/* MOBILE */
+@media(max-width:560px){.main{padding:.8rem;}.header{padding:.7rem 1rem;}.header-badges{display:none;}.nav{padding:0 .3rem;}.nav-tab{padding:.7rem .6rem;font-size:.73rem;}}
 </style>
 </head>
 <body>
-
 <!-- GATE -->
 <div id="gate">
   <div class="gate-logo">🚵🏔️</div>
@@ -210,463 +267,969 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <div id="app">
   <div class="header">
     <div class="header-inner">
-      <div class="header-logo">🏔️</div>
-      <div class="header-info">
-        <h1>Cyclonereis Annecy 2026</h1>
-        <p>Chalet Elomaz · Saint-Jean-de-Sixt · 8–14 augustus 2026</p>
-      </div>
+      <a class="chalet-link" href="https://www.ovonetwork.com/nl/vakantiehuizen/chalet-elomaz" target="_blank">
+        <div class="logo">🏠</div>
+        <div class="chalet-info">
+          <h1>Cyclonereis Annecy 2026</h1>
+          <p>🔗 Chalet Elomaz · Saint-Jean-de-Sixt · klik voor foto's</p>
+        </div>
+      </a>
       <div class="header-badges">
         <div class="badge accent">📅 8–14 aug</div>
-        <div class="badge">🏠 Chalet Elomaz</div>
         <div class="badge">📍 Saint-Jean-de-Sixt</div>
         <div class="badge">👥 11 pers.</div>
       </div>
     </div>
   </div>
-
   <div class="nav">
     <div class="nav-inner">
-      <div class="nav-tab active" onclick="showSection('activities',this)">🏔️ Activiteiten</div>
-      <div class="nav-tab" onclick="showSection('restaurants',this)">🍽️ Restaurants</div>
-      <div class="nav-tab" onclick="showSection('events',this)">🎪 Events</div>
-      <div class="nav-tab" onclick="showSection('nightlife',this)">🍻 Uitgaan</div>
-      <div class="nav-tab" onclick="showSection('rentals',this)">🚲 Verhuur</div>
-      <div class="nav-tab" onclick="showSection('shops',this)">🛒 Winkels</div>
+      <div class="nav-tab plan-tab active" onclick="showSec('planning',this)">📅 Dagplanning</div>
+      <div class="nav-tab" onclick="showSec('activities',this)">🏔️ Activiteiten</div>
+      <div class="nav-tab" onclick="showSec('restaurants',this)">🍽️ Restaurants</div>
+      <div class="nav-tab" onclick="showSec('events',this)">🎪 Events</div>
+      <div class="nav-tab" onclick="showSec('nightlife',this)">🍻 Uitgaan</div>
+      <div class="nav-tab" onclick="showSec('rentals',this)">🚲 Verhuur</div>
+      <div class="nav-tab" onclick="showSec('shops',this)">🛒 Winkels</div>
     </div>
   </div>
-
   <div class="main">
 
+    <!-- DAGPLANNING -->
+    <div id="sec-planning" class="section active">
+      <div class="sec-hdr"><h2>📅 Dagplanning</h2><p>Stel je week samen — automatisch opgeslagen voor de hele groep</p></div>
+      <div class="week-strip" id="week-strip"></div>
+      <div class="day-detail">
+        <div class="day-left" id="day-left">
+          <div style="color:var(--muted);font-size:.85rem;padding:2rem 0;text-align:center">← Selecteer een dag hierboven</div>
+        </div>
+        <div class="day-right">
+          <div class="plan-map" id="plan-map" style="height:320px;border-radius:10px;overflow:hidden;border:1px solid var(--border);"></div>
+          <div class="route-day-info" id="route-day-info"></div>
+        </div>
+      </div>
+    </div>
+
     <!-- ACTIVITEITEN -->
-    <div id="section-activities" class="section active">
+    <div id="sec-activities" class="section">
       <div class="split-layout">
         <div class="map-panel">
-          <div class="section-header">
-            <h2>🏔️ Activiteiten</h2>
-            <p>Klik op een activiteit voor detail + routekaart</p>
-          </div>
+          <div class="sec-hdr"><h2>🏔️ Activiteiten</h2><p>Klik op een marker → route vanuit chalet. Klik op kaart = reset.</p></div>
           <div class="filter-bar" id="act-filters">
-            <div class="filter-pill active" onclick="filterActivities('all',this)">Alles</div>
-            <div class="filter-pill" onclick="filterActivities('downhill',this)">🚵 Downhill</div>
-            <div class="filter-pill" onclick="filterActivities('hiking',this)">🥾 Wandelen</div>
-            <div class="filter-pill" onclick="filterActivities('ferrata',this)">🧗 Via Ferrata</div>
-            <div class="filter-pill" onclick="filterActivities('water',this)">🌊 Water</div>
+            <div class="fp active" onclick="filterActs('all',this)">Alles</div>
+            <div class="fp" onclick="filterActs('downhill',this)">🚵 Downhill</div>
+            <div class="fp" onclick="filterActs('hiking',this)">🥾 Wandelen</div>
+            <div class="fp" onclick="filterActs('ferrata',this)">🧗 Via Ferrata</div>
+            <div class="fp" onclick="filterActs('water',this)">🌊 Water</div>
           </div>
           <div class="tab-map" id="map-activities"></div>
+          <div class="route-bar" id="rb-activities">
+            <div class="rb-info" id="rbi-activities"></div>
+            <button class="rb-reset" onclick="resetTabMap('activities')">✕ Reset kaart</button>
+          </div>
         </div>
-        <div>
-          <div class="activity-grid" id="activity-grid"></div>
-        </div>
+        <div><div class="act-grid" id="act-grid"></div></div>
       </div>
     </div>
 
     <!-- RESTAURANTS -->
-    <div id="section-restaurants" class="section">
+    <div id="sec-restaurants" class="section">
       <div class="split-layout">
         <div class="map-panel">
-          <div class="section-header">
-            <h2>🍽️ Restaurants</h2>
-            <p>Van Michelin-ster tot lokale pizza</p>
-          </div>
+          <div class="sec-hdr"><h2>🍽️ Restaurants</h2><p>Klik op marker → route. Klik op kaart → reset.</p></div>
           <div class="info-banner">ℹ️ Reserveer op voorhand in augustus!</div>
           <div class="tab-map" id="map-restaurants"></div>
+          <div class="route-bar" id="rb-restaurants"><div class="rb-info" id="rbi-restaurants"></div><button class="rb-reset" onclick="resetTabMap('restaurants')">✕ Reset</button></div>
         </div>
-        <div class="content-list" id="restaurant-list"></div>
+        <div id="rest-list" style="display:flex;flex-direction:column;gap:.65rem;"></div>
       </div>
     </div>
 
     <!-- EVENTS -->
-    <div id="section-events" class="section">
+    <div id="sec-events" class="section">
       <div class="split-layout">
         <div class="map-panel">
-          <div class="section-header">
-            <h2>🎪 Publieke Events</h2>
-            <p>Festivals en evenementen tijdens jullie verblijf 8–14 aug</p>
-          </div>
+          <div class="sec-hdr"><h2>🎪 Publieke Events</h2><p>Alleen evenementen tijdens jullie verblijf 8–14 aug</p></div>
           <div class="tab-map" id="map-events"></div>
+          <div class="route-bar" id="rb-events"><div class="rb-info" id="rbi-events"></div><button class="rb-reset" onclick="resetTabMap('events')">✕ Reset</button></div>
         </div>
-        <div class="content-list" id="events-list"></div>
+        <div id="events-list" style="display:flex;flex-direction:column;gap:.65rem;"></div>
       </div>
     </div>
 
-    <!-- UITGAAN / NIGHTLIFE -->
-    <div id="section-nightlife" class="section">
+    <!-- NIGHTLIFE -->
+    <div id="sec-nightlife" class="section">
       <div class="split-layout">
         <div class="map-panel">
-          <div class="section-header">
-            <h2>🍻 Uitgaan</h2>
-            <p>Bars, terrassen en dansen in de Aravis vallei</p>
-          </div>
-          <div class="info-banner purple">🎉 August = hoogseizoen — terrassen zijn open en vol sfeer!</div>
+          <div class="sec-hdr"><h2>🍻 Uitgaan</h2><p>Bars, terrassen, dansen en casino — gesorteerd op afstand</p></div>
+          <div class="info-banner purple">🎉 August = hoogseizoen — terrassen open en vol sfeer!</div>
           <div class="tab-map" id="map-nightlife"></div>
+          <div class="route-bar" id="rb-nightlife"><div class="rb-info" id="rbi-nightlife"></div><button class="rb-reset" onclick="resetTabMap('nightlife')">✕ Reset</button></div>
         </div>
-        <div class="content-list" id="nightlife-list"></div>
+        <div id="night-list" style="display:flex;flex-direction:column;gap:.65rem;"></div>
       </div>
     </div>
 
-    <!-- VERHUUR / RENTALS -->
-    <div id="section-rentals" class="section">
+    <!-- VERHUUR -->
+    <div id="sec-rentals" class="section">
       <div class="split-layout">
         <div class="map-panel">
-          <div class="section-header">
-            <h2>🚲 Fiets- & MTB-verhuur</h2>
-            <p>Downhill, MTB, eMTB en koers — overzicht per winkel</p>
-          </div>
+          <div class="sec-hdr"><h2>🚲 Fiets- & MTB-verhuur</h2><p>Gesorteerd op afstand van het chalet</p></div>
           <div class="info-banner green">💡 Reserveer DH-bikes op voorhand in augustus!</div>
           <div class="tab-map" id="map-rentals"></div>
+          <div class="route-bar" id="rb-rentals"><div class="rb-info" id="rbi-rentals"></div><button class="rb-reset" onclick="resetTabMap('rentals')">✕ Reset</button></div>
         </div>
-        <div class="content-list" id="rentals-list"></div>
+        <div id="rental-list" style="display:flex;flex-direction:column;gap:.65rem;"></div>
       </div>
     </div>
 
     <!-- WINKELS -->
-    <div id="section-shops" class="section">
+    <div id="sec-shops" class="section">
       <div class="split-layout">
         <div class="map-panel">
-          <div class="section-header">
-            <h2>🛒 Winkels & Supermarkten</h2>
-            <p>Boodschappen, sport en souvenirs</p>
-          </div>
+          <div class="sec-hdr"><h2>🛒 Winkels & Supermarkten</h2><p>Gesorteerd op afstand van het chalet</p></div>
           <div class="tab-map" id="map-shops"></div>
+          <div class="route-bar" id="rb-shops"><div class="rb-info" id="rbi-shops"></div><button class="rb-reset" onclick="resetTabMap('shops')">✕ Reset</button></div>
         </div>
-        <div class="content-list" id="shops-list"></div>
+        <div id="shops-list" style="display:flex;flex-direction:column;gap:.65rem;"></div>
       </div>
     </div>
-
   </div>
 </div>
 
-<!-- MODAL -->
-<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
-  <div class="modal" id="modal">
-    <div class="modal-header">
-      <h2 id="modal-title"><span class="modal-icon-lg" id="modal-icon"></span><span id="modal-title-text"></span></h2>
-      <button class="modal-close" onclick="closeModalDirect()">✕</button>
+<!-- ACTIVITY MODAL -->
+<div class="modal-overlay" id="act-modal" onclick="if(event.target===this)closeActModal()">
+  <div class="modal">
+    <div class="modal-hdr">
+      <h2><span class="m-ico" id="am-ico"></span><span id="am-title"></span></h2>
+      <button class="modal-close" onclick="closeActModal()">✕</button>
     </div>
     <div class="modal-body">
-      <div class="modal-meta" id="modal-meta"></div>
-      <p class="modal-desc" id="modal-desc"></p>
-      <div class="route-info" id="route-info"></div>
-      <div class="modal-map" id="modal-map">
-        <div class="map-loading" id="map-loading">🗺️ Route laden...</div>
-      </div>
-      <div class="modal-sections" id="modal-sections"></div>
-      <div class="modal-cta" id="modal-cta"></div>
+      <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.8rem;" id="am-meta"></div>
+      <p class="m-desc" id="am-desc"></p>
+      <div class="m-route-info" id="am-route"></div>
+      <div class="m-map" id="am-map"><div class="map-loading" id="am-loading">🗺️ Route laden...</div></div>
+      <div class="m-sections" id="am-sections"></div>
+      <div class="m-cta" id="am-cta"></div>
     </div>
   </div>
 </div>
 
+<!-- ACTIVITY PICKER (for dagplanning) -->
+<div class="modal-overlay" id="picker-overlay" onclick="if(event.target===this)closePicker()">
+  <div class="picker-modal">
+    <div class="picker-hdr">
+      <h3>Activiteit toevoegen</h3>
+      <button class="modal-close" onclick="closePicker()">✕</button>
+    </div>
+    <input class="picker-search" id="picker-search" placeholder="Zoek activiteit..." oninput="renderPicker()" />
+    <div class="picker-list" id="picker-list"></div>
+  </div>
+</div>
+
+<!-- RESTAURANT PICKER (for dagplanning meals) -->
+<div class="modal-overlay" id="rest-picker-overlay" onclick="if(event.target===this)closeRestPicker()">
+  <div class="picker-modal" style="max-width:460px">
+    <div class="picker-hdr">
+      <h3 id="rest-picker-title">Restaurant kiezen</h3>
+      <button class="modal-close" onclick="closeRestPicker()">✕</button>
+    </div>
+    <div class="picker-list" id="rest-picker-list"></div>
+  </div>
+</div>
 <script>
 // ---- AUTH ----
-const MASTER_HASH = '750db0f147fb55c6755f5b3bb2606a35623b43d03c80056c48587dfa2df45c04';
-const CYCLONES_HASH = '54b36f14b97c5570c9bd4c1ebde22dd62f005e085a4a66f7b0e5e5706ff80376';
-async function sha256(s){try{const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('');}catch(e){return 'ERR';}}
+const MH='750db0f147fb55c6755f5b3bb2606a35623b43d03c80056c48587dfa2df45c04';
+const CH='54b36f14b97c5570c9bd4c1ebde22dd62f005e085a4a66f7b0e5e5706ff80376';
+async function sha256(s){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('');}
 async function checkPw(){
-  const input=document.getElementById('pwInput'),errEl=document.getElementById('pwError');
-  try{const h=await sha256(input.value);
-    if(h===MASTER_HASH||h===CYCLONES_HASH){sessionStorage.setItem('auth','1');document.getElementById('gate').style.display='none';document.getElementById('app').style.display='block';initApp();}
-    else{input.style.borderColor='#ef4444';errEl.style.display='block';input.value='';setTimeout(()=>{input.style.borderColor='#333';errEl.style.display='none';},2000);}
-  }catch(e){errEl.textContent='Fout: '+e.message;errEl.style.display='block';}
+  const inp=document.getElementById('pwInput'),err=document.getElementById('pwError');
+  try{const h=await sha256(inp.value);
+    if(h===MH||h===CH){sessionStorage.setItem('auth','1');document.getElementById('gate').style.display='none';document.getElementById('app').style.display='block';initApp();}
+    else{inp.style.borderColor='#ef4444';err.style.display='block';inp.value='';setTimeout(()=>{inp.style.borderColor='#333';err.style.display='none';},2000);}
+  }catch(e){err.textContent='Fout: '+e.message;err.style.display='block';}
 }
 window.addEventListener('DOMContentLoaded',()=>{if(sessionStorage.getItem('auth')==='1'){document.getElementById('gate').style.display='none';document.getElementById('app').style.display='block';initApp();}});
 
+// ---- CONSTANTS ----
+const CHALET={lat:45.9442,lng:6.4303};
+const OSRM='https://router.project-osrm.org/route/v1';
+const SUPA_URL='https://uvodxrrxsxnjlinqrjlw.supabase.co';
+const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV2b2R4cnJ4c3huamxpbnFyamx3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1Mjg4MzYsImV4cCI6MjA5NTEwNDgzNn0.1lX4o9zuV0VZJG7S53rdqfbRuic6YnT7g-YPnePavnI';
+const TRIP_DAYS=['2026-08-08','2026-08-09','2026-08-10','2026-08-11','2026-08-12','2026-08-13','2026-08-14'];
+const DAY_NAMES=['Za','Zo','Ma','Di','Wo','Do','Vr'];
+
+// ---- HAVERSINE ----
+function hav(lat1,lng1,lat2,lng2){
+  const R=6371,dL=(lat2-lat1)*Math.PI/180,dN=(lng2-lng1)*Math.PI/180;
+  const a=Math.sin(dL/2)**2+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dN/2)**2;
+  return+(R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a))).toFixed(1);
+}
+function addDist(arr){return arr.map(x=>({...x,dist:x.lat?hav(CHALET.lat,CHALET.lng,x.lat,x.lng):999})).sort((a,b)=>a.dist-b.dist);}
+
+// ---- FAVORITES ----
+function getFavs(type){try{return JSON.parse(localStorage.getItem('cf_'+type)||'[]');}catch{return[];}}
+function toggleFav(type,id,e){e.stopPropagation();const f=getFavs(type);const i=f.indexOf(id);if(i>-1)f.splice(i,1);else f.push(id);localStorage.setItem('cf_'+type,JSON.stringify(f));renderAll();}
+function isFav(type,id){return getFavs(type).includes(id);}
+function sortWithFavs(arr,type){const favs=getFavs(type);return [...arr.filter(x=>favs.includes(x.id||x.name)),...arr.filter(x=>!favs.includes(x.id||x.name))];}
+
 // ---- DATA ----
-const CHALET = {lat:45.9442,lng:6.4303,name:"Chalet Elomaz"};
-const OSRM = 'https://router.project-osrm.org/route/v1';
-
-const activities = [
-  {id:1,category:'downhill',emoji:'🚵',iconClass:'icon-downhill',title:'Downhill MTB — La Clusaz Bike Park',tagline:'Half dag vol gas naar beneden',difficulty:'medium',diffLabel:'Gemiddeld',stats:[{i:'🚗',l:'10 min'},{i:'⏱️',l:'4–6 uur'},{i:'🎿',l:'6 DH tracks'},{i:'🔼',l:'Lift'}],desc:"La Clusaz heeft een van de beste bike parks van de Franse Alpen. 6 downhill trails + 5 enduro tracks met 3 stoeltjesliften. Open dagelijks van 1 juli t.e.m. 30 augustus. Alle niveaus aanwezig. Huurbikes op locatie beschikbaar.",routeType:'drive',lat:45.9031,lng:6.4239,waypoints:[{lat:45.9442,lng:6.4303,l:'🏠 Chalet Elomaz'},{lat:45.9031,lng:6.4239,l:'🎯 La Clusaz Bike Park'}],praktisch:['Rij via D909 richting La Clusaz (10 min)','Parkeer op het skistation parking','Dagpass: ca. €35-40/persoon','Huurbike DH: ca. €55-70/dag','Bescherming (helm, rugplaat) sterk aangeraden'],tips:['Ga vroeg (9u) voor de drukte','Probeer Tormery (blauw), Spider (rood), La Combe (zwart)','Lunch in het dorp na de ochtend','Combineer met kort wandelingetje langs de piste'],links:[{url:'https://www.laclusaz.com/en/mountain-bike/bikepark/',l:'🌐 La Clusaz Bike Park',cls:'btn-primary'}]},
-  {id:2,category:'downhill',emoji:'🏔️',iconClass:'icon-downhill',title:'Downhill MTB — Le Grand-Bornand',tagline:'Minder druk, net zo fun',difficulty:'medium',diffLabel:'Gemiddeld',stats:[{i:'🚗',l:'15 min'},{i:'⏱️',l:'4–6 uur'},{i:'🎿',l:'10 DH tracks'},{i:'🔼',l:'Lift'}],desc:"Le Grand-Bornand staat vlak naast Saint-Jean-de-Sixt en heeft een apart bike park met 10 downhill trails. Iets minder toeristisch dan La Clusaz in augustus. Prachtig uitzicht op de Aravis keten. Ideaal tweede downhill dag.",routeType:'drive',lat:45.9437,lng:6.4826,waypoints:[{lat:45.9442,lng:6.4303,l:'🏠 Chalet Elomaz'},{lat:45.9437,lng:6.4826,l:'🎯 Grand-Bornand Bike Park'}],praktisch:['Rij richting Le Grand-Bornand (15 min, D4)','Parkeer bij het Centre Sportif','Dagpass: ca. €32/persoon','Verhuur aanwezig — reserveer online','Café en picknickzone aan de lift'],tips:['Rustiger dan La Clusaz in zomermaanden','Beste voor beginners leren DH','Combineer met aperitief in het dorp daarna'],links:[{url:'https://en.legrandbornand.com/mountain-biking-trails.html',l:'🌐 Grand-Bornand MTB',cls:'btn-primary'}]},
-  {id:3,category:'downhill',emoji:'🎯',iconClass:'icon-downhill',title:'Dubbele DH dag: La Clusaz + Grand-Bornand',tagline:'Twee parken op één epische dag',difficulty:'hard',diffLabel:'Zwaar',stats:[{i:'🚗',l:'10–15 min'},{i:'⏱️',l:'Hele dag'},{i:'🎿',l:'2 parken'},{i:'💪',l:'Full send'}],desc:"Ochtend in La Clusaz (9u-13u), lunch in het dorp, dan door naar Le Grand-Bornand (14u-17u). Twee complete bike parks op één dag. De ultieme bonusdag voor wie niet fietst maar toch shredden wil.",routeType:'drive',lat:45.9200,lng:6.4500,waypoints:[{lat:45.9442,lng:6.4303,l:'🏠 Chalet Elomaz'},{lat:45.9031,lng:6.4239,l:'⚡ La Clusaz (ochtend)'},{lat:45.9437,lng:6.4826,l:'🎯 Grand-Bornand (namiddag)'}],praktisch:['Vertrek om 8u30 naar La Clusaz','Ochtendpas: 9u-13u in La Clusaz','Lunch in La Clusaz dorp','Rij door naar Grand-Bornand (20 min)','Namiddagpas: 14u-17u30 Grand-Bornand'],tips:['Koop dagpas per park afzonderlijk','Neem lunchpakket mee om tijd te sparen','Beenspieren zijn de bottleneck — stretch!'],links:[]},
-  {id:4,category:'hiking',emoji:'🥾',iconClass:'icon-hiking',title:'La Tournette — Koningin van Annecy',tagline:'1200 hm · 8u · Spectaculaire ketting',difficulty:'hard',diffLabel:'Zwaar',stats:[{i:'🚗',l:'45 min'},{i:'⏱️',l:'7–9 uur'},{i:'📏',l:'14 km'},{i:'🔼',l:'1200 hm'}],desc:"La Tournette (2351m) is de iconische top boven Lac d'Annecy. De klim eindigt via een vaste ketting naar een spectaculair panorama op het meer en de Mont Blanc. Eén van de mooiste dagwandelingen van Haute-Savoie. Vertrek vanuit Montmin.",routeType:'hike',lat:45.8231,lng:6.3242,waypoints:[{lat:45.9442,lng:6.4303,l:'🏠 Chalet Elomaz'},{lat:45.8500,lng:6.3000,l:'🅿️ Parking Montmin'},{lat:45.8231,lng:6.3242,l:'🏔️ La Tournette (2351m)'}],praktisch:['Rij via Thônes, dan D12 naar Montmin (45 min)','Parking Montmin: gratis, vroeg vol (voor 8u30)','Neem min. 2L water + energie','Goede wandelschoenen verplicht','Top wordt bewolkt namiddag — ga vroeg'],tips:['Vertrek om 7u30','Chalet de l\'Aulp: mooi fotomoment','De ketting: 15 min, weinig technisch maar indrukwekkend'],links:[{url:'https://www.alltrails.com/trail/france/haute-savoie/la-tournette-par-montmin',l:'🗺️ AllTrails route',cls:'btn-green'},{url:'https://www.wikiloc.com/hiking-trails/tournette-montmin-32544',l:'📍 Wikiloc GPX',cls:'btn-purple'}]},
-  {id:5,category:'hiking',emoji:'⛰️',iconClass:'icon-hiking',title:'Col des Aravis + Tête du Danay',tagline:'1100 hm · 6u · Startend vanuit chalet',difficulty:'medium',diffLabel:'Gemiddeld',stats:[{i:'🚗',l:'5 min'},{i:'⏱️',l:'5–7 uur'},{i:'📏',l:'16 km'},{i:'🔼',l:'1100 hm'}],desc:"Bijna vertrekken vanuit het chalet! Klim via Col des Aravis (1486m) naar de Tête du Danay voor een 360° panorama op Mont Blanc, Chamonix en het Aravis massief. De bekendste route vanuit Saint-Jean-de-Sixt.",routeType:'hike',lat:45.9078,lng:6.5175,waypoints:[{lat:45.9442,lng:6.4303,l:'🏠 Chalet Elomaz'},{lat:45.9078,lng:6.5175,l:'⛰️ Col des Aravis (1486m)'},{lat:45.9300,lng:6.5400,l:'🏔️ Tête du Danay (1760m)'}],praktisch:['Rij 5 min naar Col des Aravis parking','Vertrek 8u30 aangeraden','Picknick op de top','Beschutting weinig — ga bij goed weer'],tips:['Marmotten spotten bijna gegarandeerd','Chalet de l\'Aulp: verse kaas te koop!','Dezelfde col als Kwiatkowski in de Dauphiné'],links:[{url:'https://www.alltrails.com/trail/france/haute-savoie/col-des-aravis-et-tete-du-danay',l:'🗺️ AllTrails route',cls:'btn-green'},{url:'https://ridewithgps.com/routes/44987221',l:'🚴 Ride with GPS',cls:'btn-purple'}]},
-  {id:6,category:'hiking',emoji:'🏔️',iconClass:'icon-hiking',title:'Plateau des Glières — WW2 + Alpenpanorama',tagline:'1300 hm · 8u · Historisch + episch',difficulty:'hard',diffLabel:'Zwaar',stats:[{i:'🚗',l:'15 min'},{i:'⏱️',l:'7–9 uur'},{i:'📏',l:'20 km'},{i:'🔼',l:'1300 hm'}],desc:"Via Col des Annes (1722m) naar het Plateau des Glières, beroemde WW2 verzetsplaats. Eindeloze vergezichten, echte alpiene sfeer, weinig toeristen. Mémorial de la Résistance op het plateau.",routeType:'hike',lat:45.9600,lng:6.4200,waypoints:[{lat:45.9442,lng:6.4303,l:'🏠 Chalet Elomaz'},{lat:45.9600,lng:6.4200,l:'⛰️ Col des Annes (1722m)'},{lat:45.9800,lng:6.3800,l:'🏔️ Plateau des Glières'}],praktisch:['Startpunt: Le Grand-Bornand (15 min)','Vroeg vertrek verplicht (7u30)','Min. 3L water + stevig eten','Wandelstokken aangeraden'],tips:['Plateau des Glières: bezoek het mémorial (WW2)','Refuge des Glières voor lunch op plateau','Hou rekening met bliksem na 14u'],links:[{url:'https://www.alltrails.com/trail/france/haute-savoie/plateau-des-glieres-depuis-le-grand-bornand',l:'🗺️ AllTrails route',cls:'btn-green'}]},
-  {id:7,category:'ferrata',emoji:'🧗',iconClass:'icon-ferrata',title:'Via Ferrata Tour du Jallouvre',tagline:'3u klimmen · Aravis klassieker',difficulty:'hard',diffLabel:'Moeilijk',stats:[{i:'🚗',l:'20 min'},{i:'⏱️',l:'4–5 uur'},{i:'🔼',l:'600 hm'},{i:'🧗',l:'D-niveau'}],desc:"De Tour du Jallouvre via ferrata is DE klassieker van het Aravis massief, boven Le Grand-Bornand. Geleidelijk stijgende moeilijkheid met verticale passages en fantastisch panorama. Geopend eind mei t.e.m. oktober.",routeType:'hike',lat:45.9792,lng:6.5281,waypoints:[{lat:45.9442,lng:6.4303,l:'🏠 Chalet Elomaz'},{lat:45.9600,lng:6.5100,l:'🅿️ Le Chinaillon parking'},{lat:45.9792,lng:6.5281,l:'🧗 Via Ferrata Jallouvre'}],praktisch:['Rij naar Le Chinaillon (boven Grand-Bornand, 20 min)','Equipment huren: Saint-Jean Sport','Harnais + longe + helm: verplicht','Gids via Compagnie des Guides Aravis: ca. €60/pers'],tips:['Reserveer gids op voorhand (augustus = druk)','Handschoenen aangeraden','Saint-Jean Sport: T. +33 4 50 02 28 12'],links:[{url:'https://www.directmountain.com/en/activities/310-via-ferrata-la-tour-du-jallouvre-grand-bornand/',l:'📍 Jallouvre info',cls:'btn-green'}]},
-  {id:8,category:'ferrata',emoji:'🧗',iconClass:'icon-ferrata',title:'Via Ferrata Yves Pollet-Villard',tagline:'5 min van chalet · Col des Aravis',difficulty:'medium',diffLabel:'Gemiddeld',stats:[{i:'🚗',l:'5 min'},{i:'⏱️',l:'3–4 uur'},{i:'🔼',l:'400 hm'},{i:'🧗',l:'C-niveau'}],desc:"Gelegen aan de Col des Aravis — 5 minuten rijden van het chalet. Een van de mooiste via ferratas van de Noord-Alpen, met panorama op Aravis en Vallée de Thônes. Ideaal voor een eerste via ferrata.",routeType:'hike',lat:45.9100,lng:6.5100,waypoints:[{lat:45.9442,lng:6.4303,l:'🏠 Chalet Elomaz'},{lat:45.9078,lng:6.5175,l:'🅿️ Col des Aravis'},{lat:45.9100,lng:6.5100,l:'🧗 Via Ferrata Pollet-Villard'}],praktisch:['Park aan Col des Aravis (5 min rijden)','30 min aanloopwandeling','Equipment: harnais + longe + helm','Kan zelfstandig bij C-niveau ervaring'],tips:['Begin vroeg: 8u30','Beginner-passage: ideaal voor eerste keer','Combineer met picknick aan de col'],links:[{url:'https://www.directmountain.com/en/activities/317-via-ferrata-aravis-pass-la-clusaz-haute-savoie/',l:'📍 Pollet-Villard info',cls:'btn-green'}]},
-  {id:9,category:'water',emoji:'🛶',iconClass:'icon-water',title:'Raften op de Giffre — Samoëns',tagline:'Klasse III-IV wildwater · Beste rivier Alpen',difficulty:'medium',diffLabel:'Gemiddeld',stats:[{i:'🚗',l:'1u15'},{i:'⏱️',l:'Halve dag'},{i:'🌊',l:'Klasse III-IV'},{i:'👥',l:'Vanaf 6j'}],desc:"Rafting op de Giffre bij Samoëns is het topavontuur van de regio. Via de Gorges des Tines navigeer je door snel stromend water. Professionele gidsen aanwezig. Prijs: ca. €42/pers.",routeType:'drive',lat:46.0803,lng:6.7225,waypoints:[{lat:45.9442,lng:6.4303,l:'🏠 Chalet Elomaz'},{lat:46.0803,lng:6.7225,l:'🎯 Samoëns — Altitude Rafting'}],praktisch:['Rij via Thônes, Cluses, Samoëns (1u15)','Reserveer online: altitude-rafting.com','Meenemen: zwemkledij, oude sportschoenen','Prijs: ca. €42 volwassene'],tips:['Combineer met Gorges des Tines wandeling','Lunch in Samoëns daarna','In augustus: pre-book min. 3 dagen op voorhand'],links:[{url:'https://www.altitude-rafting.com/',l:'🛶 Altitude Rafting',cls:'btn-primary'}]},
-  {id:10,category:'water',emoji:'💦',iconClass:'icon-canyon',title:"Canyoning Angon — Gorge in het meer",tagline:"60m waterval · Eindigt IN Lac d'Annecy",difficulty:'medium',diffLabel:'Gemiddeld',stats:[{i:'🚗',l:'50 min'},{i:'⏱️',l:'4–5 uur'},{i:'💦',l:'60m waterval'},{i:'🏊',l:'Einde = meer'}],desc:"Angon is het meest iconische canyon van Haute-Savoie. Je daalt via watervallen en glijbanen af naar Lac d'Annecy zelf. Met de brievenbus-passage en een 60m touwlanding. Combineer met een zwemnamiddag.",routeType:'drive',lat:45.8442,lng:6.2028,waypoints:[{lat:45.9442,lng:6.4303,l:'🏠 Chalet Elomaz'},{lat:45.8442,lng:6.2028,l:"🎯 Canyon d'Angon"},{lat:45.8419,lng:6.2553,l:'🏊 Plage de Talloires'}],praktisch:['Rij richting Annecy via Thônes (50 min)','Boek via Bureau des Guides Annecy','Prijs: ca. €55-70/pers incl. equipment','Na canyon: stranddag aan het meer'],tips:['De brievenbus: ondergrondse passage = spectaculair','Vroeg boeken in augustus is een must','Combineer met zwemmen aan het meer'],links:[{url:'https://www.annecymountainguide.com/canyoning',l:'📍 Guides Annecy',cls:'btn-primary'}]},
-  {id:11,category:'water',emoji:'🌊',iconClass:'icon-canyon',title:'Canyoning Morette — Thônes Vallei',tagline:'45m waterval · Dichterbij · Perfect warm-up',difficulty:'easy',diffLabel:'Beginner',stats:[{i:'🚗',l:'25 min'},{i:'⏱️',l:'3–4 uur'},{i:'💦',l:'45m waterval'},{i:'🟢',l:'Beginner OK'}],desc:"De Morette waterval in de Thônes vallei is ideaal voor wie voor het eerst wil canyonen. Minder ver rijden dan Angon — perfecte optie voor een beknoptere dag of beginners.",routeType:'drive',lat:45.8781,lng:6.3642,waypoints:[{lat:45.9442,lng:6.4303,l:'🏠 Chalet Elomaz'},{lat:45.8781,lng:6.3642,l:'🎯 Canyon de la Morette (Thônes)'}],praktisch:['Rij naar Thônes (25 min via D909)','Boek via lokale gids of Aravis Canyoning','Prijs: ca. €45-55/pers'],tips:['Ideaal als eerste canyoningervaring','Combineer met kaas kopen in Thônes daarna'],links:[{url:'https://evolution2.com/en/blog/best-canyons-haute-savoie',l:'📍 Beste canyons regio',cls:'btn-green'}]},
-  {id:12,category:'water',emoji:'🏖️',iconClass:'icon-lake',title:"Lac d'Annecy — Zwemdag + Stad",tagline:"Zuiverste meer Europa · Venetië van de Alpen",difficulty:'easy',diffLabel:'Makkelijk',stats:[{i:'🚗',l:'40 min'},{i:'⏱️',l:'Hele dag'},{i:'🏊',l:'25°C water'},{i:'🏙️',l:'Annecy stad'}],desc:"Lac d'Annecy is het zuiverste meer van Europa met kristalhelder water tot 25°C in augustus. Strand bij Talloires of Albigny. Combineer met een wandeling in de Vieille Ville van Annecy.",routeType:'drive',lat:45.8419,lng:6.2553,waypoints:[{lat:45.9442,lng:6.4303,l:'🏠 Chalet Elomaz'},{lat:45.8419,lng:6.2553,l:'🏖️ Plage de Talloires'},{lat:45.8992,lng:6.1294,l:'🏙️ Vieille Ville Annecy'}],praktisch:['Rij via Thônes naar Talloires (40 min)','Parking Talloires: vroeg vol — kom voor 9u','Gratis strand in Talloires en Albigny'],tips:['Talloires strand is mooier dan het meer bij de stad','Water is echt kristalhelder: snorkelen','Annecy stad: Café de Paris voor ijsje'],links:[{url:'https://en.lac-annecy.com/',l:'🏖️ Lac Annecy info',cls:'btn-primary'}]}
+const activities_raw=[
+  {id:1,cat:'downhill',e:'🚵',ico:'ico-dh',title:'Downhill MTB — La Clusaz',sub:'Half dag vol gas naar beneden',diff:'medium',dl:'Gemiddeld',
+   stats:[{i:'⏱️',l:'4–6u'},{i:'🎿',l:'6 tracks'},{i:'🔼',l:'Lift'}],
+   desc:"La Clusaz heeft een van de beste bike parks van de Franse Alpen. 6 downhill trails + 5 enduro tracks met 3 stoeltjesliften. Open dagelijks 1 jul–30 aug. Huurbikes op locatie beschikbaar.",
+   rtype:'drive',lat:45.9031,lng:6.4239,
+   wp:[{lat:45.9442,lng:6.4303,l:'🏠 Chalet'},{lat:45.9031,lng:6.4239,l:'🎯 La Clusaz Bike Park'}],
+   prak:['Rij via D909 richting La Clusaz (10 min)','Dagpass: ca. €35-40/persoon','Huurbike DH: ca. €55-70/dag','Bescherming (helm + rugplaat) aangeraden'],
+   tips:['Ga vroeg (9u) voor de drukte','Probeer Spider (rood), La Combe (zwart)','Lunch in het dorp na de ochtend'],
+   links:[{u:'https://www.laclusaz.com/en/mountain-bike/bikepark/',l:'🌐 La Clusaz Bike Park',c:'btn-primary'}]},
+  {id:2,cat:'downhill',e:'🏔️',ico:'ico-dh',title:'Downhill MTB — Grand-Bornand',sub:'Minder druk, net zo fun',diff:'medium',dl:'Gemiddeld',
+   stats:[{i:'⏱️',l:'4–6u'},{i:'🎿',l:'10 tracks'},{i:'🔼',l:'Lift'}],
+   desc:"Le Grand-Bornand heeft een apart bike park met 10 downhill trails, iets minder toeristisch dan La Clusaz in augustus. Prachtig uitzicht op de Aravis.",
+   rtype:'drive',lat:45.9437,lng:6.4826,
+   wp:[{lat:45.9442,lng:6.4303,l:'🏠 Chalet'},{lat:45.9437,lng:6.4826,l:'🎯 Grand-Bornand Bike Park'}],
+   prak:['Rij richting Le Grand-Bornand (15 min, D4)','Dagpass: ca. €32/persoon','Café en picknickzone aan de lift'],
+   tips:['Rustiger dan La Clusaz','Ideaal voor beginners DH','Combineer met aperitief in het dorp'],
+   links:[{u:'https://en.legrandbornand.com/mountain-biking-trails.html',l:'🌐 Grand-Bornand MTB',c:'btn-primary'}]},
+  {id:3,cat:'downhill',e:'🎯',ico:'ico-dh',title:'Dubbele DH dag: 2 parken',sub:'La Clusaz ochtend + Grand-Bornand namiddag',diff:'hard',dl:'Zwaar',
+   stats:[{i:'⏱️',l:'Hele dag'},{i:'🎿',l:'2 parken'},{i:'💪',l:'Full send'}],
+   desc:"Ochtend in La Clusaz (9u-13u), lunch, dan door naar Le Grand-Bornand (14u-17u). Twee complete bike parks op één dag.",
+   rtype:'drive',lat:45.9200,lng:6.4500,
+   wp:[{lat:45.9442,lng:6.4303,l:'🏠 Chalet'},{lat:45.9031,lng:6.4239,l:'⚡ La Clusaz'},{lat:45.9437,lng:6.4826,l:'🎯 Grand-Bornand'}],
+   prak:['Vertrek 8u30 naar La Clusaz','Ochtendpas 9u-13u La Clusaz','Lunch La Clusaz dorp','Namiddagpas 14u-17u30 Grand-Bornand'],
+   tips:['Koop dagpas per park','Neem lunchpakket mee','Beenspieren = de bottleneck'],
+   links:[]},
+  {id:4,cat:'hiking',e:'🥾',ico:'ico-hike',title:'La Tournette — 2351m top',sub:'1200 hm · 8u · Spectaculaire ketting',diff:'hard',dl:'Zwaar',
+   stats:[{i:'⏱️',l:'7–9u'},{i:'📏',l:'14 km'},{i:'🔼',l:'1200 hm'}],
+   desc:"La Tournette (2351m) boven Lac d'Annecy. De klim eindigt via een vaste ketting naar een panorama op het meer en Mont Blanc. Eén van de mooiste dagwandelingen van Haute-Savoie.",
+   rtype:'hike',lat:45.8231,lng:6.3242,
+   wp:[{lat:45.9442,lng:6.4303,l:'🏠 Chalet'},{lat:45.8500,lng:6.3000,l:'🅿️ Montmin'},{lat:45.8231,lng:6.3242,l:'🏔️ La Tournette 2351m'}],
+   prak:['Rij via D12 naar Montmin (45 min)','Parking Montmin gratis, voor 8u30 voorzijn','Min. 2L water + energie','Goede wandelschoenen verplicht'],
+   tips:['Vertrek 7u30 voor lage parking','Ketting: 15 min, weinig technisch','Top wordt bewolkt namiddag'],
+   links:[{u:'https://www.alltrails.com/trail/france/haute-savoie/la-tournette-par-montmin',l:'🗺️ AllTrails',c:'btn-green'},{u:'https://www.wikiloc.com/hiking-trails/tournette-montmin-32544',l:'📍 Wikiloc GPX',c:'btn-purple'}]},
+  {id:5,cat:'hiking',e:'⛰️',ico:'ico-hike',title:'Col des Aravis + Tête du Danay',sub:'1100 hm · 6u · Vlakbij chalet',diff:'medium',dl:'Gemiddeld',
+   stats:[{i:'⏱️',l:'5–7u'},{i:'📏',l:'16 km'},{i:'🔼',l:'1100 hm'}],
+   desc:"Klim via Col des Aravis (1486m) naar de Tête du Danay voor 360° panorama op Mont Blanc en Aravis. De bekendste route vanuit Saint-Jean-de-Sixt.",
+   rtype:'hike',lat:45.9078,lng:6.5175,
+   wp:[{lat:45.9442,lng:6.4303,l:'🏠 Chalet'},{lat:45.9078,lng:6.5175,l:'⛰️ Col des Aravis'},{lat:45.9300,lng:6.5400,l:'🏔️ Tête du Danay'}],
+   prak:['Rij 5 min naar Col des Aravis parking','Vertrek 8u30 aangeraden','Chalet Aulp: verse kaas te koop'],
+   tips:['Marmotten spotten bijna gegarandeerd','Dezelfde col als Kwiatkowski in Dauphiné'],
+   links:[{u:'https://www.alltrails.com/trail/france/haute-savoie/col-des-aravis-et-tete-du-danay',l:'🗺️ AllTrails',c:'btn-green'},{u:'https://ridewithgps.com/routes/44987221',l:'🚴 Ride with GPS',c:'btn-purple'}]},
+  {id:6,cat:'hiking',e:'🏔️',ico:'ico-hike',title:'Plateau des Glières — WW2',sub:'1300 hm · 8u · Historisch + episch',diff:'hard',dl:'Zwaar',
+   stats:[{i:'⏱️',l:'7–9u'},{i:'📏',l:'20 km'},{i:'🔼',l:'1300 hm'}],
+   desc:"Via Col des Annes (1722m) naar het Plateau des Glières, beroemde WW2-verzetsplaats. Eindeloze vergezichten, echte alpiene sfeer.",
+   rtype:'hike',lat:45.9600,lng:6.4200,
+   wp:[{lat:45.9442,lng:6.4303,l:'🏠 Chalet'},{lat:45.9600,lng:6.4200,l:'⛰️ Col des Annes'},{lat:45.9800,lng:6.3800,l:'🏔️ Plateau des Glières'}],
+   prak:['Startpunt Le Grand-Bornand (15 min)','Vroeg vertrek verplicht (7u30)','Min. 3L water + stevig eten'],
+   tips:['Refuge des Glières: lunch op het plateau','Bliksem na 14u — hou er rekening mee'],
+   links:[{u:'https://www.alltrails.com/trail/france/haute-savoie/plateau-des-glieres-depuis-le-grand-bornand',l:'🗺️ AllTrails',c:'btn-green'}]},
+  {id:7,cat:'ferrata',e:'🧗',ico:'ico-ferrata',title:'Via Ferrata Tour du Jallouvre',sub:'3u klimmen · Aravis klassieker · D-niveau',diff:'hard',dl:'Moeilijk',
+   stats:[{i:'⏱️',l:'4–5u'},{i:'🔼',l:'600 hm'},{i:'🧗',l:'D-niveau'}],
+   desc:"De Tour du Jallouvre via ferrata is DE klassieker van het Aravis massief. Verticale passages + fantastisch panorama. Gids aangeraden.",
+   rtype:'hike',lat:45.9792,lng:6.5281,
+   wp:[{lat:45.9442,lng:6.4303,l:'🏠 Chalet'},{lat:45.9600,lng:6.5100,l:'🅿️ Le Chinaillon'},{lat:45.9792,lng:6.5281,l:'🧗 Jallouvre'}],
+   prak:['Rij naar Le Chinaillon (20 min)','Harnais + longe + helm: verplicht','Gids via Compagnie des Guides Aravis: ca. €60/pers'],
+   tips:['Reserveer gids op voorhand','Handschoenen aangeraden'],
+   links:[{u:'https://www.directmountain.com/en/activities/310-via-ferrata-la-tour-du-jallouvre-grand-bornand/',l:'📍 Jallouvre info',c:'btn-green'}]},
+  {id:8,cat:'ferrata',e:'🧗',ico:'ico-ferrata',title:'Via Ferrata Pollet-Villard',sub:'5 min van chalet · Col des Aravis · C-niveau',diff:'medium',dl:'Gemiddeld',
+   stats:[{i:'⏱️',l:'3–4u'},{i:'🔼',l:'400 hm'},{i:'🧗',l:'C-niveau'}],
+   desc:"Aan de Col des Aravis — 5 minuten rijden van het chalet. Een van de mooiste via ferratas van de Noord-Alpen. Ideaal voor eerste via ferrata.",
+   rtype:'hike',lat:45.9100,lng:6.5100,
+   wp:[{lat:45.9442,lng:6.4303,l:'🏠 Chalet'},{lat:45.9078,lng:6.5175,l:'🅿️ Col des Aravis'},{lat:45.9100,lng:6.5100,l:'🧗 Pollet-Villard'}],
+   prak:['Park aan Col des Aravis (5 min)','30 min aanloopwandeling','Harnais + longe + helm'],
+   tips:['Begin vroeg (8u30)','Kan zelfstandig bij C-niveau ervaring'],
+   links:[{u:'https://www.directmountain.com/en/activities/317-via-ferrata-aravis-pass-la-clusaz-haute-savoie/',l:'📍 Pollet-Villard info',c:'btn-green'}]},
+  {id:9,cat:'water',e:'🛶',ico:'ico-water',title:'Raften op de Giffre — Samoëns',sub:'Klasse III-IV wildwater · Beste rivier Alpen',diff:'medium',dl:'Gemiddeld',
+   stats:[{i:'⏱️',l:'Halve dag'},{i:'🌊',l:'Klasse III-IV'}],
+   desc:"Rafting op de Giffre bij Samoëns via de Gorges des Tines. Professionele gidsen. Prijs: ca. €42/pers.",
+   rtype:'drive',lat:46.0803,lng:6.7225,
+   wp:[{lat:45.9442,lng:6.4303,l:'🏠 Chalet'},{lat:46.0803,lng:6.7225,l:'🎯 Samoëns Altitude Rafting'}],
+   prak:['Rij via Thônes, Cluses, Samoëns (1u15)','Reserveer: altitude-rafting.com','Prijs: ca. €42 volwassene'],
+   tips:['Combineer met lunch in Samoëns','Pre-book 3 dagen op voorhand in augustus'],
+   links:[{u:'https://www.altitude-rafting.com/',l:'🛶 Altitude Rafting',c:'btn-primary'}]},
+  {id:10,cat:'water',e:'💦',ico:'ico-canyon',title:"Canyoning Angon — eindigt in het meer",sub:"60m waterval · IN Lac d'Annecy",diff:'medium',dl:'Gemiddeld',
+   stats:[{i:'⏱️',l:'4–5u'},{i:'💦',l:'60m waterval'},{i:'🏊',l:'Einde = meer'}],
+   desc:"Angon is het meest iconische canyon van Haute-Savoie. Je daalt via watervallen en glijbanen af naar Lac d'Annecy. Combineer met een zwemnamiddag.",
+   rtype:'drive',lat:45.8442,lng:6.2028,
+   wp:[{lat:45.9442,lng:6.4303,l:'🏠 Chalet'},{lat:45.8442,lng:6.2028,l:"🎯 Canyon d'Angon"},{lat:45.8419,lng:6.2553,l:'🏊 Talloires strand'}],
+   prak:['Rij richting Annecy via Thônes (50 min)','Boek via Bureau des Guides Annecy','Prijs: ca. €55-70/pers'],
+   tips:['Vroeg boeken in augustus is een must','Combineer met zwemmen aan het meer'],
+   links:[{u:'https://www.annecymountainguide.com/canyoning',l:'📍 Guides Annecy',c:'btn-primary'}]},
+  {id:11,cat:'water',e:'🌊',ico:'ico-canyon',title:'Canyoning Morette — Thônes Vallei',sub:'45m waterval · Dichterbij · Beginnersvriendelijk',diff:'easy',dl:'Beginner',
+   stats:[{i:'⏱️',l:'3–4u'},{i:'💦',l:'45m waterval'},{i:'🟢',l:'Beginner OK'}],
+   desc:"Ideaal voor wie voor het eerst wil canyonen. Minder ver rijden dan Angon. De 45m repel in de Morette waterval is onvergetelijk.",
+   rtype:'drive',lat:45.8781,lng:6.3642,
+   wp:[{lat:45.9442,lng:6.4303,l:'🏠 Chalet'},{lat:45.8781,lng:6.3642,l:'🎯 Canyon de la Morette'}],
+   prak:['Rij naar Thônes (25 min via D909)','Boek via lokale gids of Aravis Canyoning','Prijs: ca. €45-55/pers'],
+   tips:['Combineer met kaas kopen in Thônes'],
+   links:[]},
+  {id:12,cat:'water',e:'🏖️',ico:'ico-lake',title:"Lac d'Annecy — Zwemdag + Stad",sub:"Zuiverste meer Europa · Talloires strand",diff:'easy',dl:'Makkelijk',
+   stats:[{i:'⏱️',l:'Hele dag'},{i:'🏊',l:'25°C water'},{i:'🏙️',l:'Annecy stad'}],
+   desc:"Talloires strand aan Lac d'Annecy — kristalhelder water tot 25°C in augustus. Strand is aan de oostoever van het meer bij het dorpje Talloires. Combineer met Annecy oude stad.",
+   rtype:'drive',lat:45.8419,lng:6.2553,
+   wp:[{lat:45.9442,lng:6.4303,l:'🏠 Chalet'},{lat:45.8419,lng:6.2553,l:'🏖️ Plage de Talloires'},{lat:45.8992,lng:6.1294,l:'🏙️ Annecy stad'}],
+   prak:['Rij via Thônes naar Talloires (40 min)','Parking Talloires: vroeg vol — voor 9u','Gratis strand in Talloires'],
+   tips:['Water is kristalhelder: snorkelen geweldig','Annecy stad: Café de Paris voor ijsje'],
+   links:[{u:'https://en.lac-annecy.com/',l:'🏖️ Lac Annecy info',c:'btn-primary'}]},
+  {id:13,cat:'water',e:'🏞️',ico:'ico-river',title:"Borne rivier — wild zwemmen Grand-Bornand",sub:'Kristalhelder bergwater · 15 min van chalet',diff:'easy',dl:'Makkelijk',
+   stats:[{i:'🚗',l:'15 min'},{i:'🌡️',l:'~16°C'},{i:'🏞️',l:'Natuur'}],
+   desc:"De Borne rivier bij Le Grand-Bornand heeft prachtige rotsige zwemplekken met kristalhelder smeltwater. Rustig gelegen, perfect voor een ontspannende ochtend of middag. Dichtste wilde zwemplek bij het chalet.",
+   rtype:'drive',lat:45.9380,lng:6.4650,
+   wp:[{lat:45.9442,lng:6.4303,l:'🏠 Chalet'},{lat:45.9380,lng:6.4650,l:'🏞️ Borne rivier Grand-Bornand'}],
+   prak:['Rij naar Le Grand-Bornand (15 min)','Parkeer in het centrum aan het speel-/picknickveld','Stap 5 min naar de rivier','Geen toegangsgeld, volledig wild'],
+   tips:['Water is koud (smeltwater) — breng handdoek','Mooiste plekken net voor het dorp stroomopwaarts','Picknick mee = perfecte combo','Vroeg gaan in augustus (rustig voor 10u)'],
+   links:[]},
+  {id:14,cat:'water',e:'💧',ico:'ico-river',title:"Fier rivier — wilde zwemplekken Thônes",sub:'Rotsige natuur pools · 20 min van chalet',diff:'easy',dl:'Makkelijk',
+   stats:[{i:'🚗',l:'20 min'},{i:'🌡️',l:'~15°C'},{i:'🏞️',l:'Rotsig'}],
+   desc:"De Filière (Fier) rivier bij Thônes heeft spectaculaire rotsige pools en kleine watervallen. Meer afgelegen dan de Borne, maar ook mooier. Populair bij locals. Beste zwemplek bij de brug van Saint-Clair.",
+   rtype:'drive',lat:45.8580,lng:6.3150,
+   wp:[{lat:45.9442,lng:6.4303,l:'🏠 Chalet'},{lat:45.8580,lng:6.3150,l:'💧 Fier rivier bij Thônes'}],
+   prak:['Rij richting Thônes via D909 (20 min)','Parkeer bij de brug Saint-Clair','Stap 5-10 min via bospad naar de pools','Brengt water en snacks mee'],
+   tips:['Vroeg gaan voor de rustigste plekken','Rotsige bodem: strandschoentjes aangeraden','Combineer met kaas kopen in Thônes'],
+   links:[]}
 ];
 
-const restaurants = [
-  {emoji:'⭐',iconClass:'icon-restaurant',name:'Le Cin5 (1 Michelin ⭐)',location:'La Clusaz',lat:45.9030,lng:6.4240,dist:'10 min',desc:'Chef Vincent Deforce combineert Mauritiaanse invloeden met Savoie producten. Inventieve, elegante gerechten. Reservatie verplicht en ver op voorhand.',tags:['Gastronomisch','Michelin ⭐','Frans-creatief'],stars:'★★★★★',price:'€€€€'},
-  {emoji:'🌿',iconClass:'icon-restaurant',name:'Le Cairn',location:'Saint-Jean-de-Sixt',lat:45.9445,lng:6.4298,dist:'2 min',desc:'Adrien Pollet serveert creatieve gastronomie vanuit de tuin. Twee verrassingsmenu\'s met topproducten uit de streek. Rustiek maar verfijnd — vlakbij het chalet!',tags:['Creatief','Gastronomisch','Lokale producten'],stars:'★★★★☆',price:'€€€'},
-  {emoji:'🏔️',iconClass:'icon-restaurant',name:'Confins des Sens',location:'Le Grand-Bornand',lat:45.9435,lng:6.4820,dist:'15 min',desc:'Jean-Sébastien Faber kookt inventief met seizoensproducten. Fantastisch terras met uitzicht op de Aravis.',tags:['Inventief','Terras','Aravis view'],stars:'★★★★☆',price:'€€€'},
-  {emoji:'🍕',iconClass:'icon-restaurant',name:"La Pizz' de Saint Jean",location:'Saint-Jean-de-Sixt',lat:45.9440,lng:6.4302,dist:'1 min',desc:'De lokale favoriet: genereuze pizza\'s. Ideaal voor een casual avond na een zware dag. Ook afhalen.',tags:['Pizza','Casual','Afhalen'],stars:'★★★★☆',price:'€€'},
-  {emoji:'🧀',iconClass:'icon-restaurant',name:'La Ferme de Lormay',location:'La Clusaz',lat:45.9050,lng:6.4250,dist:'12 min',desc:'Traditionele Savoyard keuken op een authentieke bergboerderij. Fondue, raclette, tartiflette. Reserveer op voorhand.',tags:['Savoyard','Fondue/Raclette','Authentiek'],stars:'★★★★☆',price:'€€'},
-  {emoji:'🍺',iconClass:'icon-restaurant',name:'Le Flambeau',location:'La Clusaz',lat:45.9032,lng:6.4235,dist:'10 min',desc:'Goede lokale bieren, burger, snacks. Ideaal na de bike park. Terras met uitzicht op het dorp.',tags:['Bar','Burger','Na het sporten'],stars:'★★★☆☆',price:'€€'},
-  {emoji:'🐟',iconClass:'icon-restaurant',name:"L'Auberge du Père Bise",location:"Talloires (Lac d'Annecy)",lat:45.8419,lng:6.2555,dist:'45 min',desc:'Legendarisch 2-Michelin ster restaurant met uitzicht op Lac d\'Annecy. Als je één bijzondere avond hebt: hier. Reserveer weken op voorhand.',tags:['2 Michelin ⭐⭐','Legendair','Meer-uitzicht'],stars:'★★★★★',price:'€€€€€'},
-  {emoji:'🥐',iconClass:'icon-restaurant',name:'Boulangerie Aravis',location:'Saint-Jean-de-Sixt',lat:45.9443,lng:6.4295,dist:'1 min',desc:'Verse broodjes en viennoiseries. Open vroeg — ideaal voor ontbijt voor een dag in de bergen. Sandwiches als picknick.',tags:['Bakkerij','Ontbijt','Picknick'],stars:'★★★★☆',price:'€'}
+const restaurants_raw=[
+  {id:'r1',e:'⭐',ico:'ico-rest',name:'Le Cin5 (1 Michelin ⭐)',loc:'La Clusaz',lat:45.9030,lng:6.4240,desc:'Chef Vincent Deforce combineert Mauritiaanse invloeden met Savoie producten. Elegante gerechten. Reservatie verplicht ver op voorhand.',tags:['Gastronomisch','Michelin ⭐','Frans-creatief'],stars:'★★★★★',price:'€€€€'},
+  {id:'r2',e:'🌿',ico:'ico-rest',name:'Le Cairn',loc:'Saint-Jean-de-Sixt',lat:45.9445,lng:6.4298,desc:"Adrien Pollet serveert creatieve gastronomie vanuit de tuin. Twee verrassingsmenu's met topproducten. Vlakbij het chalet!",tags:['Creatief','Gastronomisch','Lokaal'],stars:'★★★★☆',price:'€€€'},
+  {id:'r3',e:'🏔️',ico:'ico-rest',name:'Confins des Sens',loc:'Le Grand-Bornand',lat:45.9435,lng:6.4820,desc:'Jean-Sébastien Faber kookt inventief met seizoensproducten. Fantastisch terras met uitzicht op de Aravis.',tags:['Inventief','Terras','Aravis view'],stars:'★★★★☆',price:'€€€'},
+  {id:'r4',e:'🍕',ico:'ico-rest',name:"La Pizz' de Saint Jean",loc:'Saint-Jean-de-Sixt',lat:45.9440,lng:6.4302,desc:"De lokale favoriet: genereuze pizza's. Ideaal casual, ook afhalen voor op het chalet.",tags:['Pizza','Casual','Afhalen'],stars:'★★★★☆',price:'€€'},
+  {id:'r5',e:'🧀',ico:'ico-rest',name:'La Ferme de Lormay',loc:'La Clusaz',lat:45.9050,lng:6.4250,desc:'Traditionele Savoyard keuken op een authentieke bergboerderij. Fondue, raclette, tartiflette.',tags:['Savoyard','Fondue/Raclette'],stars:'★★★★☆',price:'€€'},
+  {id:'r6',e:'🍺',ico:'ico-rest',name:'Le Flambeau',loc:'La Clusaz',lat:45.9032,lng:6.4235,desc:'Goede lokale bieren, burger, snacks. Ideaal na de bike park.',tags:['Bar','Burger','Na sport'],stars:'★★★☆☆',price:'€€'},
+  {id:'r7',e:'🐟',ico:'ico-rest',name:"L'Auberge du Père Bise",loc:'Talloires',lat:45.8419,lng:6.2555,desc:'Legendarisch 2-Michelin ster restaurant op Lac d\'Annecy. Als je één bijzondere avond hebt: hier.',tags:['2 Michelin ⭐⭐','Legendair','Meer-uitzicht'],stars:'★★★★★',price:'€€€€€'},
+  {id:'r8',e:'🥐',ico:'ico-rest',name:'Boulangerie Aravis',loc:'Saint-Jean-de-Sixt',lat:45.9443,lng:6.4295,desc:'Verse broodjes en viennoiseries. Open vroeg voor bergontbijt. Sandwiches als picknick.',tags:['Bakkerij','Ontbijt','Picknick'],stars:'★★★★☆',price:'€'}
 ];
 
-const events = [
-  {emoji:'🛒',name:'Wekelijkse boerenmarkt Saint-Jean-de-Sixt',day:'Di/Vr',month:'AUG',during:true,location:'Centre Saint-Jean-de-Sixt',lat:45.9442,lng:6.4303,desc:'Boerenmarkt in het centrum: verse Reblochon, Beaufort, charcuterie, groenten, honing. Ideaal voor proviand en souvenirs. Dinsdags en vrijdags.'},
-  {emoji:'🛒',name:'Wekelijkse markt La Clusaz',day:'Ma/Do',month:'AUG',during:true,location:'Centre La Clusaz',lat:45.9031,lng:6.4239,desc:'Markt in La Clusaz centrum met lokale producten, vers fruit, ambacht en souvenirs. Maandags en donderdags.'},
-  {emoji:'🎵',name:'Festival de musique La Clusaz',day:'10-13',month:'AUG',during:true,location:'La Clusaz (10 min)',lat:45.9031,lng:6.4239,desc:'Zomermuziekfestival in het centrum van La Clusaz met live optredens in openlucht. Mix van folk, jazz en chanson française. Meeste concerten gratis.'},
-  {emoji:'🎻',name:'Musique et Nature en Bauges',day:'8-22',month:'AUG',during:true,location:'Diverse locaties Haute-Savoie',lat:45.8992,lng:6.1294,desc:'Klassieke muziek festival in prachtige bergkerkjes en openlucht. Check het programma voor optredens dicht bij Saint-Jean-de-Sixt.'},
-  {emoji:'🚴',name:'Étape wielrennen — Aravis passage',day:'9-14',month:'AUG',during:true,location:'Aravis, Haute-Savoie',lat:45.9200,lng:6.4500,desc:'Professioneel wielerpeloton trekt door de Aravis vallei. Kans om langs de weg te supporteren op dezelfde cols als de fietsers!'},
-  {emoji:'🎆',name:'Vuurwerk 15 augustus',day:'14-15',month:'AUG',during:true,location:'La Clusaz & omgeving',lat:45.9031,lng:6.4239,desc:'Nationale feestdag (15/8 = Marie-Hemelvaart). Vuurwerkshows in de dorpen op de avond van 14 en 15 augustus. La Clusaz organiseert traditioneel een groot vuurwerk.'},
-  {emoji:'🏊',name:'Alpe d\'Huez Triathlon (reference)',day:'9',month:'AUG',during:true,location:'Alpe d\'Huez (1u30)',lat:45.0900,lng:6.0700,desc:'Groot triathlon evenement in de buurt. Niet in de vallei zelf, maar interessant als je een uitstap richting Alpe d\'Huez plant.'},
-  {emoji:'🎪',name:'Dahu Festival (net na verblijf)',day:'14-16',month:'AUG',during:false,location:"Les Carroz d'Arraches (45 min)",lat:46.0270,lng:6.6130,desc:'Groot muziekfestival net na jullie verblijf. Wie wil kan vertrek uitstellen voor dit festival op 15-16/8!'}
+const events_raw=[
+  {e:'🛒',name:'Boerenmarkt Saint-Jean-de-Sixt',day:'Di/Vr',mo:'AUG',during:true,loc:'Centre Saint-Jean-de-Sixt',lat:45.9442,lng:6.4303,desc:'Verse Reblochon, Beaufort, charcuterie, groenten, honing. Ideaal voor proviand. Dinsdags en vrijdags.'},
+  {e:'🛒',name:'Markt La Clusaz',day:'Ma/Do',mo:'AUG',during:true,loc:'Centre La Clusaz',lat:45.9031,lng:6.4239,desc:'Lokale producten, vers fruit, ambacht en souvenirs. Maandags en donderdags.'},
+  {e:'🎵',name:'Festival de musique La Clusaz',day:'10–13',mo:'AUG',during:true,loc:'La Clusaz (10 min)',lat:45.9031,lng:6.4239,desc:'Zomermuziekfestival met live optredens in openlucht. Mix van folk, jazz en chanson. Meeste concerten gratis.'},
+  {e:'🎻',name:'Musique et Nature en Bauges',day:'8–22',mo:'AUG',during:true,loc:'Diverse locaties H-S',lat:45.8992,lng:6.1294,desc:'Klassieke muziek in prachtige bergkerkjes. Check programma voor optredens dicht bij Saint-Jean.'},
+  {e:'🚴',name:'Wielrennen door de Aravis',day:'9–14',mo:'AUG',during:true,loc:'Aravis vallei',lat:45.9200,lng:6.4500,desc:'Professioneel wielerpeloton trekt door de vallei. Kans om op dezelfde cols als de fietsers te supporteren!'},
+  {e:'🎆',name:'Vuurwerk 15 augustus',day:'14–15',mo:'AUG',during:true,loc:'La Clusaz & omgeving',lat:45.9031,lng:6.4239,desc:'Nationale feestdag (Marie-Hemelvaart). Vuurwerkshows op de avond van 14 en 15 augustus in de dorpen.'},
+  {e:'🎪',name:'Dahu Festival (na verblijf)',day:'14–16',mo:'AUG',during:false,loc:"Les Carroz d'Arraches (45 min)",lat:46.0270,lng:6.6130,desc:'Groot muziekfestival net na jullie verblijf. Wie wil kan iets later vertrekken!'}
 ];
 
-const nightlife = [
-  {emoji:'🍺',iconClass:'icon-bar',name:'Le Moulin — Bar La Clusaz',type:'Bar & Terras',lat:45.9032,lng:6.4237,dist:'10 min',desc:'Het populairste terras van La Clusaz in de zomer. Grote bierkaart, drukke buitenspeelplaats, goede sfeer na een dag in de bergen. Perfect voor de eerste drink.',vibe:'busy',vibeLabel:'Druk',hours:'14u–1u',tags:['Terras','Bier','Après','Muziek']},
-  {emoji:'🍹',iconClass:'icon-bar',name:'Le Barioz — Cocktailbar',type:'Cocktailbar',lat:45.9031,lng:6.4241,dist:'10 min',desc:'Hippe cocktailbar in het centrum van La Clusaz. Inventieve cocktails, goede muziek, jong publiek. Ideaal voor een avonduitstap met de groep.',vibe:'busy',vibeLabel:'Druk',hours:'17u–2u',tags:['Cocktails','Jong','Muziek','Shots']},
-  {emoji:'💃',iconClass:'icon-bar',name:'Le Pressoir — Dansen La Clusaz',type:'Club / Dansvloer',lat:45.9029,lng:6.4238,dist:'10 min',desc:'De enige echte discotheek van La Clusaz. In de zomer open op vrijdag en zaterdag. DJ-muziek, dansvloer, late night. Toegang gratis voor dames, €10-15 voor heren.',vibe:'party',vibeLabel:'Party',hours:'Vr-Za 23u–4u',tags:['Club','Dansen','DJ','Laat']},
-  {emoji:'🥂',iconClass:'icon-bar',name:"La P'tite Bodega",type:'Tapasbar & Terras',lat:45.9033,lng:6.4243,dist:'10 min',desc:'Gezellige tapasbar met uitgebreid aperitief-aanbod. Sangria, pintxos, goede wijnen. Ideaal voor een langzame avond voor het diner.',vibe:'quiet',vibeLabel:'Gezellig',hours:'16u–23u',tags:['Tapas','Terras','Wijn','Aperitief']},
-  {emoji:'🍷',iconClass:'icon-bar',name:'Le Gressoney — Wijnbar Grand-Bornand',type:'Wijnbar',lat:45.9436,lng:6.4824,dist:'15 min',desc:'Intieme wijnbar met focus op Savoie en Rhône wijnen. Kaasplank, charcuterie, sfeervol interieur. Ideaal voor een rustigere avond.',vibe:'quiet',vibeLabel:'Sfeervol',hours:'17u–23u30',tags:['Wijn','Kaas','Sfeervol','Intiem']},
-  {emoji:'🍻',iconClass:'icon-bar',name:'Bar des Glières — Dorpscafé',type:'Lokaal café',lat:45.9443,lng:6.4306,dist:'2 min',desc:'Het lokale café van Saint-Jean-de-Sixt — vlakbij het chalet. Goedkope bieren, dartbord, echte lokale sfeer. Ideaal voor een spontane avond zonder autorit.',vibe:'quiet',vibeLabel:'Lokaal',hours:'9u–23u',tags:['Lokaal','Goedkoop','Dichtbij','Dartbord']},
-  {emoji:'🎸',iconClass:'icon-bar',name:'Le Galop — Live muziek',type:'Bar met livemuziek',lat:45.9031,lng:6.4238,dist:'10 min',desc:'Bar in La Clusaz met regelmatig live muziek in de zomer. Bands, singer-songwriters, folk en rock. Check het programma voor de week van 8-14 augustus.',vibe:'busy',vibeLabel:'Live muziek',hours:'18u–1u',tags:['Live muziek','Bands','Zomer','Terras']},
-  {emoji:'🌙',iconClass:'icon-bar',name:"Cave des Aravis — Proeverij & bar",type:'Wijnkelder & bar',lat:45.9445,lng:6.4310,dist:'5 min',desc:'Wijnproeverij en bar in een echte kelder. Avondprogramma met Savoie-wijnen, kaasplanken en kleine hapjes. Originele avond-activiteit voor de groep.',vibe:'quiet',vibeLabel:'Origineel',hours:'17u–22u',tags:['Proeverij','Wijn','Kaas','Uniek']}
+const nightlife_raw=[
+  {id:'n1',e:'🍺',ico:'ico-bar',name:'Le Moulin — Terrasbar',type:'Bar & Terras',lat:45.9032,lng:6.4237,desc:'Het populairste terras van La Clusaz. Grote bierkaart, drukke buitenbar. Perfect voor de eerste drink na de berg.',vibe:'busy',vl:'Druk',hours:'14u–1u',tags:['Terras','Bier','Après']},
+  {id:'n2',e:'🍹',ico:'ico-bar',name:'Le Barioz — Cocktailbar',type:'Cocktailbar',lat:45.9031,lng:6.4241,desc:'Hippe cocktailbar in het centrum. Inventieve cocktails, goede muziek, jong publiek.',vibe:'busy',vl:'Druk',hours:'17u–2u',tags:['Cocktails','Muziek','Shots']},
+  {id:'n3',e:'💃',ico:'ico-bar',name:'Le Pressoir — Club La Clusaz',type:'Club / Dansvloer',lat:45.9029,lng:6.4238,desc:'De enige echte discotheek van La Clusaz. In zomer open op vr en za. DJ-muziek, dansvloer, late night.',vibe:'party',vl:'Party',hours:'Vr-Za 23u–4u',tags:['Club','Dansen','DJ','Laat']},
+  {id:'n4',e:'🥂',ico:'ico-bar',name:"La P'tite Bodega",type:'Tapasbar & Terras',lat:45.9033,lng:6.4243,desc:'Gezellige tapasbar met aperitief-aanbod. Sangria, pintxos, goede wijnen.',vibe:'quiet',vl:'Gezellig',hours:'16u–23u',tags:['Tapas','Terras','Wijn']},
+  {id:'n5',e:'🍷',ico:'ico-bar',name:'Le Gressoney — Wijnbar GBornand',type:'Wijnbar',lat:45.9436,lng:6.4824,desc:'Intieme wijnbar met focus op Savoie-wijnen. Kaasplank, charcuterie. Rustige avond.',vibe:'quiet',vl:'Sfeervol',hours:'17u–23u30',tags:['Wijn','Kaas','Intiem']},
+  {id:'n6',e:'🍻',ico:'ico-bar',name:'Bar des Glières — Lokaal café',type:'Dorpscafé',lat:45.9443,lng:6.4306,desc:'Het lokale café van Saint-Jean-de-Sixt — 2 min van het chalet. Goedkope bieren, echte lokale sfeer, dartbord.',vibe:'quiet',vl:'Lokaal',hours:'9u–23u',tags:['Lokaal','Goedkoop','Dichtbij']},
+  {id:'n7',e:'🎸',ico:'ico-bar',name:'Le Galop — Live muziek La Clusaz',type:'Bar met livemuziek',lat:45.9031,lng:6.4238,desc:'Bar in La Clusaz met regelmatig live muziek in zomer. Bands, folk, rock. Check hun Facebook voor het zomerprogramma: "Le Galop La Clusaz".',vibe:'busy',vl:'Live muziek',hours:'18u–1u',tags:['Live muziek','Bands','Zomer']},
+  {id:'n8',e:'🎰',ico:'ico-bar',name:"Casino de Megève",type:'Casino',lat:45.8569,lng:6.6178,desc:'Dichtstbijzijnde echt casino van de regio (30 min). Roulette, slots, blackjack. Dresscode van toepassing. Open dagelijks vanaf 20u.',vibe:'busy',vl:'Casino',hours:'20u–3u (dagelijks)',tags:['Casino','Roulette','Dresscode']},
+  {id:'n9',e:'🎲',ico:'ico-bar',name:'Casino dAnnecy (Annecy Le Vieux)',type:'Casino',lat:45.9102,lng:6.1556,desc:'Casino in de rand van Annecy. Slots, roulette, blackjack, pokertafels. Combineer met een avond in de Vieille Ville.',vibe:'busy',vl:'Casino',hours:'20u–3u (dagelijks)',tags:['Casino','Poker','Annecy']}
 ];
 
-const rentals = [
-  {emoji:'🚵',iconClass:'icon-rental',name:'La Clusaz Bike Park Rentals',location:'La Clusaz Ski Station',lat:45.9031,lng:6.4239,dist:'10 min',desc:'Officiële verhuur aan het bike park. Volledig DH-pakket: fiets + bescherming. Reserveer online voor de beste fietsen.',hours:'8u30–17u30 (dagelijks jul-aug)',specs:['dh','mtb','emtb'],price:'DH ca. €55-70/dag · eMTB ca. €70/dag',link:'https://www.laclusaz.com/en/mountain-bike/bikepark/'},
-  {emoji:'🏔️',iconClass:'icon-rental',name:'Intersport La Clusaz',location:'La Clusaz Centre',lat:45.9033,lng:6.4242,dist:'10 min',desc:'Groot sportmateriaalverhuur in het centrum. Breed gamma van DH tot e-bike tot koersfiets. Bekende keten met betrouwbaar materiaal.',hours:'9u–19u (dagelijks aug)',specs:['dh','mtb','emtb','road'],price:'MTB ca. €30-45/dag · DH ca. €50-65/dag',link:'https://www.intersportlaclusaz.com/'},
-  {emoji:'🚲',iconClass:'icon-rental',name:'Sport 2000 Le Grand-Bornand',location:'Le Grand-Bornand',lat:45.9437,lng:6.4828,dist:'15 min',desc:'Sport 2000 aan de voet van het bike park. Specialisatie in MTB en eMTB. Goed alternatief als La Clusaz uitverkocht is.',hours:'8u30–18u30 (dagelijks jul-aug)',specs:['mtb','emtb','kids'],price:'MTB ca. €28-40/dag · eMTB ca. €60/dag',link:'https://www.sport2000.fr/'},
-  {emoji:'⛷️',iconClass:'icon-rental',name:'Saint-Jean Sport',location:'Saint-Jean-de-Sixt',lat:45.9442,lng:6.4303,dist:'1 min',desc:'De sport-allrounder vlakbij het chalet. Via ferrata equipment, wandelstokken, MTB verhuur. Handig voor last-minute huur.',hours:'9u–12u30 & 15u–19u30 (dagelijks aug)',specs:['mtb','emtb'],price:'MTB ca. €25-35/dag',link:'#'},
-  {emoji:'🏆',iconClass:'icon-rental',name:'Scott Rent — Performance MTB',location:'La Clusaz',lat:45.9030,lng:6.4236,dist:'10 min',desc:'Premium Scott MTB-verhuur, topmateriaal voor wie serieus wil rijden. Enduro, trail en DH bikes. Goed onderhouden en recent park.',hours:'9u–18u (dagelijks in zomer)',specs:['dh','mtb','emtb'],price:'Premium MTB ca. €50-75/dag',link:'#'},
-  {emoji:'🚴',iconClass:'icon-rental',name:'Bikeworld Annecy',location:'Annecy (40 min)',lat:45.9050,lng:6.0900,dist:'40 min',desc:'Grootste fietsverhuurder van de regio. Elektrische fietsen, koersfietsen, MTB, stadsfiets. Ideaal voor een fietstocht langs het meer van Annecy.',hours:'9u–19u (ma-za), 9u–13u (zo)',specs:['mtb','emtb','road','kids'],price:'eBike ca. €35/dag · Road ca. €30/dag',link:'#'},
-  {emoji:'⚡',iconClass:'icon-rental',name:'Eco Bike La Clusaz — eMTB specialist',location:'La Clusaz',lat:45.9028,lng:6.4242,dist:'10 min',desc:'Specialist in elektrische mountainbikes. Ideaal als je de benen wil sparen maar toch veel wil zien. Moderne Bosch-systemen, goed onderhouden.',hours:'9u–18u (dagelijks jul-aug)',specs:['emtb'],price:'eMTB ca. €60-75/dag incl. helm',link:'#'}
+const rentals_raw=[
+  {id:'rt1',e:'🚵',ico:'ico-rental',name:'La Clusaz Bike Park Rentals',loc:'La Clusaz Skistation',lat:45.9031,lng:6.4239,desc:'Officiële verhuur aan het bike park. Volledig DH-pakket: fiets + bescherming. Reserveer online.',hours:'8u30–17u30 dagelijks jul-aug',specs:['dh','mtb','emtb'],price:'DH ca. €55-70/dag'},
+  {id:'rt2',e:'🏔️',ico:'ico-rental',name:'Intersport La Clusaz',loc:'La Clusaz Centre',lat:45.9033,lng:6.4242,desc:'Groot sportmateriaalverhuur. DH, e-bike en koersfiets. Betrouwbaar materiaal.',hours:'9u–19u dagelijks aug',specs:['dh','mtb','emtb','road'],price:'MTB ca. €30-45/dag'},
+  {id:'rt3',e:'🚲',ico:'ico-rental',name:'Sport 2000 Grand-Bornand',loc:'Le Grand-Bornand',lat:45.9437,lng:6.4828,desc:'Specialisatie MTB en eMTB. Goed alternatief als La Clusaz vol is.',hours:'8u30–18u30 dagelijks aug',specs:['mtb','emtb','kids'],price:'MTB ca. €28-40/dag'},
+  {id:'rt4',e:'⛷️',ico:'ico-rental',name:'Saint-Jean Sport',loc:'Saint-Jean-de-Sixt',lat:45.9442,lng:6.4303,desc:'De sport-allrounder vlakbij het chalet. Via ferrata equipment + MTB verhuur.',hours:'9u–12u30 & 15u–19u30 dagelijks aug',specs:['mtb','emtb'],price:'MTB ca. €25-35/dag'},
+  {id:'rt5',e:'⚡',ico:'ico-rental',name:'Eco Bike La Clusaz — eMTB',loc:'La Clusaz',lat:45.9028,lng:6.4242,desc:'Specialist in elektrische mountainbikes. Bosch-systemen, goed onderhouden.',hours:'9u–18u dagelijks aug',specs:['emtb'],price:'eMTB ca. €60-75/dag incl. helm'},
+  {id:'rt6',e:'🚴',ico:'ico-rental',name:'Bikeworld Annecy',loc:'Annecy (40 min)',lat:45.9050,lng:6.0900,desc:'Grootste fietsverhuurder van de regio. eBike, koersfiets, MTB, stadsfiets. Ideaal voor tocht langs het meer.',hours:'9u–19u ma-za, 9u–13u zo',specs:['mtb','emtb','road','kids'],price:'eBike ca. €35/dag'}
 ];
 
-const shops = [
-  {emoji:'🏪',iconClass:'icon-shop',name:'Intermarché Aravis',type:'Supermarkt',lat:45.9300,lng:6.4000,dist:'3 min',desc:'De grootste supermarkt van de regio. Volledig assortiment: vers vlees, vis, groenten, wijn, bier.',hours:'Ma-Za 8u30-20u, Zo 9u-13u'},
-  {emoji:'🛒',iconClass:'icon-shop',name:'Carrefour Express La Clusaz',type:'Supermarkt',lat:45.9030,lng:6.4238,dist:'10 min',desc:'Handige dagelijkse supermarkt in het centrum van La Clusaz. Goed gesorteerd voor een kleinere winkel.',hours:'Elke dag 8u-20u (augustus)'},
-  {emoji:'🏔️',iconClass:'icon-shop',name:'Sherpa Les Villards-sur-Thônes',type:'Bergsupermarkt',lat:45.9100,lng:6.3800,dist:'8 min',desc:'Typische berg-supermarkt: lokale producten, reblochon, beaufort en charcuterie. Warm aanbevolen voor kaas.',hours:'Ma-Za 8u-19u30, Zo 8u30-12u30'},
-  {emoji:'🧀',iconClass:'icon-shop',name:'Fromagerie Paccard',type:'Kaaswinkel',lat:45.9150,lng:6.3900,dist:'20 min',desc:'De beste fromagerie van de Aravis. Reblochon AOC, Beaufort, Abondance. Bezoek verplicht!',hours:'Di-Za 9u-12u & 15u-19u'},
-  {emoji:'🛍️',iconClass:'icon-shop',name:'Centre Bonlieu Annecy',type:'Winkelcentrum',lat:45.8992,lng:6.1294,dist:'40 min',desc:'Groot winkelcentrum in Annecy centrum. H&M, FNAC, diverse kledingwinkels. Combineer met bezoek oude stad.',hours:'Ma-Za 10u-19u30, Zo gesloten'},
-  {emoji:'🍷',iconClass:'icon-shop',name:'Cave des Aravis',type:'Wijnwinkel',lat:45.9445,lng:6.4310,dist:'5 min',desc:'Lokale wijnwinkelier met selectie Savoie wijnen: Roussette, Apremont, Mondeuse... Perfect voor chalet-avond.',hours:'Di-Za 10u-12u & 16u-19u'},
-  {emoji:'🏕️',iconClass:'icon-shop',name:'Maison de la Montagne La Clusaz',type:'Berguitrusting',lat:45.9031,lng:6.4239,dist:'10 min',desc:'Professionele berguitrusting voor wandelen, klimmen en via ferrata. Wandelkaarten en GPX tracks voor de regio.',hours:'Elke dag 9u-19u (aug)'}
+const shops_raw=[
+  {id:'s1',e:'🏪',ico:'ico-shop',name:'Intermarché Aravis',type:'Supermarkt',lat:45.9300,lng:6.4000,desc:'Grootste supermarkt van de regio. Vers vlees, vis, groenten, wijn, bier.',hours:'Ma-Za 8u30–20u, Zo 9u–13u'},
+  {id:'s2',e:'🛒',ico:'ico-shop',name:'Carrefour Express La Clusaz',type:'Supermarkt',lat:45.9030,lng:6.4238,desc:'Handige dagelijkse supermarkt in La Clusaz centrum.',hours:'Elke dag 8u–20u (aug)'},
+  {id:'s3',e:'🏔️',ico:'ico-shop',name:'Sherpa Les Villards-sur-Thônes',type:'Bergsupermarkt',lat:45.9100,lng:6.3800,desc:'Lokale producten, reblochon, beaufort en charcuterie.',hours:'Ma-Za 8u–19u30, Zo 8u30–12u30'},
+  {id:'s4',e:'🧀',ico:'ico-shop',name:'Fromagerie Paccard',type:'Kaaswinkel',lat:45.9150,lng:6.3900,desc:'Beste fromagerie van de Aravis. Reblochon AOC, Beaufort, Abondance.',hours:'Di-Za 9u–12u & 15u–19u'},
+  {id:'s5',e:'🛍️',ico:'ico-shop',name:'Centre Bonlieu Annecy',type:'Winkelcentrum',lat:45.8992,lng:6.1294,desc:'H&M, FNAC, diverse winkels. Combineer met bezoek oude stad.',hours:'Ma-Za 10u–19u30, Zo gesloten'},
+  {id:'s6',e:'🍷',ico:'ico-shop',name:'Cave des Aravis',type:'Wijnwinkel',lat:45.9445,lng:6.4310,desc:'Savoie wijnen: Roussette, Apremont, Mondeuse. Perfect voor chalet-avond.',hours:'Di-Za 10u–12u & 16u–19u'},
+  {id:'s7',e:'🏕️',ico:'ico-shop',name:'Maison de la Montagne La Clusaz',type:'Berguitrusting',lat:45.9031,lng:6.4239,desc:'Via ferrata en wandeluitrusting. Wandelkaarten en GPX tracks.',hours:'Elke dag 9u–19u (aug)'}
 ];
 
-// ---- MAPS STATE ----
-let tabMaps = {}, tabMarkers = {}, modalMap = null, activeFilter = 'all';
+// Add distances + sort
+const activities=addDist(activities_raw);
+const restaurants=addDist(restaurants_raw);
+const nightlife=addDist(nightlife_raw);
+const rentals=addDist(rentals_raw);
+const shops=addDist(shops_raw);
+const events=events_raw.map(x=>({...x,dist:x.lat?hav(CHALET.lat,CHALET.lng,x.lat,x.lng):999}));
 
-function makeIcon(html, size=28) {
-  return L.divIcon({html,className:'',iconSize:[size,size],iconAnchor:[size/2,size/2],popupAnchor:[0,-size/2]});
+// ---- MAP STATE ----
+let tabMaps={},tabMarkers={},tabRoutes={},tabBounds={};
+let modalMap=null,planMap=null,planRouteLayer=null;
+let activeFilter='all';
+
+function makeIco(html,sz=28){return L.divIcon({html,className:'',iconSize:[sz,sz],iconAnchor:[sz/2,sz/2],popupAnchor:[0,-sz/2]});}
+
+// Chalet marker icon (pulsing dot)
+function chaletIco(){
+  return makeIco(`<div style="position:relative;width:34px;height:34px">
+    <div style="position:absolute;inset:0;background:rgba(45,212,191,.25);border-radius:50%;animation:pulse 2s infinite"></div>
+    <div style="position:absolute;inset:4px;background:#2dd4bf;border:2.5px solid #fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;box-shadow:0 2px 8px rgba(0,0,0,.5)">🏠</div>
+  </div><style>@keyframes pulse{0%,100%{transform:scale(1);opacity:.6}50%{transform:scale(1.5);opacity:0}}</style>`,34);}
+
+// Category icon for activities
+function actIco(cat){
+  const m={downhill:['#22c55e','🚵'],hiking:['#3b82f6','🥾'],ferrata:['#a855f7','🧗'],water:['#06b6d4','🌊']};
+  const [c,em]=m[cat]||['#2dd4bf','📍'];
+  return makeIco(`<div style="background:${c};border:2.5px solid #fff;border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center;font-size:15px;box-shadow:0 2px 8px rgba(0,0,0,.5);">${em}</div>`,30);
 }
+function colorIco(em,col='#f97316'){
+  return makeIco(`<div style="background:${col};border:2.5px solid #fff;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:13px;box-shadow:0 2px 8px rgba(0,0,0,.5)">${em}</div>`,28);}
 
-// ---- INIT ----
-function initApp() {
-  renderActivities(); renderRestaurants(); renderEvents();
-  renderNightlife(); renderRentals(); renderShops();
-  setTimeout(() => initTabMap('activities'), 150);
-}
-
-function initTabMap(tab) {
-  if (tabMaps[tab]) return;
-  const el = document.getElementById('map-' + tab);
-  if (!el) return;
-  const map = L.map(el, {scrollWheelZoom:false}).setView([45.93,6.40],11);
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OSM',maxZoom:18}).addTo(map);
-  tabMaps[tab] = map; tabMarkers[tab] = [];
-  const chaletIco = makeIcon('<div style="background:#2dd4bf;border:2px solid #fff;border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center;font-size:15px;box-shadow:0 2px 8px rgba(0,0,0,.5)">🏠</div>',30);
-  L.marker([CHALET.lat,CHALET.lng],{icon:chaletIco}).addTo(map).bindPopup('<b>🏠 Chalet Elomaz</b><br>Saint-Jean-de-Sixt<br>8–14 augustus 2026');
-  if (tab==='activities') updateActivityMap();
-  else if (tab==='restaurants') addMarkersToMap(map,restaurants,tabMarkers[tab],'restaurant',r=>`<b>${r.emoji} ${r.name}</b><br>${r.location}<br><span style="color:#2dd4bf">🚗 ${r.dist} · ${r.price}</span>`);
-  else if (tab==='events') addMarkersToMap(map,events.filter(e=>e.during),tabMarkers[tab],'event',e=>`<b>${e.emoji} ${e.name}</b><br><span style="color:#2dd4bf">📍 ${e.location}</span>`);
-  else if (tab==='nightlife') addMarkersToMap(map,nightlife,tabMarkers[tab],'nightlife',b=>`<b>${b.emoji} ${b.name}</b><br>${b.type}<br><span style="color:#a855f7">🕐 ${b.hours}</span>`);
-  else if (tab==='rentals') addMarkersToMap(map,rentals,tabMarkers[tab],'rental',r=>`<b>${r.emoji} ${r.name}</b><br>${r.location}<br><span style="color:#22c55e">🕐 ${r.hours}</span>`);
-  else if (tab==='shops') addMarkersToMap(map,shops,tabMarkers[tab],'shop',s=>`<b>${s.emoji} ${s.name}</b><br>${s.type}<br><span style="color:#22c55e">🕐 ${s.hours}</span>`);
-}
-
-function addMarkersToMap(map, data, markersArr, type, popupFn) {
-  const colors = {restaurant:'#f97316',event:'#6366f1',shop:'#22c55e',nightlife:'#a855f7',rental:'#22c55e'};
-  const col = colors[type]||'#2dd4bf';
-  const bounds = [[CHALET.lat,CHALET.lng]];
-  data.forEach((item,i) => {
-    if (!item.lat) return;
-    const ico = makeIcon(`<div style="background:${col};border:2px solid #fff;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:13px;box-shadow:0 2px 8px rgba(0,0,0,.5)">${item.emoji}</div>`);
-    const m = L.marker([item.lat,item.lng],{icon:ico}).addTo(map).bindPopup(popupFn(item));
-    markersArr.push({marker:m,item,idx:i});
-    bounds.push([item.lat,item.lng]);
-  });
-  if (bounds.length>1) map.fitBounds(bounds,{padding:[30,30]});
-}
-
-function updateActivityMap() {
-  const map = tabMaps['activities'];
-  if (!map) return;
-  if (!tabMarkers['activities']) tabMarkers['activities']=[];
-  tabMarkers['activities'].forEach(m=>map.removeLayer(m.marker));
-  tabMarkers['activities']=[];
-  const catColors={downhill:'#22c55e',hiking:'#3b82f6',ferrata:'#a855f7',water:'#06b6d4'};
-  const catEmoji={downhill:'🚵',hiking:'🥾',ferrata:'🧗',water:'🌊'};
-  const bounds=[[CHALET.lat,CHALET.lng]];
-  activities.forEach(a=>{
-    if (activeFilter!=='all'&&a.category!==activeFilter) return;
-    const col=catColors[a.category]||'#2dd4bf';
-    const ico=makeIcon(`<div style="background:${col};border:2px solid #fff;border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center;font-size:15px;box-shadow:0 2px 8px rgba(0,0,0,.5);cursor:pointer">${catEmoji[a.category]||'📍'}</div>`,30);
-    const m=L.marker([a.lat,a.lng],{icon:ico}).addTo(map)
-      .bindPopup(`<b>${a.emoji} ${a.title}</b><br>${a.stats.map(s=>s.i+' '+s.l).join(' · ')}`);
-    tabMarkers['activities'].push({marker:m,item:a});
-    bounds.push([a.lat,a.lng]);
-  });
-  if (bounds.length>1) map.fitBounds(bounds,{padding:[30,30]});
-}
-
-// ---- RENDER ----
-function renderActivities() {
-  const filtered=activities.filter(a=>activeFilter==='all'||a.category===activeFilter);
-  document.getElementById('activity-grid').innerHTML=filtered.map(a=>`
-    <div class="activity-card" onclick="openActivity(${a.id})">
-      <div class="card-icon ${a.iconClass}">${a.emoji}</div>
-      <div class="card-body"><h3>${a.title}</h3><p>${a.tagline}</p>
-        <div class="card-stats">${a.stats.map(s=>`<div class="stat">${s.i} ${s.l}</div>`).join('')}</div></div>
-      <div class="card-right"><span class="diff-badge diff-${a.difficulty}">${a.diffLabel}</span><span class="card-arrow">›</span></div>
-    </div>`).join('');
-}
-
-function renderRestaurants() {
-  document.getElementById('restaurant-list').innerHTML=restaurants.map((r,i)=>`
-    <div class="rest-card" onclick="flyToMarker('restaurants',${i})">
-      <div class="rest-icon ${r.iconClass}">${r.emoji}</div>
-      <div class="rest-body"><h3>${r.name} <span class="stars">${r.stars}</span></h3>
-        <div class="rest-loc">📍 ${r.location}</div>
-        <p>${r.desc}</p>
-        <div class="rest-tags">${r.tags.map(t=>`<span class="rtag">${t}</span>`).join('')}</div></div>
-      <div class="rest-right"><div class="rest-dist">🚗 ${r.dist}</div><div class="rest-price">${r.price}</div></div>
-    </div>`).join('');
-}
-
-function renderEvents() {
-  document.getElementById('events-list').innerHTML=events.map((e,i)=>`
-    <div class="event-card${e.during?' during':''}" onclick="flyToMarker('events',${i})">
-      <div class="event-date-box"><div class="event-day">${e.day}</div><div class="event-month">${e.month}</div></div>
-      <div class="event-body">
-        <h3>${e.emoji} ${e.name}${e.during?'<span class="during-badge">TIJDENS VERBLIJF</span>':''}</h3>
-        <p>${e.desc}</p>
-        <div class="event-loc">📍 ${e.location}</div></div>
-    </div>`).join('');
-}
-
-function renderNightlife() {
-  document.getElementById('nightlife-list').innerHTML=nightlife.map((b,i)=>`
-    <div class="bar-card" onclick="flyToMarker('nightlife',${i})">
-      <div class="bar-icon ${b.iconClass}">${b.emoji}</div>
-      <div class="bar-body">
-        <h3>${b.name}</h3><div class="bar-type">${b.type}</div>
-        <p>${b.desc}</p>
-        <div class="rest-tags">${b.tags.map(t=>`<span class="rtag">${t}</span>`).join('')}</div></div>
-      <div class="bar-right">
-        <span class="vibe-badge vibe-${b.vibe}">${b.vibeLabel}</span>
-        <div class="bar-hours">🕐 ${b.hours}</div>
-        <div class="bar-dist">🚗 ${b.dist}</div></div>
-    </div>`).join('');
-}
-
-function renderRentals() {
-  const specMap={dh:['spec-dh','DH'],mtb:['spec-mtb','MTB'],emtb:['spec-emtb','eMTB'],road:['spec-road','Koers'],kids:['spec-kids','Kids']};
-  document.getElementById('rentals-list').innerHTML=rentals.map((r,i)=>`
-    <div class="rental-card" onclick="flyToMarker('rentals',${i})">
-      <div class="rental-icon ${r.iconClass}">${r.emoji}</div>
-      <div class="rental-body">
-        <h3>${r.name}</h3><p>${r.desc}</p>
-        <div class="rental-spec">${r.specs.map(s=>`<span class="spec-tag ${specMap[s][0]}">${specMap[s][1]}</span>`).join('')}</div></div>
-      <div class="rental-right">
-        <div class="rental-hours">🕐 ${r.hours.split(' ')[0]}</div>
-        <div class="rental-dist">🚗 ${r.dist}</div>
-        <div class="rental-price">${r.price}</div></div>
-    </div>`).join('');
-}
-
-function renderShops() {
-  document.getElementById('shops-list').innerHTML=shops.map((s,i)=>`
-    <div class="shop-card" onclick="flyToMarker('shops',${i})">
-      <div class="shop-icon ${s.iconClass}">${s.emoji}</div>
-      <div class="shop-body">
-        <h3>${s.name}</h3><div class="shop-type">${s.type}</div>
-        <p>${s.desc}</p></div>
-      <div class="shop-right">
-        <div class="shop-hours">🕐 ${s.hours}</div>
-        <div class="shop-dist">🚗 ${s.dist}</div></div>
-    </div>`).join('');
-}
-
-// ---- MARKER FLY-TO ----
-function flyToMarker(tab, idx) {
-  const m = tabMaps[tab]; const markers = tabMarkers[tab];
-  if (!m||!markers) return;
-  const entry = markers.find(x=>x.idx===idx);
-  if (entry) { m.flyTo([entry.item.lat,entry.item.lng],14,{duration:.8}); entry.marker.openPopup(); }
-}
-
-// ---- FILTER ----
-function filterActivities(cat,el) {
-  document.querySelectorAll('#act-filters .filter-pill').forEach(p=>p.classList.remove('active'));
-  el.classList.add('active'); activeFilter=cat;
-  renderActivities(); updateActivityMap();
-}
-
-// ---- ACTIVITY MODAL ----
-async function openActivity(id) {
-  const a=activities.find(x=>x.id===id); if(!a) return;
-  document.getElementById('modal-icon').className='modal-icon-lg '+a.iconClass;
-  document.getElementById('modal-icon').textContent=a.emoji;
-  document.getElementById('modal-title-text').textContent=a.title;
-  document.getElementById('modal-desc').textContent=a.desc;
-  document.getElementById('modal-meta').innerHTML=a.stats.map(s=>`<div class="badge">${s.i} ${s.l}</div>`).join('')+`<span class="diff-badge diff-${a.difficulty}" style="margin-left:.3rem">${a.diffLabel}</span>`;
-  document.getElementById('route-info').innerHTML='';
-  document.getElementById('modal-sections').innerHTML=`
-    <div class="modal-section"><h4>🔧 Praktisch</h4><ul>${a.praktisch.map(t=>`<li>${t}</li>`).join('')}</ul></div>
-    <div class="modal-section"><h4>💡 Tips</h4><ul>${a.tips.map(t=>`<li>${t}</li>`).join('')}</ul></div>`;
-  document.getElementById('modal-cta').innerHTML=
-    a.links.map(l=>`<a class="btn ${l.cls||'btn-secondary'}" href="${l.url}" target="_blank">${l.l}</a>`).join('')+
-    `<button class="btn btn-secondary" onclick="openGoogleMaps(${a.lat},${a.lng})">🗺️ Google Maps</button>`;
-  document.getElementById('modal-overlay').classList.add('open');
-  document.getElementById('map-loading').style.display='flex';
-  await new Promise(r=>setTimeout(r,80));
-  if (modalMap){modalMap.remove();modalMap=null;}
-  const isHike=a.routeType==='hike';
-  modalMap=L.map('modal-map').setView([a.lat,a.lng],12);
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OSM',maxZoom:18}).addTo(modalMap);
-  if (isHike) L.tileLayer('https://tile.waymarkedtrails.org/hiking/{z}/{x}/{y}.png',{attribution:'© Waymarked Trails',maxZoom:18,opacity:.7}).addTo(modalMap);
-  a.waypoints.forEach((w,i)=>{
-    const isStart=i===0,isEnd=i===a.waypoints.length-1;
-    const bg=isStart?'#2dd4bf':isEnd?'#f97316':'#6366f1';
-    const lbl=isStart?'🏠':isEnd?'🎯':'⚡';
-    const ico=makeIcon(`<div style="background:${bg};border:2px solid #fff;border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 2px 8px rgba(0,0,0,.5)">${lbl}</div>`,30);
-    L.marker([w.lat,w.lng],{icon:ico}).addTo(modalMap).bindPopup(`<b>${w.l}</b>`);
-  });
-  document.getElementById('map-loading').style.display='none';
-  if (a.waypoints.length>=2) {
-    const profile=isHike?'foot':'driving';
-    const coords=a.waypoints.map(w=>`${w.lng},${w.lat}`).join(';');
-    try{
-      const res=await fetch(`${OSRM}/route/v1/${profile}/${coords}?overview=full&geometries=geojson`);
-      const data=await res.json();
-      if(data.code==='Ok'&&data.routes[0]){
-        const route=data.routes[0];
-        L.geoJSON(route.geometry,{style:{color:isHike?'#22c55e':'#f97316',weight:4,opacity:.85}}).addTo(modalMap);
-        const dist=(route.distance/1000).toFixed(1)+' km';
-        const mins=Math.round(route.duration/60);
-        const time=mins>=60?`${Math.floor(mins/60)}u${mins%60>0?mins%60+'min':''}`:`${mins} min`;
-        document.getElementById('route-info').innerHTML=`<div class="route-chip">📏 ${dist}</div><div class="route-chip">⏱️ ${time} ${isHike?'lopend':'rijden'}</div><div class="route-chip">${isHike?'🥾 Wandelroute':'🚗 Autoroute'}</div>`;
-        const latlngs=route.geometry.coordinates.map(c=>[c[1],c[0]]);
-        modalMap.fitBounds(L.polyline(latlngs).getBounds(),{padding:[30,30]});
-      }
-    }catch(e){
-      const latlngs=a.waypoints.map(w=>[w.lat,w.lng]);
-      L.polyline(latlngs,{color:'#2dd4bf',weight:3,dashArray:'8 4'}).addTo(modalMap);
-      modalMap.fitBounds(L.polyline(latlngs).getBounds(),{padding:[30,30]});
+// Route from chalet to a point on a tab map
+async function showTabRoute(tab,item,markerEl){
+  const map=tabMaps[tab];
+  if(tabRoutes[tab]){map.removeLayer(tabRoutes[tab]);tabRoutes[tab]=null;}
+  const rb=document.getElementById('rb-'+tab);
+  const rbi=document.getElementById('rbi-'+tab);
+  rb.classList.remove('visible');
+  const isHike=(item.rtype==='hike');
+  const profile=isHike?'foot':'driving';
+  const coords=`${CHALET.lng},${CHALET.lat};${item.lng},${item.lat}`;
+  try{
+    const res=await fetch(`${OSRM}/route/v1/${profile}/${coords}?overview=full&geometries=geojson`);
+    const d=await res.json();
+    if(d.code==='Ok'&&d.routes[0]){
+      const r=d.routes[0];
+      tabRoutes[tab]=L.geoJSON(r.geometry,{style:{color:'#f97316',weight:4,opacity:.85}}).addTo(map);
+      const pts=r.geometry.coordinates.map(c=>[c[1],c[0]]);
+      map.fitBounds(L.polyline(pts).getBounds(),{padding:[35,35]});
+      const km=(r.distance/1000).toFixed(1);
+      const mins=Math.round(r.duration/60);
+      const t=mins>=60?`${Math.floor(mins/60)}u${mins%60>0?mins%60+'m':''}`:`${mins} min`;
+      rbi.innerHTML=`<span class="route-chip">📍 ${item.name||item.title}</span><span class="route-chip">📏 ${km} km</span><span class="route-chip">⏱️ ${t} rijden</span>`;
+      rb.classList.add('visible');
     }
+  }catch(err){
+    const pts=[[CHALET.lat,CHALET.lng],[item.lat,item.lng]];
+    tabRoutes[tab]=L.polyline(pts,{color:'#f97316',weight:3,dashArray:'8 4'}).addTo(map);
+    map.fitBounds(L.polyline(pts).getBounds(),{padding:[35,35]});
   }
 }
 
-function openGoogleMaps(lat,lng){window.open(`https://www.google.com/maps/dir/?api=1&origin=${CHALET.lat},${CHALET.lng}&destination=${lat},${lng}`,'_blank');}
-function closeModal(e){if(e.target===document.getElementById('modal-overlay'))closeModalDirect();}
-function closeModalDirect(){document.getElementById('modal-overlay').classList.remove('open');if(modalMap){modalMap.remove();modalMap=null;}}
+function resetTabMap(tab){
+  const map=tabMaps[tab];
+  if(!map) return;
+  if(tabRoutes[tab]){map.removeLayer(tabRoutes[tab]);tabRoutes[tab]=null;}
+  document.getElementById('rb-'+tab).classList.remove('visible');
+  if(tabBounds[tab]) map.fitBounds(tabBounds[tab],{padding:[30,30]});
+}
+
+// Init a tab map
+function initTabMap(tab){
+  if(tabMaps[tab]) return;
+  const el=document.getElementById('map-'+tab);
+  if(!el) return;
+  const map=L.map(el,{scrollWheelZoom:false}).setView([45.93,6.42],11);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OSM',maxZoom:18}).addTo(map);
+  tabMaps[tab]=map; tabMarkers[tab]=[]; tabRoutes[tab]=null;
+  const cm=L.marker([CHALET.lat,CHALET.lng],{icon:chaletIco(),zIndexOffset:1000}).addTo(map)
+    .bindPopup('<b>🏠 Chalet Elomaz</b><br>Saint-Jean-de-Sixt');
+  map.on('click',()=>resetTabMap(tab));
+  if(tab==='activities') populateActMap(map);
+  else if(tab==='restaurants') populateGenMap(map,restaurants,'#f97316');
+  else if(tab==='events') populateGenMap(map,events.filter(e=>e.during),'#6366f1');
+  else if(tab==='nightlife') populateGenMap(map,nightlife,'#a855f7');
+  else if(tab==='rentals') populateGenMap(map,rentals,'#22c55e');
+  else if(tab==='shops') populateGenMap(map,shops,'#22c55e');
+}
+
+function populateActMap(map){
+  const bounds=[[CHALET.lat,CHALET.lng]];
+  const shown=activities.filter(a=>activeFilter==='all'||a.cat===activeFilter);
+  tabMarkers['activities'].forEach(m=>map.removeLayer(m));
+  tabMarkers['activities']=[];
+  shown.forEach(a=>{
+    const m=L.marker([a.lat,a.lng],{icon:actIco(a.cat)}).addTo(map)
+      .bindPopup(`<b>${a.e} ${a.title}</b><br><span style="color:var(--accent)">📏 ${a.dist} km van chalet</span>`);
+    m.on('click',e=>{L.DomEvent.stopPropagation(e);showTabRoute('activities',{...a,name:a.title,rtype:a.rtype},m);});
+    tabMarkers['activities'].push(m);
+    bounds.push([a.lat,a.lng]);
+  });
+  const b=L.latLngBounds(bounds);tabBounds['activities']=b;
+  map.fitBounds(b,{padding:[30,30]});
+}
+
+function populateGenMap(map,data,col){
+  const tab=Object.keys(tabMaps).find(k=>tabMaps[k]===map);
+  const bounds=[[CHALET.lat,CHALET.lng]];
+  data.forEach(item=>{
+    if(!item.lat) return;
+    const m=L.marker([item.lat,item.lng],{icon:colorIco(item.e,col)}).addTo(map)
+      .bindPopup(`<b>${item.e} ${item.name||item.title}</b><br><span style="color:var(--accent)">📏 ${item.dist} km</span>`);
+    m.on('click',ev=>{L.DomEvent.stopPropagation(ev);showTabRoute(tab,{...item,name:item.name||item.title,rtype:'drive'},m);});
+    tabMarkers[tab].push(m);
+    bounds.push([item.lat,item.lng]);
+  });
+  const b=L.latLngBounds(bounds);tabBounds[tab]=b;
+  map.fitBounds(b,{padding:[30,30]});
+}
+
+// ---- RENDER FUNCTIONS ----
+function renderAll(){renderActs();renderRests();renderEvents();renderNightlife();renderRentals();renderShops();}
+
+function renderActs(){
+  let data=activities.filter(a=>activeFilter==='all'||a.cat===activeFilter);
+  const favs=getFavs('act');
+  data=[...data.filter(a=>favs.includes(a.id)),...data.filter(a=>!favs.includes(a.id))];
+  document.getElementById('act-grid').innerHTML=data.map(a=>`
+    <div class="act-card${isFav('act',a.id)?' favd':''}" onclick="openActModal(${a.id})">
+      <div class="card-ico ${a.ico}">${a.e}</div>
+      <div class="card-body">
+        <h3>${a.title}</h3>
+        <p>${a.sub} <span class="dist-badge">· ${a.dist} km</span></p>
+        <div class="card-stats">${a.stats.map(s=>`<span class="cs">${s.i} ${s.l}</span>`).join('')}</div>
+      </div>
+      <div class="card-right">
+        <button class="fav-btn" onclick="toggleFav('act',${a.id},event)" title="Favoriet">${isFav('act',a.id)?'⭐':'☆'}</button>
+        <span class="diff d-${a.diff}">${a.dl}</span>
+        <button class="add-plan-btn" onclick="openPickerFor(${a.id},event)">📅 Plan</button>
+      </div>
+    </div>`).join('');
+}
+
+function renderRests(){
+  let data=sortWithFavs([...restaurants],'rest');
+  document.getElementById('rest-list').innerHTML=data.map((r,i)=>`
+    <div class="list-card" onclick="flyTo('restaurants',${i})">
+      <div class="lc-ico ${r.ico}">${r.e}</div>
+      <div class="lc-body">
+        <h3>${r.name} <span class="stars-row">${r.stars}</span></h3>
+        <p style="color:var(--muted);font-size:.7rem;margin-bottom:.2rem">📍 ${r.loc} · 🚗 ${r.dist} km</p>
+        <p>${r.desc}</p>
+        <div class="lc-tags">${r.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+      </div>
+      <div class="lc-right">
+        <button class="fav-btn" onclick="toggleFav('rest','${r.id}',event)">${isFav('rest',r.id)?'⭐':'☆'}</button>
+        <div class="lc-sub">${r.price}</div>
+      </div>
+    </div>`).join('');
+}
+
+function renderEvents(){
+  document.getElementById('events-list').innerHTML=events.map((ev,i)=>`
+    <div class="ev-card${ev.during?' during':''}" onclick="flyTo('events',${i})">
+      <div class="ev-date"><div class="ev-day">${ev.day}</div><div class="ev-mo">${ev.mo}</div></div>
+      <div class="ev-body">
+        <h3>${ev.e} ${ev.name}${ev.during?'<span class="during-tag">TIJDENS VERBLIJF</span>':''}</h3>
+        <p>${ev.desc}</p>
+        <div class="ev-loc">📍 ${ev.loc}</div>
+      </div>
+    </div>`).join('');
+}
+
+function renderNightlife(){
+  let data=sortWithFavs([...nightlife],'night');
+  document.getElementById('night-list').innerHTML=data.map((b,i)=>`
+    <div class="bar-card" onclick="flyTo('nightlife',${i})">
+      <div class="lc-ico ${b.ico}">${b.e}</div>
+      <div class="bar-body">
+        <h3>${b.name}</h3><div class="bar-type">${b.type}</div>
+        <p>${b.desc}</p>
+        <div class="lc-tags">${b.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+      </div>
+      <div class="bar-right">
+        <button class="fav-btn" onclick="toggleFav('night','${b.id}',event)">${isFav('night',b.id)?'⭐':'☆'}</button>
+        <span class="vibe v-${b.vibe}">${b.vl}</span>
+        <div style="font-size:.7rem;color:var(--muted)">🕐 ${b.hours}</div>
+        <div style="font-size:.7rem;color:var(--accent)">🚗 ${b.dist} km</div>
+      </div>
+    </div>`).join('');
+}
+
+function renderRentals(){
+  const sm={dh:['st-dh','DH'],mtb:['st-mtb','MTB'],emtb:['st-emtb','eMTB'],road:['st-road','Koers'],kids:['st-kids','Kids']};
+  document.getElementById('rental-list').innerHTML=rentals.map((r,i)=>`
+    <div class="rental-card" onclick="flyTo('rentals',${i})">
+      <div class="lc-ico ${r.ico}">${r.e}</div>
+      <div class="rental-body">
+        <h3>${r.name}</h3>
+        <p>${r.desc} <span class="lc-dist">🚗 ${r.dist} km</span></p>
+        <div class="spec-tags">${r.specs.map(s=>`<span class="st ${sm[s][0]}">${sm[s][1]}</span>`).join('')}</div>
+      </div>
+      <div class="lc-right">
+        <div style="font-size:.68rem;color:var(--success)">🕐 ${r.hours.split(' ').slice(0,3).join(' ')}</div>
+        <div class="lc-sub">${r.price}</div>
+      </div>
+    </div>`).join('');
+}
+
+function renderShops(){
+  document.getElementById('shops-list').innerHTML=shops.map((s,i)=>`
+    <div class="list-card" onclick="flyTo('shops',${i})">
+      <div class="lc-ico ${s.ico}">${s.e}</div>
+      <div class="lc-body">
+        <h3>${s.name}</h3>
+        <p style="font-size:.68rem;color:var(--purple);text-transform:uppercase;letter-spacing:.3px;font-weight:700;margin-bottom:.15rem">${s.type}</p>
+        <p>${s.desc}</p>
+      </div>
+      <div class="lc-right">
+        <div style="font-size:.7rem;color:var(--success)">🕐 ${s.hours}</div>
+        <div class="lc-dist">🚗 ${s.dist} km</div>
+      </div>
+    </div>`).join('');
+}
+
+function flyTo(tab,idx){
+  const map=tabMaps[tab];
+  const m=tabMarkers[tab][idx];
+  if(map&&m){map.flyTo(m.getLatLng(),14,{duration:.7});m.openPopup();}
+}
+
+// ---- FILTERS ----
+function filterActs(cat,el){
+  document.querySelectorAll('#act-filters .fp').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');activeFilter=cat;
+  renderActs();
+  if(tabMaps['activities']){tabMaps['activities'].closePopup();populateActMap(tabMaps['activities']);}
+}
+
+// ---- ACTIVITY MODAL ----
+let modalMapObj=null;
+async function openActModal(id){
+  const a=activities.find(x=>x.id===id);if(!a)return;
+  document.getElementById('am-ico').className='m-ico '+a.ico;
+  document.getElementById('am-ico').textContent=a.e;
+  document.getElementById('am-title').textContent=a.title;
+  document.getElementById('am-desc').textContent=a.desc;
+  document.getElementById('am-meta').innerHTML=a.stats.map(s=>`<span class="badge">${s.i} ${s.l}</span>`).join('')+`<span class="diff d-${a.diff}" style="margin-left:.2rem">${a.dl}</span><span class="badge" style="color:var(--accent)">📏 ${a.dist} km</span>`;
+  document.getElementById('am-route').innerHTML='';
+  document.getElementById('am-sections').innerHTML=`
+    <div class="m-section"><h4>🔧 Praktisch</h4><ul>${a.prak.map(t=>`<li>${t}</li>`).join('')}</ul></div>
+    <div class="m-section"><h4>💡 Tips</h4><ul>${a.tips.map(t=>`<li>${t}</li>`).join('')}</ul></div>`;
+  document.getElementById('am-cta').innerHTML=
+    a.links.map(l=>`<a class="btn ${l.c}" href="${l.u}" target="_blank">${l.l}</a>`).join('')+
+    `<button class="btn btn-sec" onclick="window.open('https://www.google.com/maps/dir/?api=1&origin=${CHALET.lat},${CHALET.lng}&destination=${a.lat},${a.lng}','_blank')">🗺️ Google Maps</button>`;
+  document.getElementById('act-modal').classList.add('open');
+  document.getElementById('am-loading').style.display='flex';
+  await new Promise(r=>setTimeout(r,80));
+  if(modalMapObj){modalMapObj.remove();modalMapObj=null;}
+  const isH=a.rtype==='hike';
+  modalMapObj=L.map('am-map').setView([a.lat,a.lng],12);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OSM',maxZoom:18}).addTo(modalMapObj);
+  if(isH) L.tileLayer('https://tile.waymarkedtrails.org/hiking/{z}/{x}/{y}.png',{opacity:.7,maxZoom:18}).addTo(modalMapObj);
+  a.wp.forEach((w,i)=>{
+    const bg=i===0?'#2dd4bf':i===a.wp.length-1?'#f97316':'#6366f1';
+    const lbl=i===0?'🏠':i===a.wp.length-1?'🎯':'⚡';
+    const ic=makeIco(`<div style="background:${bg};border:2.5px solid #fff;border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 2px 8px rgba(0,0,0,.5)">${lbl}</div>`,30);
+    L.marker([w.lat,w.lng],{icon:ic}).addTo(modalMapObj).bindPopup(`<b>${w.l}</b>`);
+  });
+  document.getElementById('am-loading').style.display='none';
+  if(a.wp.length>=2){
+    const prof=isH?'foot':'driving';
+    const coords=a.wp.map(w=>`${w.lng},${w.lat}`).join(';');
+    try{
+      const res=await fetch(`${OSRM}/route/v1/${prof}/${coords}?overview=full&geometries=geojson`);
+      const d=await res.json();
+      if(d.code==='Ok'&&d.routes[0]){
+        const r=d.routes[0];
+        L.geoJSON(r.geometry,{style:{color:isH?'#22c55e':'#f97316',weight:4,opacity:.85}}).addTo(modalMapObj);
+        const km=(r.distance/1000).toFixed(1);
+        const mins=Math.round(r.duration/60);
+        const t=mins>=60?`${Math.floor(mins/60)}u${mins%60>0?mins%60+'m':''}`:`${mins} min`;
+        document.getElementById('am-route').innerHTML=`<span class="route-chip">📏 ${km} km</span><span class="route-chip">⏱️ ${t} ${isH?'lopend':'rijden'}</span><span class="route-chip">${isH?'🥾 Wandelroute':'🚗 Autoroute'}</span>`;
+        const pts=r.geometry.coordinates.map(c=>[c[1],c[0]]);
+        modalMapObj.fitBounds(L.polyline(pts).getBounds(),{padding:[30,30]});
+      }
+    }catch(err){
+      const pts=a.wp.map(w=>[w.lat,w.lng]);
+      L.polyline(pts,{color:'#2dd4bf',weight:3,dashArray:'8 4'}).addTo(modalMapObj);
+      modalMapObj.fitBounds(L.polyline(pts).getBounds(),{padding:[30,30]});
+    }
+  }
+}
+function closeActModal(){
+  document.getElementById('act-modal').classList.remove('open');
+  if(modalMapObj){modalMapObj.remove();modalMapObj=null;}
+}
+// ---- DAGPLANNING ----
+let dayPlans={};
+let selectedDay=null;
+let savePlanTimer=null;
+let pickingForDayDirectly=null;
+let mealPickerField=null;
+let mealPickerDay=null;
+
+function initPlanning(){
+  renderWeekStrip();
+  TRIP_DAYS.forEach(d=>dayPlans[d]={activities:[],lunch:'',dinner:'',evening:'',notes:''});
+  loadAllPlans();
+  initPlanMap();
+}
+
+function initPlanMap(){
+  if(planMap) return;
+  const el=document.getElementById('plan-map');
+  if(!el) return;
+  planMap=L.map(el,{scrollWheelZoom:false}).setView([45.93,6.42],11);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OSM',maxZoom:18}).addTo(planMap);
+  L.marker([CHALET.lat,CHALET.lng],{icon:chaletIco(),zIndexOffset:1000}).addTo(planMap).bindPopup('<b>🏠 Chalet Elomaz</b>');
+}
+
+async function loadAllPlans(){
+  try{
+    const res=await fetch(`${SUPA_URL}/rest/v1/cyclonereis_day_plans?select=*`,{
+      headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY}
+    });
+    const rows=await res.json();
+    if(Array.isArray(rows)){
+      rows.forEach(row=>{
+        if(dayPlans[row.day_date]!==undefined){
+          dayPlans[row.day_date]={
+            activities:row.activities||[],
+            lunch:row.lunch||'',dinner:row.dinner||'',
+            evening:row.evening||'',notes:row.notes||''
+          };
+        }
+      });
+    }
+  }catch(e){console.warn('Supabase load failed:',e);}
+  renderWeekStrip();
+  if(selectedDay) renderDayDetail(selectedDay);
+}
+
+async function savePlan(date){
+  const plan=dayPlans[date];
+  try{
+    await fetch(`${SUPA_URL}/rest/v1/cyclonereis_day_plans`,{
+      method:'POST',
+      headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Content-Type':'application/json','Prefer':'resolution=merge-duplicates'},
+      body:JSON.stringify({day_date:date,...plan,updated_at:new Date().toISOString()})
+    });
+    const ind=document.getElementById('save-ind');
+    if(ind){ind.textContent='✅ Opgeslagen';setTimeout(()=>{if(ind)ind.textContent='';},2000);}
+  }catch(e){const ind=document.getElementById('save-ind');if(ind)ind.textContent='⚠️ Opslaan mislukt';}
+}
+
+function debounceSave(date){
+  clearTimeout(savePlanTimer);
+  savePlanTimer=setTimeout(()=>savePlan(date),800);
+}
+
+function renderWeekStrip(){
+  const strip=document.getElementById('week-strip');
+  strip.innerHTML=TRIP_DAYS.map((d,i)=>{
+    const plan=dayPlans[d];
+    const dateNum=parseInt(d.split('-')[2]);
+    const hasActs=plan&&plan.activities.length>0;
+    const hasMeals=plan&&(plan.lunch||plan.dinner);
+    const icons=(plan&&plan.activities.map(a=>{const ac=activities.find(x=>x.id===a.id);return ac?ac.e:'';}).slice(0,3).join(''))||'';
+    return `<div class="day-card${selectedDay===d?' selected':''}${hasActs?' has-items':''}" onclick="selectDay('${d}')">
+      <div class="dc-name">${DAY_NAMES[i]}</div>
+      <div class="dc-date">${dateNum}</div>
+      <div class="dc-icons">${icons||'&nbsp;'}</div>
+      <div class="dc-meals">${hasMeals?'🍽️':''}</div>
+    </div>`;
+  }).join('');
+}
+
+function selectDay(date){
+  selectedDay=date;
+  renderWeekStrip();
+  renderDayDetail(date);
+}
+
+function renderDayDetail(date){
+  const plan=dayPlans[date];
+  const di=TRIP_DAYS.indexOf(date);
+  const dayName=DAY_NAMES[di];
+  const dateNum=parseInt(date.split('-')[2]);
+  const left=document.getElementById('day-left');
+  left.innerHTML=`
+    <div class="day-hdr">
+      <h3>${dayName} ${dateNum} augustus</h3>
+      <button class="day-add-btn" onclick="openPicker('${date}')">+ Activiteit toevoegen</button>
+    </div>
+    <div id="slots-${date}">
+      ${plan.activities.length===0?`<div style="color:var(--muted);font-size:.82rem;padding:.8rem 0">Nog geen activiteiten gepland. Klik op "+ Activiteit toevoegen".</div>`:''}
+      ${plan.activities.map((slot,si)=>{
+        const ac=activities.find(x=>x.id===slot.id);
+        if(!ac) return '';
+        return `<div class="plan-slot">
+          <div class="slot-times">
+            <input class="time-input" type="time" value="${slot.start||'09:00'}" onchange="updateSlotTime('${date}',${si},'start',this.value)">
+            <input class="time-input" type="time" value="${slot.end||'17:00'}" onchange="updateSlotTime('${date}',${si},'end',this.value)">
+          </div>
+          <div class="slot-ico">${ac.e}</div>
+          <div class="slot-name">${ac.title}</div>
+          <div class="slot-actions">
+            <button class="slot-del" onclick="removeSlot('${date}',${si})" title="Verwijder">🗑️</button>
+          </div>
+        </div>`;
+      }).join('')}
+    </div>
+    <div class="meals-section">
+      <div class="meal-row">
+        <div class="meal-label">🍽️ Lunch</div>
+        <input class="meal-input" id="lunch-${date}" value="${plan.lunch}" placeholder="bijv. Picknick op Col des Aravis" oninput="updateMeal('${date}','lunch',this.value)">
+        <button class="meal-rest-btn" onclick="openRestPicker('${date}','lunch')">🍽️ Restaurant</button>
+      </div>
+      <div class="meal-row">
+        <div class="meal-label">🌙 Diner</div>
+        <input class="meal-input" id="dinner-${date}" value="${plan.dinner}" placeholder="bijv. La Ferme de Lormay" oninput="updateMeal('${date}','dinner',this.value)">
+        <button class="meal-rest-btn" onclick="openRestPicker('${date}','dinner')">🍽️ Restaurant</button>
+      </div>
+      <div class="meal-row">
+        <div class="meal-label">🎉 Avond</div>
+        <input class="meal-input" id="evening-${date}" value="${plan.evening}" placeholder="bijv. Aperitief op Le Moulin terras" oninput="updateMeal('${date}','evening',this.value)">
+      </div>
+      <div class="meal-row">
+        <div class="meal-label">📝 Notities</div>
+        <input class="meal-input" id="notes-${date}" value="${plan.notes}" placeholder="Extra info..." oninput="updateMeal('${date}','notes',this.value)">
+      </div>
+    </div>
+    <div class="plan-save-bar">
+      <button class="btn btn-primary" onclick="calcDayRoute('${date}')">🗺️ Bereken dagroute</button>
+      <button class="btn btn-sec" onclick="savePlan('${date}')">💾 Opslaan</button>
+      <span class="save-indicator" id="save-ind"></span>
+    </div>`;
+}
+
+function updateSlotTime(date,si,field,val){
+  if(!dayPlans[date]||!dayPlans[date].activities[si]) return;
+  dayPlans[date].activities[si][field]=val;
+  debounceSave(date);
+}
+function updateMeal(date,field,val){
+  if(!dayPlans[date]) return;
+  dayPlans[date][field]=val;
+  debounceSave(date);
+}
+function removeSlot(date,si){
+  if(!dayPlans[date]) return;
+  dayPlans[date].activities.splice(si,1);
+  renderWeekStrip();
+  renderDayDetail(date);
+  debounceSave(date);
+}
+function addActivityToDay(date,actId){
+  if(!dayPlans[date]) return;
+  const existing=dayPlans[date].activities;
+  const last=existing[existing.length-1];
+  const newStart=last?last.end:'09:00';
+  const [h,m]=newStart.split(':').map(Number);
+  const endH=Math.min(h+4,22);
+  const newEnd=`${String(endH).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
+  existing.push({id:actId,start:newStart,end:newEnd});
+  renderWeekStrip();
+  renderDayDetail(date);
+  debounceSave(date);
+}
+
+// Picker
+function openPicker(date){
+  pickingForDayDirectly=date;
+  document.getElementById('picker-search').value='';
+  renderPicker();
+  document.getElementById('picker-overlay').classList.add('open');
+}
+function openPickerFor(actId,ev){
+  ev.stopPropagation();
+  // Pick a day first
+  pickingForDayDirectly=null;
+  document.getElementById('picker-search').value='';
+  renderPickerDays(actId);
+  document.getElementById('picker-overlay').classList.add('open');
+}
+function closePicker(){document.getElementById('picker-overlay').classList.remove('open');}
+
+function renderPicker(){
+  const q=document.getElementById('picker-search').value.toLowerCase();
+  const favs=getFavs('act');
+  let data=[...activities.filter(a=>favs.includes(a.id)),...activities.filter(a=>!favs.includes(a.id))];
+  if(q) data=data.filter(a=>a.title.toLowerCase().includes(q)||a.sub.toLowerCase().includes(q));
+  const date=pickingForDayDirectly;
+  document.getElementById('picker-list').innerHTML=data.map(a=>`
+    <div class="picker-item">
+      <div class="pi-icon">${a.e}</div>
+      <div class="pi-name">${a.title}<br><span style="font-size:.68rem;color:var(--muted);font-weight:400">${a.sub}</span></div>
+      <div class="pi-dist">${a.dist} km</div>
+      ${date?`<button class="pi-add" onclick="addActivityToDay('${date}',${a.id});closePicker()">+ Voeg toe</button>`:
+        TRIP_DAYS.map((d,i)=>`<button class="pi-add" onclick="addActivityToDay('${d}',${a.id});closePicker()" style="margin-left:3px">${DAY_NAMES[i]} ${parseInt(d.split('-')[2])}</button>`).join('')}
+    </div>`).join('');
+}
+
+function renderPickerDays(actId){
+  const a=activities.find(x=>x.id===actId);if(!a) return;
+  document.getElementById('picker-list').innerHTML=`
+    <div style="padding:.5rem .8rem;font-size:.82rem;color:var(--muted);margin-bottom:.3rem">Kies een dag voor <b style="color:var(--text)">${a.e} ${a.title}</b>:</div>
+    ${TRIP_DAYS.map((d,i)=>`
+      <div class="picker-item" onclick="addActivityToDay('${d}',${actId});closePicker()">
+        <div class="pi-icon">📅</div>
+        <div class="pi-name">${DAY_NAMES[i]} ${parseInt(d.split('-')[2])} augustus</div>
+        <div style="font-size:.72rem;color:var(--accent)">${dayPlans[d].activities.length} act. gepland</div>
+      </div>`).join('')}`;
+}
+
+// Restaurant picker for meals
+function openRestPicker(date,field){
+  mealPickerDay=date;mealPickerField=field;
+  document.getElementById('rest-picker-title').textContent=field==='lunch'?'🍽️ Lunch restaurant':'🌙 Diner restaurant';
+  document.getElementById('rest-picker-list').innerHTML=restaurants.map(r=>`
+    <div class="rest-pick-item" onclick="pickRestaurant('${r.name}')">
+      <div style="font-size:1.2rem;width:30px">${r.e}</div>
+      <div style="flex:1">
+        <div style="font-size:.82rem;font-weight:600">${r.name}</div>
+        <div style="font-size:.7rem;color:var(--muted)">${r.loc} · ${r.dist} km · ${r.price}</div>
+      </div>
+    </div>`).join('');
+  document.getElementById('rest-picker-overlay').classList.add('open');
+}
+function closeRestPicker(){document.getElementById('rest-picker-overlay').classList.remove('open');}
+function pickRestaurant(name){
+  if(!mealPickerDay||!mealPickerField) return;
+  dayPlans[mealPickerDay][mealPickerField]=name;
+  const el=document.getElementById(mealPickerField+'-'+mealPickerDay);
+  if(el) el.value=name;
+  debounceSave(mealPickerDay);
+  closeRestPicker();
+}
+
+// Calculate day route
+async function calcDayRoute(date){
+  const plan=dayPlans[date];
+  if(!plan||plan.activities.length===0){alert('Voeg eerst activiteiten toe!');return;}
+  if(!planMap) return;
+  if(planRouteLayer){planMap.removeLayer(planRouteLayer);planRouteLayer=null;}
+  document.getElementById('route-day-info').innerHTML='<span style="color:var(--muted);font-size:.8rem">🗺️ Route berekenen...</span>';
+  const stops=[CHALET,...plan.activities.map(s=>{const a=activities.find(x=>x.id===s.id);return a?{lat:a.lat,lng:a.lng}:null;}).filter(Boolean),CHALET];
+  const coordStr=stops.map(s=>`${s.lng},${s.lat}`).join(';');
+  try{
+    const res=await fetch(`${OSRM}/route/v1/driving/${coordStr}?overview=full&geometries=geojson`);
+    const d=await res.json();
+    if(d.code==='Ok'&&d.routes[0]){
+      const r=d.routes[0];
+      planRouteLayer=L.geoJSON(r.geometry,{style:{color:'#818cf8',weight:4,opacity:.85}}).addTo(planMap);
+      // Add markers
+      stops.forEach((s,i)=>{
+        const bg=i===0||i===stops.length-1?'#2dd4bf':'#f97316';
+        const lbl=i===0?'🏠':i===stops.length-1?'🏠':(plan.activities[i-1]?(activities.find(x=>x.id===plan.activities[i-1].id)||{e:'📍'}).e:'📍');
+        const ic=makeIco(`<div style="background:${bg};border:2.5px solid #fff;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:13px;box-shadow:0 2px 6px rgba(0,0,0,.5)">${lbl}</div>`,28);
+        L.marker([s.lat,s.lng],{icon:ic}).addTo(planMap);
+      });
+      const pts=r.geometry.coordinates.map(c=>[c[1],c[0]]);
+      planMap.fitBounds(L.polyline(pts).getBounds(),{padding:[30,30]});
+      const km=(r.distance/1000).toFixed(1);
+      const mins=Math.round(r.duration/60);
+      const t=mins>=60?`${Math.floor(mins/60)}u${mins%60>0?mins%60+'m':''}`:`${mins} min`;
+      const actNames=plan.activities.map(s=>{const a=activities.find(x=>x.id===s.id);return a?a.e:'';}).join(' → ');
+      document.getElementById('route-day-info').innerHTML=`<span class="route-chip">🏠 → ${actNames} → 🏠</span><span class="route-chip">📏 ${km} km totaal</span><span class="route-chip">🚗 ${t} rijden</span>`;
+    }
+  }catch(e){document.getElementById('route-day-info').innerHTML='<span style="color:#ef4444;font-size:.8rem">Route kon niet worden berekend</span>';}
+}
 
 // ---- TABS ----
-function showSection(name,tabEl) {
+function showSec(name,el){
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
   document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
-  document.getElementById('section-'+name).classList.add('active');
-  tabEl.classList.add('active');
-  setTimeout(()=>{initTabMap(name);if(tabMaps[name])tabMaps[name].invalidateSize();},100);
+  document.getElementById('sec-'+name).classList.add('active');
+  el.classList.add('active');
+  setTimeout(()=>{
+    if(name!=='planning'){initTabMap(name);if(tabMaps[name])tabMaps[name].invalidateSize();}
+    else{if(planMap)planMap.invalidateSize();}
+  },120);
+}
+
+// ---- INIT ----
+function initApp(){
+  renderAll();
+  initPlanning();
+  setTimeout(()=>initTabMap('activities'),200);
 }
 </script>
 </body>
