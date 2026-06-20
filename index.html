@@ -135,15 +135,16 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 .info-banner.purple{background:rgba(168,85,247,.07);border-color:rgba(168,85,247,.2);color:#c084fc;}
 .info-banner.green{background:rgba(34,197,94,.07);border-color:rgba(34,197,94,.2);color:#4ade80;}
 /* MODALS (shared) */
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:1100;align-items:center;justify-content:center;padding:1rem;backdrop-filter:blur(4px);}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:1100;align-items:center;justify-content:center;padding:1rem;cursor:pointer;}
 .modal-overlay.open{display:flex;}
-.modal{background:#fff;border:1px solid var(--border);border-radius:16px;width:100%;max-width:800px;max-height:92vh;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.15);}
+.modal{background:#fff;border:1px solid var(--border);border-radius:16px;width:100%;max-width:800px;max-height:92vh;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.15);cursor:default;}
+.modal-box{background:#fff;border:1px solid var(--border);border-radius:16px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.15);cursor:default;overflow:hidden;display:flex;flex-direction:column;}
 .modal-hdr{padding:1.2rem 1.2rem 0;display:flex;align-items:flex-start;justify-content:space-between;gap:.8rem;flex-shrink:0;}
 .modal-hdr h2{font-size:1.1rem;font-weight:800;display:flex;align-items:center;gap:.5rem;}
 .m-ico{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;}
 .modal-close{background:#f1f5f9;border:none;border-radius:7px;color:var(--muted);font-size:1rem;width:28px;height:28px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .modal-close:hover{background:#e2e8f0;}
-.modal-body{padding:.9rem 1.2rem 1.2rem;overflow-y:auto;overscroll-behavior:contain;touch-action:pan-y;flex:1;min-height:0;}
+.modal-body{padding:.9rem 1.2rem 1.2rem;overflow-y:scroll;overscroll-behavior:contain;touch-action:pan-y;flex:1;min-height:0;}
 .m-desc{color:var(--muted);font-size:.83rem;line-height:1.6;margin-bottom:.9rem;}
 .m-map{height:260px;border-radius:10px;overflow:hidden;margin-bottom:.9rem;border:1px solid var(--border);position:relative;}
 .map-loading{position:absolute;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:.82rem;z-index:10;}
@@ -200,7 +201,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 .plan-map{height:320px;border-radius:10px;overflow:hidden;border:1px solid var(--border);}
 .route-day-info{margin-top:.5rem;display:flex;gap:.4rem;flex-wrap:wrap;}
 /* PICKERS */
-.picker-modal{background:#fff;border:1px solid var(--border);border-radius:16px;width:100%;max-width:600px;max-height:88vh;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.15);}
+.picker-modal{background:#fff;border:1px solid var(--border);border-radius:16px;width:100%;max-width:600px;max-height:88vh;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.15);cursor:default;}
 .picker-hdr{padding:1rem 1rem .5rem;display:flex;align-items:center;justify-content:space-between;}
 .picker-hdr h3{font-size:1rem;font-weight:800;}
 .picker-search{display:block;width:calc(100% - 2rem);margin:.5rem 1rem;background:#f8fafc;border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:.82rem;padding:.5rem .7rem;outline:none;}
@@ -3560,8 +3561,8 @@ html.modal-open{overflow:hidden;}body.modal-open{overflow:hidden;}
 
 
 <!-- ===== ADD TO DAY MODAL ===== -->
-<div class="modal-overlay" id="add-to-day-modal" onclick="if(event.target===this)closeAddToDayModal()">
-  <div class="modal-box" style="max-width:420px;overflow:hidden;display:flex;flex-direction:column;">
+<div class="modal-overlay" id="add-to-day-modal" style="z-index:1200" onclick="if(event.target===this)closeAddToDayModal()">
+  <div class="modal-box" style="max-width:420px;overflow:hidden;display:flex;flex-direction:column;cursor:default;">
     <button class="modal-close" onclick="closeAddToDayModal()">✕</button>
     <h3 style="font-size:1rem;font-weight:800;margin-bottom:.3rem">📅 Toevoegen aan dagplanning</h3>
     <div id="atd-item-label" style="font-size:.85rem;color:var(--muted);margin-bottom:1rem;padding:.4rem .7rem;background:var(--bg);border-radius:8px;font-weight:600"></div>
@@ -3579,7 +3580,7 @@ html.modal-open{overflow:hidden;}body.modal-open{overflow:hidden;}
 </div>
 
 <!-- ===== CUSTOM ITEM MODAL ===== -->
-<div class="modal-overlay" id="ci-modal">
+<div class="modal-overlay" id="ci-modal" style="z-index:1200">
   <div class="modal" style="max-width:540px;">
     <div class="modal-hdr" style="background:linear-gradient(135deg,var(--accent),#0ea5e9);border-radius:14px 14px 0 0;padding:1rem 1.2rem;">
       <h2 style="color:#fff;font-size:1rem;font-weight:800;display:flex;align-items:center;gap:.5rem;">➕ <span id="ci-modal-title">Eigen item toevoegen</span></h2>
