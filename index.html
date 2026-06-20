@@ -363,6 +363,19 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 .lb-prev{left:1rem;}.lb-next{right:1rem;}
 .lb-counter{color:var(--muted);font-size:.75rem;margin-top:.4rem;}
 /* New activity form modal */
+
+/* Custom activity in picker */
+.pi-custom-hdr{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.05em;padding:.4rem .2rem .2rem;margin-top:.3rem;border-top:1px solid var(--border);}
+.pi-custom-badge{background:var(--accent);color:#fff;font-size:.6rem;font-weight:700;border-radius:4px;padding:.1rem .3rem;margin-left:.3rem;}
+/* Custom act modal */
+.custom-act-modal{max-width:520px;}
+.custom-act-geocode-row{display:flex;gap:.5rem;align-items:flex-end;}
+.custom-act-geocode-row .form-input{flex:1;}
+.geocode-result{font-size:.75rem;color:var(--success);margin-top:.3rem;font-weight:600;}
+.geocode-err{font-size:.75rem;color:var(--warn);margin-top:.3rem;}
+/* Picker footer */
+.picker-footer{padding:.6rem 1rem;border-top:1px solid var(--border);}
+
 .act-form-modal{max-width:500px;}
 .form-field{margin-bottom:.8rem;}
 .form-field label{display:block;font-size:.75rem;font-weight:600;color:var(--muted);margin-bottom:.3rem;}
@@ -866,6 +879,7 @@ const shops_raw=[
 ];
 
 const activities=addDist(activities_raw);
+let customActivities=[];
 const restaurants=addDist(restaurants_raw);
 const nightlife=addDist(nightlife_raw);
 const rentals=addDist(rentals_raw);
@@ -1407,16 +1421,27 @@ function renderSlotGroup(date,gi,group,allSlots){
 }
 
 function renderSingleSlot(date,gi,slot,compact=false){
-  const ac=activities.find(x=>x.id===slot.id);
+  // Support both predefined (slot.id) and custom (slot.customId) activities
+  let ac;
+  if(slot.customId){
+    const ca=customActivities.find(x=>x.id===slot.customId);
+    if(ca) ac={e:ca.emoji||'✏️',title:ca.title,_custom:true,_ca:ca};
+  } else {
+    ac=activities.find(x=>x.id===slot.id);
+  }
   if(!ac) return '';
   const si=slot._si;
+  const gpxBtn=ac._custom&&ac._ca?.gpx_url
+    ?`<a href="${ac._ca.gpx_url}" target="_blank" title="Download GPX" style="font-size:.85rem;text-decoration:none;flex-shrink:0;">⬇️</a>`:'';
+  const customBadge=ac._custom?`<span style="font-size:.55rem;background:var(--accent);color:#fff;border-radius:3px;padding:.05rem .2rem;vertical-align:middle;margin-left:.2rem">eigen</span>`:'';
   return `<div class="group-slot" style="${compact?'flex-direction:column;align-items:flex-start;gap:.25rem;':''}">
     <div class="group-slot-times">
       <input class="time-input" type="time" value="${slot.start||'09:00'}" onchange="updateGroupSlotTime('${date}',${gi},${si},'start',this.value)">
       <input class="time-input" type="time" value="${slot.end||'17:00'}" onchange="updateGroupSlotTime('${date}',${gi},${si},'end',this.value)">
     </div>
     <div style="font-size:1.1rem;flex-shrink:0;">${ac.e}</div>
-    <div style="font-size:.75rem;font-weight:600;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;${compact?'white-space:normal;':'white-space:nowrap;'}">${ac.title}</div>
+    <div style="font-size:.75rem;font-weight:600;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;${compact?'white-space:normal;':'white-space:nowrap;'}">${ac.title}${customBadge}</div>
+    ${gpxBtn}
     <button class="slot-del" onclick="removeGroupSlot('${date}',${gi},${si})">🗑️</button>
   </div>`;
 }
@@ -1443,15 +1468,29 @@ function removeGroupSlot(date,gi,si){
 
 function openActPicker(date,gi){
   pickingForDay=date;pickingForGroup=gi;
+  renderActPickerList();
+  document.getElementById('act-pick-modal').classList.add('open');
+}
+function renderActPickerList(){
   const list=document.getElementById('act-picker-list');
-  list.innerHTML=sortWithFavs(activities,'act').map(a=>`
+  const customHtml=customActivities.length>0?`
+    <div class="pi-custom-hdr">✏️ Eigen activiteiten<span class="pi-custom-badge">${customActivities.length}</span></div>
+    ${customActivities.map(ca=>`
+      <div class="picker-item">
+        <div class="pi-icon">${ca.emoji||'✏️'}</div>
+        <div class="pi-name">${ca.title}${ca.duration_min?` <span style="color:var(--muted);font-size:.7rem;">(${Math.round(ca.duration_min/60*10)/10}u)</span>`:''}</div>
+        <div class="pi-dist">${ca.start_place||''}</div>
+        <button class="pi-add" onclick="addCustomActToGroup('${ca.id}')">+ Toevoegen</button>
+      </div>`).join('')}
+    <div class="pi-custom-hdr">📍 Activiteiten in de buurt</div>
+  `:'';
+  list.innerHTML=customHtml+sortWithFavs(activities,'act').map(a=>`
     <div class="picker-item">
       <div class="pi-icon">${a.e}</div>
       <div class="pi-name">${a.title}</div>
       <div class="pi-dist">${a.dist} km</div>
       <button class="pi-add" onclick="addActToGroup(${a.id})">+ Toevoegen</button>
     </div>`).join('');
-  document.getElementById('act-pick-modal').classList.add('open');
 }
 function closeActPicker(){document.getElementById('act-pick-modal').classList.remove('open');pickingForDay=null;pickingForGroup=null;}
 function filterActPicker(){
@@ -1465,6 +1504,17 @@ function addActToGroup(actId){
   g.activities.push({id:actId,start:'09:00',end:'17:00'});
   renderWeekStrip();renderDayDetail(pickingForDay);closeActPicker();
 }
+function addCustomActToGroup(customId){
+  if(pickingForDay==null||pickingForGroup==null) return;
+  const g=dayPlans[pickingForDay]?.groups?.[pickingForGroup];
+  if(!g) return;
+  const ca=customActivities.find(x=>x.id===customId);
+  const dur=ca?.duration_min||120;
+  g.activities.push({customId,start:'09:00',end:minsToTime(timeToMins('09:00')+dur)});
+  renderWeekStrip();renderDayDetail(pickingForDay);closeActPicker();
+}
+function timeToMins(t){const[h,m]=t.split(':').map(Number);return h*60+m;}
+function minsToTime(m){m=Math.min(m,23*60+59);return String(Math.floor(m/60)).padStart(2,'0')+':'+String(m%60).padStart(2,'0');}
 function quickAddToPlan(actId){
   if(!selectedDay){selectPlanDay(TRIP_DAYS[0]);showSec('planning',document.getElementById('tab-planning'));}
   const g=dayPlans[selectedDay]?.groups?.[0];
@@ -1511,7 +1561,10 @@ async function calcGroupRoute(date,gi){
   const infoEl=document.getElementById(`route-info-${date}-${gi}`);
   if(infoEl) infoEl.textContent='🗺️ Route berekenen...';
   const col=g.color;
-  const stops=[CHALET,...g.activities.map(s=>{const a=activities.find(x=>x.id===s.id);return a?{lat:a.lat,lng:a.lng,e:a.e,title:a.title}:null;}).filter(Boolean),CHALET];
+  const stops=[CHALET,...g.activities.map(s=>{
+    if(s.customId){const ca=customActivities.find(x=>x.id===s.customId);return ca&&ca.lat?{lat:ca.lat,lng:ca.lng,e:ca.emoji||'✏️',title:ca.title}:null;}
+    const a=activities.find(x=>x.id===s.id);return a?{lat:a.lat,lng:a.lng,e:a.e,title:a.title}:null;
+  }).filter(Boolean),CHALET];
   const coordStr=stops.map(s=>`${s.lng},${s.lat}`).join(';');
   const route=await calcRoute(coordStr,'driving');
   if(route){
@@ -1527,7 +1580,7 @@ async function calcGroupRoute(date,gi){
     const pts=route.geometry.coordinates.map(c=>[c[1],c[0]]);
     planMap.fitBounds(L.polyline(pts).getBounds(),{padding:[30,30]});
     const km=(route.distance/1000).toFixed(1);
-    if(infoEl) infoEl.innerHTML=`🏠 → ${g.activities.map(s=>{const a=activities.find(x=>x.id===s.id);return a?a.e:'';}).join(' → ')} → 🏠 &nbsp;|&nbsp; 📏 ${km} km &nbsp;|&nbsp; 🚗 ${fmtDuration(route.duration,'driving')}`;
+    if(infoEl) infoEl.innerHTML=`🏠 → ${g.activities.map(s=>{if(s.customId){const ca=customActivities.find(x=>x.id===s.customId);return ca?ca.emoji||'✏️':'';}const a=activities.find(x=>x.id===s.id);return a?a.e:'';}).join(' → ')} → 🏠 &nbsp;|&nbsp; 📏 ${km} km &nbsp;|&nbsp; 🚗 ${fmtDuration(route.duration,'driving')}`;
   } else {
     const pts=stops.map(s=>[s.lat,s.lng]);
     planRouteLayer=L.polyline(pts,{color:col,weight:3,dashArray:'8 4'}).addTo(planMap);
@@ -2212,9 +2265,124 @@ function showSec(name,el){
 }
 
 // ---- INIT ----
+
+// ---- EIGEN ACTIVITEITEN ----
+let customActGpxFile=null;
+let customActGeocodedLat=null;
+let customActGeocodedLng=null;
+
+async function loadCustomActivities(){
+  try{
+    const r=await fetch(`${SUPA_URL}/rest/v1/custom_activities?order=created_at.asc`,{headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY}});
+    if(r.ok) customActivities=await r.json();
+  }catch(e){console.warn('loadCustomActivities:',e);}
+}
+
+function openCustomActForm(){
+  // Reset form
+  document.getElementById('cam-title').value='';
+  document.getElementById('cam-emoji').value='🏔️';
+  document.getElementById('cam-place').value='';
+  document.getElementById('cam-desc').value='';
+  document.getElementById('cam-dur').value='';
+  document.getElementById('cam-lat').value='';
+  document.getElementById('cam-lng').value='';
+  document.getElementById('cam-gpx-name').textContent='';
+  document.getElementById('cam-geocode-result').innerHTML='';
+  document.getElementById('cam-error').style.display='none';
+  document.getElementById('cam-title-hdr').textContent='Eigen activiteit aanmaken';
+  customActGpxFile=null;customActGeocodedLat=null;customActGeocodedLng=null;
+  document.getElementById('custom-act-modal').classList.add('open');
+}
+
+async function geocodeCustomAct(){
+  const place=document.getElementById('cam-place').value.trim();
+  if(!place) return;
+  const resEl=document.getElementById('cam-geocode-result');
+  resEl.innerHTML='<span style="color:var(--muted);font-size:.75rem">🔍 Zoeken...</span>';
+  try{
+    const r=await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(place+', France')}&format=json&limit=1`,{headers:{'Accept-Language':'nl'}});
+    const d=await r.json();
+    if(d&&d[0]){
+      customActGeocodedLat=parseFloat(d[0].lat);
+      customActGeocodedLng=parseFloat(d[0].lon);
+      document.getElementById('cam-lat').value=customActGeocodedLat;
+      document.getElementById('cam-lng').value=customActGeocodedLng;
+      resEl.innerHTML=`<div class="geocode-result">📍 Gevonden: ${d[0].display_name.split(',').slice(0,3).join(', ')}</div>`;
+    } else {
+      resEl.innerHTML='<div class="geocode-err">❌ Niet gevonden — probeer een andere naam</div>';
+    }
+  }catch(e){resEl.innerHTML='<div class="geocode-err">❌ Geocodeer fout</div>';}
+}
+
+function handleCustomGpxSelect(inp){
+  if(inp.files&&inp.files[0]){
+    customActGpxFile=inp.files[0];
+    document.getElementById('cam-gpx-name').textContent=customActGpxFile.name;
+  }
+}
+
+async function submitCustomActivity(){
+  const title=document.getElementById('cam-title').value.trim();
+  const errEl=document.getElementById('cam-error');
+  if(!title){errEl.textContent='Titel is verplicht';errEl.style.display='block';return;}
+  errEl.style.display='none';
+  const btn=document.getElementById('cam-submit-btn');
+  btn.disabled=true;btn.textContent='Opslaan...';
+
+  let gpx_url=null;
+  if(customActGpxFile){
+    try{
+      const path=`custom/${Date.now()}_${customActGpxFile.name.replace(/[^a-zA-Z0-9._-]/g,'_')}`;
+      const up=await fetch(`${SUPA_URL}/storage/v1/object/cyclonereis-gpx/${path}`,{
+        method:'POST',headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Content-Type':'application/gpx+xml'},
+        body:customActGpxFile
+      });
+      if(up.ok) gpx_url=`${SUPA_URL}/storage/v1/object/public/cyclonereis-gpx/${path}`;
+    }catch(e){console.warn('GPX upload:',e);}
+  }
+
+  const payload={
+    title,
+    emoji:document.getElementById('cam-emoji').value||'🏔️',
+    start_place:document.getElementById('cam-place').value.trim()||null,
+    lat:document.getElementById('cam-lat').value?parseFloat(document.getElementById('cam-lat').value):null,
+    lng:document.getElementById('cam-lng').value?parseFloat(document.getElementById('cam-lng').value):null,
+    description:document.getElementById('cam-desc').value.trim()||null,
+    duration_min:document.getElementById('cam-dur').value?parseInt(document.getElementById('cam-dur').value):null,
+    gpx_url
+  };
+
+  try{
+    const r=await fetch(`${SUPA_URL}/rest/v1/custom_activities`,{
+      method:'POST',
+      headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Content-Type':'application/json','Prefer':'return=representation'},
+      body:JSON.stringify(payload)
+    });
+    if(!r.ok) throw new Error(await r.text());
+    const saved=await r.json();
+    customActivities.push(saved[0]||{...payload,id:Date.now().toString()});
+    closeModal('custom-act-modal');
+    renderActPickerList();
+  }catch(e){
+    errEl.textContent='Fout bij opslaan: '+e.message;errEl.style.display='block';
+  }
+  btn.disabled=false;btn.textContent='💾 Opslaan';
+}
+
+async function deleteCustomActivity(id){
+  if(!isMaster()||!confirm('Eigen activiteit verwijderen?')) return;
+  await fetch(`${SUPA_URL}/rest/v1/custom_activities?id=eq.${id}`,{
+    method:'DELETE',headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY}
+  });
+  customActivities=customActivities.filter(x=>x.id!==id);
+  renderActPickerList();
+}
+
 function initApp(){
   renderAll();
   initPlanning();
+  loadCustomActivities();
   setTimeout(()=>initTabMap('activities'),250);
 }
 </script>
@@ -2262,6 +2430,57 @@ function initApp(){
     <div class="picker-hdr"><h3>Activiteit toevoegen</h3><button class="modal-close" onclick="closeActPicker()">✕</button></div>
     <input class="picker-search" id="act-pick-search" placeholder="Zoeken..." oninput="filterActPicker()"/>
     <div class="picker-list" id="act-picker-list"></div>
+    <div class="picker-footer">
+      <button class="btn btn-pri" style="width:100%;font-size:.82rem;" onclick="openCustomActForm()">✏️ Eigen activiteit aanmaken</button>
+    </div>
+  </div>
+</div>
+
+<!-- Custom activity create/view modal -->
+<div class="modal-overlay" id="custom-act-modal">
+  <div class="modal custom-act-modal">
+    <div class="modal-hdr">
+      <h2>✏️ <span id="cam-title-hdr">Eigen activiteit</span></h2>
+      <button class="modal-close" onclick="closeModal('custom-act-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Emoji</label>
+        <input class="form-input" id="cam-emoji" value="🏔️" style="width:4rem;font-size:1.3rem;text-align:center;">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Titel *</label>
+        <input class="form-input" id="cam-title" placeholder="Naam van activiteit">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Startplaats</label>
+        <div class="custom-act-geocode-row">
+          <input class="form-input" id="cam-place" placeholder="Naam of adres (bijv. Col de la Croix Fry)">
+          <button class="btn btn-sec" onclick="geocodeCustomAct()" style="white-space:nowrap">📍 Zoek</button>
+        </div>
+        <div id="cam-geocode-result"></div>
+        <input type="hidden" id="cam-lat"><input type="hidden" id="cam-lng">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Beschrijving</label>
+        <textarea class="form-input" id="cam-desc" rows="3" placeholder="Wat gaan we doen?"></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Tijdsduur (minuten)</label>
+        <input class="form-input" id="cam-dur" type="number" min="15" step="15" placeholder="120">
+      </div>
+      <div class="form-group">
+        <label class="form-label">GPX route uploaden</label>
+        <input type="file" id="cam-gpx" accept=".gpx" style="display:none" onchange="handleCustomGpxSelect(this)">
+        <button class="btn btn-sec" onclick="document.getElementById('cam-gpx').click()">📂 Kies GPX bestand</button>
+        <span id="cam-gpx-name" style="font-size:.78rem;color:var(--muted);margin-left:.5rem;"></span>
+      </div>
+      <div id="cam-error" style="color:var(--warn);font-size:.82rem;display:none;margin-bottom:.5rem;"></div>
+      <div style="display:flex;gap:.5rem;justify-content:flex-end;margin-top:.5rem;">
+        <button class="btn btn-sec" onclick="closeModal('custom-act-modal')">Annuleren</button>
+        <button class="btn btn-pri" id="cam-submit-btn" onclick="submitCustomActivity()">💾 Opslaan</button>
+      </div>
+    </div>
   </div>
 </div>
 
