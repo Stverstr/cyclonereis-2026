@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🚵 Cyclonereis Annecy 2026</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<style>
+  :root {
+    --bg: #0d1117;
+    --card: #161b22;
+    --border: #21262d;
+    --accent: #2dd4bf;
+    --accent2: #f97316;
+    --accent3: #a855f7;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --danger: #ef4444;
+    --success: #22c55e;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+  /* GATE */
+  #gate { display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; background: linear-gradient(135deg, #0d1117 0%, #1a1f2e 100%); }
+  .gate-logo { font-size: 3rem; margin-bottom: 0.5rem; }
+  .gate-title { font-size: 1.6rem; font-weight: 800; color: var(--text); margin-bottom: 0.3rem; }
+  .gate-sub { color: var(--muted); margin-bottom: 2rem; font-size: 0.9rem; }
+  .gate-box { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; width: 340px; text-align: center; }
+  .gate-box h2 { color: var(--text); margin-bottom: 1.2rem; font-size: 1.1rem; }
+  #pwInput { width:100%; padding:.85rem; border:1px solid #333; border-radius:10px; background:#0d1117; color:var(--text); font-size:1rem; margin-bottom:1rem; outline:none; transition: border-color .2s; }
+  #pwInput:focus { border-color: var(--accent); }
+  .gate-btn { width:100%; padding:.85rem; background: linear-gradient(135deg, var(--accent), #0ea5e9); color:#000; border:none; border-radius:10px; font-size:1rem; font-weight:700; cursor:pointer; transition: opacity .2s; }
+  .gate-btn:hover { opacity: .9; }
+
+  /* APP */
+  #app { display: none; }
+
+  /* HEADER */
+  .header { background: linear-gradient(135deg, #0d1117 0%, #1a1f2e 60%, #0f2027 100%); border-bottom: 1px solid var(--border); padding: 1.5rem 2rem; position: sticky; top: 0; z-index: 100; }
+  .header-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; }
+  .header-logo { font-size: 2rem; }
+  .header-info h1 { font-size: 1.4rem; font-weight: 800; color: var(--text); }
+  .header-info p { color: var(--muted); font-size: 0.85rem; margin-top: 0.2rem; }
+  .header-badges { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-left: auto; }
+  .badge { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 0.3rem 0.9rem; font-size: 0.78rem; color: var(--muted); display: flex; align-items: center; gap: 0.3rem; }
+  .badge.accent { border-color: var(--accent); color: var(--accent); }
+
+  /* NAV */
+  .nav { background: var(--card); border-bottom: 1px solid var(--border); padding: 0 2rem; }
+  .nav-inner { max-width: 1200px; margin: 0 auto; display: flex; gap: 0; }
+  .nav-tab { padding: 1rem 1.4rem; font-size: 0.9rem; font-weight: 600; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; transition: all .2s; display: flex; align-items: center; gap: 0.4rem; white-space: nowrap; }
+  .nav-tab:hover { color: var(--text); }
+  .nav-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  /* MAIN */
+  .main { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* SECTION HEADER */
+  .section-header { margin-bottom: 1.5rem; }
+  .section-header h2 { font-size: 1.4rem; font-weight: 800; color: var(--text); margin-bottom: 0.3rem; }
+  .section-header p { color: var(--muted); font-size: 0.88rem; }
+
+  /* ACTIVITY GRID */
+  .activity-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.2rem; }
+  .activity-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; cursor: pointer; transition: all .2s; position: relative; }
+  .activity-card:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(45,212,191,.1); }
+  .card-img { height: 120px; display: flex; align-items: center; justify-content: center; font-size: 3.5rem; position: relative; }
+  .card-img.downhill { background: linear-gradient(135deg, #1e3a2f 0%, #0d2b1d 100%); }
+  .card-img.hiking { background: linear-gradient(135deg, #1e2a3a 0%, #0d1b2b 100%); }
+  .card-img.ferrata { background: linear-gradient(135deg, #2a1e3a 0%, #1b0d2b 100%); }
+  .card-img.water { background: linear-gradient(135deg, #1e2a3a 0%, #0d2040 100%); }
+  .card-img.lake { background: linear-gradient(135deg, #0d2040 0%, #0a3060 100%); }
+  .card-img.canyon { background: linear-gradient(135deg, #3a1e1e 0%, #2b0d0d 100%); }
+  .card-difficulty { position: absolute; top: 0.6rem; right: 0.6rem; border-radius: 6px; padding: 0.2rem 0.6rem; font-size: 0.7rem; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; }
+  .diff-easy { background: rgba(34,197,94,.2); color: #22c55e; border: 1px solid rgba(34,197,94,.3); }
+  .diff-medium { background: rgba(249,115,22,.2); color: #f97316; border: 1px solid rgba(249,115,22,.3); }
+  .diff-hard { background: rgba(239,68,68,.2); color: #ef4444; border: 1px solid rgba(239,68,68,.3); }
+  .diff-extreme { background: rgba(168,85,247,.2); color: #a855f7; border: 1px solid rgba(168,85,247,.3); }
+  .card-body { padding: 1rem 1.2rem; }
+  .card-body h3 { font-size: 1rem; font-weight: 700; color: var(--text); margin-bottom: 0.4rem; }
+  .card-body p { font-size: 0.82rem; color: var(--muted); line-height: 1.5; }
+  .card-stats { display: flex; gap: 0.8rem; margin-top: 0.8rem; flex-wrap: wrap; }
+  .stat { display: flex; align-items: center; gap: 0.3rem; font-size: 0.75rem; color: var(--muted); background: rgba(255,255,255,.04); border-radius: 6px; padding: 0.25rem 0.5rem; }
+  .stat-icon { font-size: 0.8rem; }
+  .card-tag { position: absolute; top: 0.6rem; left: 0.6rem; background: rgba(0,0,0,.5); border-radius: 6px; padding: 0.2rem 0.5rem; font-size: 0.68rem; color: rgba(255,255,255,.7); }
+
+  /* MODAL */
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.7); z-index: 500; align-items: center; justify-content: center; padding: 1rem; backdrop-filter: blur(4px); }
+  .modal-overlay.open { display: flex; }
+  .modal { background: var(--card); border: 1px solid var(--border); border-radius: 18px; width: 100%; max-width: 800px; max-height: 90vh; overflow-y: auto; position: relative; }
+  .modal-header { padding: 1.5rem 1.5rem 0; display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; }
+  .modal-header h2 { font-size: 1.3rem; font-weight: 800; color: var(--text); }
+  .modal-close { background: rgba(255,255,255,.1); border: none; border-radius: 8px; color: var(--muted); font-size: 1.2rem; width: 32px; height: 32px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .modal-close:hover { background: rgba(255,255,255,.15); color: var(--text); }
+  .modal-body { padding: 1rem 1.5rem 1.5rem; }
+  .modal-meta { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-bottom: 1.2rem; }
+  .modal-meta .badge { font-size: 0.8rem; }
+  .modal-desc { color: var(--muted); font-size: 0.88rem; line-height: 1.6; margin-bottom: 1.2rem; }
+  .modal-map { height: 300px; border-radius: 12px; overflow: hidden; margin-bottom: 1.2rem; border: 1px solid var(--border); }
+  .modal-sections { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  @media (max-width: 600px) { .modal-sections { grid-template-columns: 1fr; } }
+  .modal-section { background: var(--bg); border-radius: 10px; padding: 1rem; }
+  .modal-section h4 { font-size: 0.82rem; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 0.6rem; }
+  .modal-section ul { list-style: none; }
+  .modal-section ul li { font-size: 0.82rem; color: var(--muted); padding: 0.2rem 0; display: flex; align-items: flex-start; gap: 0.4rem; }
+  .modal-section ul li::before { content: '→'; color: var(--accent); flex-shrink: 0; }
+  .modal-cta { margin-top: 1.2rem; display: flex; gap: 0.8rem; flex-wrap: wrap; }
+  .btn { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.65rem 1.2rem; border-radius: 10px; font-size: 0.85rem; font-weight: 600; cursor: pointer; text-decoration: none; border: none; transition: opacity .2s; }
+  .btn-primary { background: linear-gradient(135deg, var(--accent), #0ea5e9); color: #000; }
+  .btn-secondary { background: rgba(255,255,255,.08); color: var(--text); border: 1px solid var(--border); }
+  .btn:hover { opacity: .85; }
+
+  /* RESTAURANTS */
+  .restaurant-list { display: flex; flex-direction: column; gap: 1rem; }
+  .restaurant-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 1.2rem 1.4rem; display: flex; gap: 1.2rem; align-items: flex-start; transition: border-color .2s; }
+  .restaurant-card:hover { border-color: var(--accent); }
+  .restaurant-emoji { font-size: 2.2rem; flex-shrink: 0; }
+  .restaurant-info { flex: 1; }
+  .restaurant-info h3 { font-size: 1rem; font-weight: 700; color: var(--text); margin-bottom: 0.2rem; }
+  .restaurant-location { font-size: 0.8rem; color: var(--muted); margin-bottom: 0.4rem; display: flex; align-items: center; gap: 0.3rem; }
+  .restaurant-info p { font-size: 0.83rem; color: var(--muted); line-height: 1.5; margin-bottom: 0.5rem; }
+  .restaurant-tags { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+  .rtag { background: rgba(255,255,255,.05); border: 1px solid var(--border); border-radius: 20px; padding: 0.2rem 0.6rem; font-size: 0.72rem; color: var(--muted); }
+  .stars { color: #fbbf24; font-size: 0.85rem; margin-left: 0.4rem; }
+  .restaurant-right { text-align: right; flex-shrink: 0; }
+  .dist { font-size: 0.8rem; color: var(--accent); font-weight: 600; }
+  .price { font-size: 0.82rem; color: var(--muted); margin-top: 0.2rem; }
+
+  /* EVENTS */
+  .events-list { display: flex; flex-direction: column; gap: 1rem; }
+  .event-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 1.2rem 1.4rem; display: flex; gap: 1.2rem; align-items: flex-start; }
+  .event-date { background: linear-gradient(135deg, var(--accent), #0ea5e9); color: #000; border-radius: 10px; padding: 0.6rem 0.8rem; text-align: center; flex-shrink: 0; min-width: 56px; }
+  .event-date .day { font-size: 1.4rem; font-weight: 900; line-height: 1; }
+  .event-date .month { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; }
+  .event-info h3 { font-size: 1rem; font-weight: 700; color: var(--text); margin-bottom: 0.3rem; }
+  .event-info p { font-size: 0.83rem; color: var(--muted); line-height: 1.5; }
+  .event-loc { font-size: 0.78rem; color: var(--accent); margin-top: 0.3rem; display: flex; align-items: center; gap: 0.3rem; }
+  .event-during { border-color: var(--accent); }
+  .event-during-badge { background: rgba(45,212,191,.15); color: var(--accent); border: 1px solid rgba(45,212,191,.3); border-radius: 6px; padding: 0.15rem 0.5rem; font-size: 0.7rem; font-weight: 700; margin-left: 0.5rem; }
+
+  /* SHOPS */
+  .shops-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
+  .shop-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 1.2rem 1.4rem; }
+  .shop-card h3 { font-size: 0.95rem; font-weight: 700; color: var(--text); margin-bottom: 0.3rem; display: flex; align-items: center; gap: 0.5rem; }
+  .shop-card .shop-type { font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 0.6rem; }
+  .shop-card p { font-size: 0.82rem; color: var(--muted); line-height: 1.5; margin-bottom: 0.5rem; }
+  .shop-hours { font-size: 0.8rem; color: var(--success); font-weight: 500; display: flex; align-items: center; gap: 0.3rem; }
+  .shop-dist { font-size: 0.78rem; color: var(--accent); margin-top: 0.3rem; }
+
+  /* FILTER PILLS */
+  .filter-bar { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.2rem; }
+  .filter-pill { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 0.35rem 0.9rem; font-size: 0.8rem; color: var(--muted); cursor: pointer; transition: all .2s; }
+  .filter-pill:hover, .filter-pill.active { background: rgba(45,212,191,.1); border-color: var(--accent); color: var(--accent); }
+
+  /* RESPONSIVE */
+  @media (max-width: 600px) {
+    .main { padding: 1rem; }
+    .header { padding: 1rem; }
+    .header-badges { display: none; }
+    .nav { padding: 0 1rem; }
+    .nav-tab { padding: 0.8rem 0.8rem; font-size: 0.8rem; }
+    .modal { border-radius: 14px; }
+    .modal-header, .modal-body { padding: 1rem; }
+    .restaurant-card { flex-wrap: wrap; }
+    .restaurant-right { text-align: left; }
+  }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  /* HERO MAP */
+  .hero-map { height: 200px; border-radius: 14px; overflow: hidden; margin-bottom: 1.5rem; border: 1px solid var(--border); }
+
+  /* ALERT BANNERS */
+  .info-banner { background: rgba(45,212,191,.08); border: 1px solid rgba(45,212,191,.2); border-radius: 10px; padding: 0.8rem 1rem; font-size: 0.83rem; color: var(--accent); margin-bottom: 1.2rem; display: flex; align-items: center; gap: 0.5rem; }
+</style>
+</head>
+<body>
+
+<!-- PASSWORD GATE -->
+<div id="gate">
+  <div class="gate-logo">🚵🏔️</div>
+  <div class="gate-title">Cyclonereis Annecy 2026</div>
+  <div class="gate-sub">8–14 augustus · Saint-Jean-de-Sixt · Haute-Savoie</div>
+  <div class="gate-box">
+    <h2>Beveiligde app</h2>
+    <input type="password" id="pwInput" placeholder="Wachtwoord..." onkeydown="if(event.key==='Enter')checkPw()"/>
+    <button class="gate-btn" onclick="checkPw()">Toegang →</button>
+    <div style="margin-top:1rem;font-size:.75rem;color:#444">
+      <a href="https://stverstr.github.io" style="color:#6366f1">← Portfolio</a>
+    </div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-inner">
+      <div class="header-logo">🏔️</div>
+      <div class="header-info">
+        <h1>Cyclonereis Annecy 2026</h1>
+        <p>Chalet Elomaz · Saint-Jean-de-Sixt · 8–14 augustus 2026</p>
+      </div>
+      <div class="header-badges">
+        <div class="badge accent">📅 8–14 aug</div>
+        <div class="badge">🏠 Chalet Elomaz</div>
+        <div class="badge">📍 Saint-Jean-de-Sixt</div>
+        <div class="badge">👥 11 personen</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAV -->
+  <div class="nav">
+    <div class="nav-inner">
+      <div class="nav-tab active" onclick="showSection('activities', this)">🏔️ Activiteiten</div>
+      <div class="nav-tab" onclick="showSection('restaurants', this)">🍽️ Restaurants</div>
+      <div class="nav-tab" onclick="showSection('events', this)">🎪 Events</div>
+      <div class="nav-tab" onclick="showSection('shops', this)">🛒 Winkels</div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+
+    <!-- ACTIVITIES -->
+    <div id="section-activities" class="section active">
+      <div class="section-header">
+        <h2>🏔️ Dagactiviteiten voor Stijn & Rik</h2>
+        <p>12 opties voor downhill, wandelen, via ferrata, raften, canyoning en zwemmen · Klik op een kaart voor detail + kaart</p>
+      </div>
+      <div class="filter-bar">
+        <div class="filter-pill active" onclick="filterActivities('all', this)">Alles</div>
+        <div class="filter-pill" onclick="filterActivities('downhill', this)">🚵 Downhill MTB</div>
+        <div class="filter-pill" onclick="filterActivities('hiking', this)">🥾 Wandelen</div>
+        <div class="filter-pill" onclick="filterActivities('ferrata', this)">🧗 Via Ferrata</div>
+        <div class="filter-pill" onclick="filterActivities('water', this)">🌊 Water</div>
+      </div>
+      <div id="hero-map" class="hero-map"></div>
+      <div class="activity-grid" id="activity-grid"></div>
+    </div>
+
+    <!-- RESTAURANTS -->
+    <div id="section-restaurants" class="section">
+      <div class="section-header">
+        <h2>🍽️ Restaurants in de buurt</h2>
+        <p>Van gastronomisch tot pizza — alle adressen, afstanden en reviews</p>
+      </div>
+      <div class="info-banner">ℹ️ Reserveer op voorhand tijdens augustus! Dit is het drukste seizoen in de Aravis.</div>
+      <div class="restaurant-list" id="restaurant-list"></div>
+    </div>
+
+    <!-- EVENTS -->
+    <div id="section-events" class="section">
+      <div class="section-header">
+        <h2>🎪 Events & Festivals</h2>
+        <p>Wat er gebeurt in Haute-Savoie tijdens jullie verblijf (8–14 aug 2026)</p>
+      </div>
+      <div class="events-list" id="events-list"></div>
+    </div>
+
+    <!-- SHOPS -->
+    <div id="section-shops" class="section">
+      <div class="section-header">
+        <h2>🛒 Winkels & Supermarkten</h2>
+        <p>Boodschappen doen, sportwinkels en winkelcentra in de regio</p>
+      </div>
+      <div class="shops-grid" id="shops-grid"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <h2 id="modal-title"></h2>
+      <button class="modal-close" onclick="closeModalDirect()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-meta" id="modal-meta"></div>
+      <p class="modal-desc" id="modal-desc"></p>
+      <div class="modal-map" id="modal-map"></div>
+      <div class="modal-sections" id="modal-sections"></div>
+      <div class="modal-cta" id="modal-cta"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ---- AUTH ----
+const MASTER_HASH = '750db0f147fb55c6755f5b3bb2606a35623b43d03c80056c48587dfa2df45c04';
+async function sha256(s){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('');}
+async function checkPw(){const h=await sha256(document.getElementById('pwInput').value);if(h===MASTER_HASH){sessionStorage.setItem('auth','1');document.getElementById('gate').style.display='none';document.getElementById('app').style.display='block';initApp();}else{const i=document.getElementById('pwInput');i.style.borderColor='#ef4444';i.value='';setTimeout(()=>i.style.borderColor='#333',600);}}
+window.addEventListener('DOMContentLoaded',()=>{if(sessionStorage.getItem('auth')==='1'){document.getElementById('gate').style.display='none';document.getElementById('app').style.display='block';initApp();}});
+
+// ---- DATA ----
+const CHALET = { lat: 45.9442, lng: 6.4303, name: "Chalet Elomaz, Saint-Jean-de-Sixt" };
+
+const activities = [
+  {
+    id: 1, category: 'downhill', emoji: '🚵', imgClass: 'downhill',
+    title: 'Downhill MTB — La Clusaz Bike Park',
+    tagline: 'Half dag vol gas naar beneden',
+    difficulty: 'medium', diffLabel: 'Gemiddeld',
+    stats: [{ icon: '🚗', label: '10 min rijden' }, { icon: '⏱️', label: '4–6 uur' }, { icon: '🎿', label: '6 DH tracks' }, { icon: '🔼', label: 'Lift aanwezig' }],
+    desc: 'La Clusaz heeft een van de beste bike parks van de Franse Alpen. 6 downhill trails + 5 enduro tracks met 3 stoeltjesliften. Open dagelijks van 1 juli t.e.m. 30 augustus. Alle niveaus aanwezig, van beginners tot gevorderden. Huurbikes op locatie beschikbaar.',
+    lat: 45.9031, lng: 6.4239,
+    waypoints: [
+      { lat: 45.9442, lng: 6.4303, label: 'Chalet Elomaz (vertrek)' },
+      { lat: 45.9031, lng: 6.4239, label: 'La Clusaz Bike Park (aankomst)' }
+    ],
+    praktisch: ['Rij via D909 richting La Clusaz (10 min)', 'Parkeer op het skistation parking', 'Dagpass: ±€35-40/persoon', 'Huurbike DH: ±€55-70/dag', 'Protectie (helm, rugplaat) sterk aangeraden'],
+    tips: ['Ga vroeg (9u) voor de liften vol lopen', 'Probeer minimaal 3 tracks: Tormery (blauw), Spider (rood), La Combe (zwart)', 'Lunch in het dorp: cafetaria aan de lift of pizzeria', 'Combineer met een middagwandeling langs de piste'],
+    links: [{ url: 'https://www.laclusaz.com/en/mountain-bike/bikepark/', label: '🌐 La Clusaz Bike Park' }]
+  },
+  {
+    id: 2, category: 'downhill', emoji: '🏔️', imgClass: 'downhill',
+    title: 'Downhill MTB — Le Grand-Bornand',
+    tagline: 'Minder druk, net zo fun',
+    difficulty: 'medium', diffLabel: 'Gemiddeld',
+    stats: [{ icon: '🚗', label: '15 min rijden' }, { icon: '⏱️', label: '4–6 uur' }, { icon: '🎿', label: '10 DH tracks' }, { icon: '🔼', label: 'Lift aanwezig' }],
+    desc: 'Le Grand-Bornand staat vlak naast Saint-Jean-de-Sixt en heeft een apart bike park met 10 downhill trails. Iets minder toeristisch dan La Clusaz, dus aangenamer in augustus. Prachtig uitzicht op de Aravis keten. Ideaal om de tweede downhill dag in te vullen.',
+    lat: 45.9437, lng: 6.4826,
+    waypoints: [
+      { lat: 45.9442, lng: 6.4303, label: 'Chalet Elomaz (vertrek)' },
+      { lat: 45.9437, lng: 6.4826, label: 'Le Grand-Bornand Bike Park' }
+    ],
+    praktisch: ['Rij richting Le Grand-Bornand (15 min, D4)', 'Parkeer bij het Centre Sportif', 'Dagpass: ±€32/persoon', 'Verhuur ook aanwezig (reserveer online)', 'Café en picknickzone aan de lift'],
+    tips: ['Rustiger dan La Clusaz in zomermaanden', 'Beste voor beginners / leren DH', 'Combineer met een aperitief in het dorp', 'Vlak bij: Vallée du Bouchet voor wandeling achteraf'],
+    links: [{ url: 'https://en.legrandbornand.com/mountain-biking-trails.html', label: '🌐 Le Grand-Bornand MTB' }]
+  },
+  {
+    id: 3, category: 'downhill', emoji: '🚵🏔️', imgClass: 'downhill',
+    title: 'Dubbele DH dag: La Clusaz + Grand-Bornand',
+    tagline: 'De ultieme MTB dag',
+    difficulty: 'hard', diffLabel: 'Zwaar',
+    stats: [{ icon: '🚗', label: '10–15 min' }, { icon: '⏱️', label: 'Hele dag' }, { icon: '🎿', label: '2 parken' }, { icon: '💪', label: 'Voor de beesten' }],
+    desc: 'Begin\'s ochtends in La Clusaz (9u-13u), lunch in het dorp, dan 's middags doorrijden naar Le Grand-Bornand (14u-17u). Twee complete bike parks op één dag — perfecte Cyclones bonusdag voor wie niet fietst maar wel shredden wil.',
+    lat: 45.9200, lng: 6.4500,
+    waypoints: [
+      { lat: 45.9442, lng: 6.4303, label: 'Chalet Elomaz (vertrek)' },
+      { lat: 45.9031, lng: 6.4239, label: 'La Clusaz Bike Park (ochtend)' },
+      { lat: 45.9437, lng: 6.4826, label: 'Le Grand-Bornand (namiddag)' }
+    ],
+    praktisch: ['Vertrek om 8u30 naar La Clusaz', 'Ochtendpas: 9u-13u in La Clusaz', 'Lunch in La Clusaz dorp (±13u)', 'Rij door naar Grand-Bornand (20 min)', 'Namiddagpas: 14u-17u30 in Grand-Bornand'],
+    tips: ['Koop dagpas per park afzonderlijk', 'Neem lunchpakket mee om tijd te sparen', 'Beenspieren zijn de bottleneck: stretch goed!', 'Bierpauze in Grand-Bornand daarna'],
+    links: []
+  },
+  {
+    id: 4, category: 'hiking', emoji: '🥾', imgClass: 'hiking',
+    title: 'La Tournette — De Koningin van Annecy',
+    tagline: '1200 hm · 8u · Spectaculaire ketting',
+    difficulty: 'hard', diffLabel: 'Zwaar',
+    stats: [{ icon: '🚗', label: '45 min rijden' }, { icon: '⏱️', label: '7–9 uur' }, { icon: '📏', label: '14 km' }, { icon: '🔼', label: '1200 hm' }],
+    desc: 'La Tournette (2351m) is de iconische top boven Lac d\'Annecy. De klim eindigt via een vaste ketting (geen via ferrata equipment nodig, maar spannend) naar een spectaculair panorama op het meer én de Mont Blanc. Eén van de mooiste dagwandelingen van de Haute-Savoie. Vertrek vanuit Montmin.',
+    lat: 45.8231, lng: 6.3242,
+    waypoints: [
+      { lat: 45.9442, lng: 6.4303, label: 'Chalet Elomaz (vertrek)' },
+      { lat: 45.8500, lng: 6.3000, label: 'Parking Montmin (trailhead)' },
+      { lat: 45.8231, lng: 6.3242, label: 'La Tournette top (2351m)' }
+    ],
+    praktisch: ['Rij via D909 richting Thônes, dan D12 naar Montmin (45 min)', 'Parking Montmin: gratis, vroeg vol (ga voor 8u30)', 'Neem minstens 2L water + energie', 'Goede wandelschoenen verplicht (rotsig)', 'Top wordt bewolkt namiddag — ga vroeg'],
+    tips: ['Vertrek om 7u30 voor lage parking en rustige klim', 'Middenstuk via Chalet de l\'Aulp: mooi fotomoment', 'De ketting: 15 min, weinig technisch maar indrukwekkend', 'Daal af via zelfde route of via Col du Pertuis (langer)'],
+    links: [{ url: 'https://www.alltrails.com/france/haute-savoie/saint-jean-de-sixt', label: '🗺️ AllTrails kaarten' }]
+  },
+  {
+    id: 5, category: 'hiking', emoji: '⛰️', imgClass: 'hiking',
+    title: 'Col des Aravis + Tête du Danay',
+    tagline: '1100 hm · 6u · Startend vanuit chalet',
+    difficulty: 'medium', diffLabel: 'Gemiddeld',
+    stats: [{ icon: '🚗', label: '5 min rijden' }, { icon: '⏱️', label: '5–7 uur' }, { icon: '📏', label: '16 km' }, { icon: '🔼', label: '1100 hm' }],
+    desc: 'Vertrek bijna vanuit het chalet! Klim via Col des Aravis (1486m) naar de Tête du Danay voor een 360° panorama op Mont Blanc, Chamonix en het Aravis massief. Mooie alpine weide met marmotten en koeien. De bekendste route vanuit Saint-Jean-de-Sixt.',
+    lat: 45.9078, lng: 6.5175,
+    waypoints: [
+      { lat: 45.9442, lng: 6.4303, label: 'Chalet Elomaz (vertrek)' },
+      { lat: 45.9078, lng: 6.5175, label: 'Col des Aravis (1486m)' },
+      { lat: 45.9300, lng: 6.5400, label: 'Tête du Danay (1760m)' }
+    ],
+    praktisch: ['Rij 5 min naar Col des Aravis parking', 'Vertrek: 8u30 aangeraden', 'Picknick op de top (fantastisch uitzicht)', 'Terug via L\'Étale alternatief (langere lus)', 'Beschutting weinig — ga bij goed weer'],
+    tips: ['Gratis parking aan de col', 'Marmotten spotten bijna gegarandeerd', 'Doorstap: Chalet de l\'Aulp (verse kaas te koop!)', 'Col is startpunt voor fietsers: WVA reed hier ook'],
+    links: [{ url: 'https://www.saintjeandesixt.com/activites/balades-randonnees/', label: '🌐 Saint-Jean-de-Sixt wandelroutes' }]
+  },
+  {
+    id: 6, category: 'hiking', emoji: '🏔️', imgClass: 'hiking',
+    title: 'Chaîne des Aravis — Col des Annes Ronde',
+    tagline: '1300 hm · 8u · Episch alpenlandschap',
+    difficulty: 'hard', diffLabel: 'Zwaar',
+    stats: [{ icon: '🚗', label: '15 min rijden' }, { icon: '⏱️', label: '7–9 uur' }, { icon: '📏', label: '20 km' }, { icon: '🔼', label: '1300 hm' }],
+    desc: 'Een langdurige ronde door de hartkern van het Aravis massief. Via Col des Annes (1722m) en het plateau des Glières (beroemd WW2 verzetsplaats, ook de klim van Kwiatkowski en WVA in de Dauphiné). Eindeloze vergezichten, echte alpiene sfeer, weinig toeristen.',
+    lat: 45.9600, lng: 6.4200,
+    waypoints: [
+      { lat: 45.9442, lng: 6.4303, label: 'Chalet Elomaz (vertrek)' },
+      { lat: 45.9600, lng: 6.4200, label: 'Col des Annes (1722m)' },
+      { lat: 45.9800, lng: 6.3800, label: 'Plateau des Glières (1440m)' }
+    ],
+    praktisch: ['Startpunt: Le Grand-Bornand (15 min)', 'Vroeg vertrek verplicht (7u30)', 'Minimaal 3L water + stevig eten', 'Wandelstokken aangeraden', 'GPS of track downloaden via Komoot'],
+    tips: ['Plateau des Glières: bezoek het mémorial (WW2)', 'Weinig besproken maar indrukwekkender dan Tournette', 'Eetplek op plateau: Refuge des Glières', 'Hou rekening met bliksem na 14u — vroeg weg'],
+    links: [{ url: 'https://www.komoot.com/guide/1493963', label: '🗺️ Komoot routes' }]
+  },
+  {
+    id: 7, category: 'ferrata', emoji: '🧗', imgClass: 'ferrata',
+    title: 'Via Ferrata Tour du Jallouvre',
+    tagline: '3u klimmen · Spectaculair uitzicht · Dicht bij',
+    difficulty: 'hard', diffLabel: 'Moeilijk',
+    stats: [{ icon: '🚗', label: '20 min rijden' }, { icon: '⏱️', label: '4–5 uur totaal' }, { icon: '🔼', label: '600 hm' }, { icon: '🧗', label: 'D-niveau' }],
+    desc: 'De Tour du Jallouvre via ferrata is DE klassieker van het Aravis massief. Boven Le Grand-Bornand, met geleidelijk stijgende moeilijkheid. Prachtige rotswanden, verticale passages, en een fantastisch panorama op de Aravis en Mont Blanc. Geopend eind mei t.e.m. oktober. Voor gevorderden of met gids.',
+    lat: 45.9792, lng: 6.5281,
+    waypoints: [
+      { lat: 45.9442, lng: 6.4303, label: 'Chalet Elomaz (vertrek)' },
+      { lat: 45.9600, lng: 6.5100, label: 'Parking trailhead Le Chinaillon' },
+      { lat: 45.9792, lng: 6.5281, label: 'Via Ferrata Jallouvre top' }
+    ],
+    praktisch: ['Rij naar Le Chinaillon (boven Grand-Bornand, 20 min)', 'Equipment huren in Grand-Bornand of Saint-Jean Sport', 'Harnais + longe + helm: noodzakelijk', 'Gids via Compagnie des Guides Aravis: ±€60/pers', 'Nooit alleen zonder gids als eerste keer'],
+    tips: ['Reserveer gids op voorhand (augustus = druk)', 'Goed ontbijt eten: veel energie nodig', 'Handschoenen aangeraden', 'Beste voor gevorderden of met begeleiding', 'Saint-Jean Sport verhuurt alles: T: +33 4 50 02 28 12'],
+    links: [
+      { url: 'https://www.directmountain.com/en/activities/310-via-ferrata-la-tour-du-jallouvre-grand-bornand/', label: '📍 Jallouvre info' },
+      { url: 'https://www.saint-jean-sport.com/via-ferrata/', label: '🛒 Saint-Jean Sport verhuur' }
+    ]
+  },
+  {
+    id: 8, category: 'ferrata', emoji: '🏔️🧗', imgClass: 'ferrata',
+    title: 'Via Ferrata Yves Pollet-Villard (Col des Aravis)',
+    tagline: 'Pal naast het chalet · Verplichte klassieker',
+    difficulty: 'medium', diffLabel: 'Gemiddeld',
+    stats: [{ icon: '🚗', label: '5 min rijden' }, { icon: '⏱️', label: '3–4 uur' }, { icon: '🔼', label: '400 hm' }, { icon: '🧗', label: 'C-niveau' }],
+    desc: 'Gelegen aan de Col des Aravis — letterlijk naast de col op 5 minuten rijden van het chalet. Een van de mooiste via ferratas van de Noord-Alpen, met panorama op Aravis en Vallée de Thônes. 2u30 klimmen na 30 min aanloop. Perfect voor een eerste via ferrata of een halverdaguitstap.',
+    lat: 45.9100, lng: 6.5100,
+    waypoints: [
+      { lat: 45.9442, lng: 6.4303, label: 'Chalet Elomaz (vertrek)' },
+      { lat: 45.9078, lng: 6.5175, label: 'Col des Aravis (parking)' },
+      { lat: 45.9100, lng: 6.5100, label: 'Via Ferrata Yves Pollet-Villard' }
+    ],
+    praktisch: ['Park aan Col des Aravis (5 min rijden)', '30 min aanloopwandeling naar de ingang', 'Equipment: harnais + longe + helm (verhuur Saint-Jean Sport)', 'Snacks en water mee (geen bar)', 'Kan zelfstandig bij C-niveau ervaring'],
+    tips: ['Begin vroeg: 8u30 voor de zon op de rotsen staat', 'De "beginner"-passage is ideaal voor aanvallers', 'Uitzicht overheerst heel de Aravis vallei', 'Combineer met picknick aan de col na afloop'],
+    links: [
+      { url: 'https://www.directmountain.com/en/activities/317-via-ferrata-aravis-pass-la-clusaz-haute-savoie/', label: '📍 Pollet-Villard info' }
+    ]
+  },
+  {
+    id: 9, category: 'water', emoji: '🛶', imgClass: 'water',
+    title: 'Raften op de Giffre — Samoëns',
+    tagline: 'Klasse 3-4 wildwater · Beste rivier van de Alpen',
+    difficulty: 'medium', diffLabel: 'Gemiddeld',
+    stats: [{ icon: '🚗', label: '1u15 rijden' }, { icon: '⏱️', label: 'Halve dag' }, { icon: '🌊', label: 'Klasse III-IV' }, { icon: '👥', label: 'Vanaf 6j' }],
+    desc: 'Rafting op de Giffre bij Samoëns is het topavontuur van de regio. Via de Gorges des Tines, spectaculaire rotskloof met hoge wanden, navigeer je door snel stromend water met kleine stroomversnellingen. Professionele gidsen aanwezig. Altitude Rafting en Ecolorado Rafting zijn de twee beste aanbieders. Prijs: ±€42/pers. Open april-september.',
+    lat: 46.0803, lng: 6.7225,
+    waypoints: [
+      { lat: 45.9442, lng: 6.4303, label: 'Chalet Elomaz (vertrek)' },
+      { lat: 46.0300, lng: 6.6500, label: 'Via A40 richting Cluses' },
+      { lat: 46.0803, lng: 6.7225, label: 'Samoëns — Altitude Rafting' }
+    ],
+    praktisch: ['Rij via Thônes → Cluses → Samoëns (1u15)', 'Reserveer online: www.altitude-rafting.com', 'Meenemen: zwemkledij, oude sportschoenen', 'Goed materiaal verstrekt: wetsuit, helm, vest', 'Prijs: ±€42 volwassene, €35 kind (<14j)'],
+    tips: ['Combineer met wandeling Gorges des Tines achteraf (gratis)', 'Lunch in Samoëns (charmant dorp)', 'Meerdere vertrekuren: 9u, 11u, 14u30', 'In augustus: pre-book minstens 3 dagen op voorhand', 'Mini-raft (4 pers) ook beschikbaar voor meer actie'],
+    links: [
+      { url: 'https://www.altitude-rafting.com/', label: '🛶 Altitude Rafting' },
+      { url: 'https://www.ecoloradorafting.com/?lang=en', label: '🛶 Ecolorado Rafting' }
+    ]
+  },
+  {
+    id: 10, category: 'water', emoji: '💦', imgClass: 'canyon',
+    title: 'Canyoning Angon — Gorge in Lac d\'Annecy',
+    tagline: '60m waterval · Eindigt in het meer · Spectaculair',
+    difficulty: 'medium', diffLabel: 'Gemiddeld',
+    stats: [{ icon: '🚗', label: '50 min rijden' }, { icon: '⏱️', label: '4–5 uur' }, { icon: '💦', label: '60m waterval' }, { icon: '🏊', label: 'Einde = meer' }],
+    desc: 'Angon is het meest iconische canyon van Haute-Savoie. Je begint op de bergflank en daalt via watervallen, glijbanen en sprongen af naar... Lac d\'Annecy! De grand finale is een sprong/glijbaan in het meer. Met de beroemde "brievenbus" passage en een 60m touwlanding. Perfect combineren met een zwemnamiddag aan het meer.',
+    lat: 45.8442, lng: 6.2028,
+    waypoints: [
+      { lat: 45.9442, lng: 6.4303, label: 'Chalet Elomaz (vertrek)' },
+      { lat: 45.8667, lng: 6.1667, label: 'Rive est Lac d\'Annecy' },
+      { lat: 45.8442, lng: 6.2028, label: 'Canyon d\'Angon trailhead' }
+    ],
+    praktisch: ['Rij richting Annecy via Thônes (50 min)', 'Boek via: Bureau des Guides Annecy of DirectMountain', 'Prijs: ±€55-70/pers incl. equipment', 'Geen eigen equipment nodig (alles verstrekt)', 'Na canyon: stranddag aan Lac d\'Annecy (gratis)'],
+    tips: ['Combineer met picknick / zwemmen aan het meer', 'De brievenbus: kleine ondergrondse doorgang = spectaculair', 'Goede conditie aangeraden (steile afdaling)', 'Vroeg boeken in augustus is een must', 'Beste verhuurbedrijf: Aravis Canyoning'],
+    links: [
+      { url: 'https://www.annecymountainguide.com/canyoning', label: '📍 Guides Annecy canyoning' },
+      { url: 'https://www.directmountain.com/en/activities/475-canyoning-aravis-annecy-lake-haute-savoie/', label: '📍 DirectMountain' }
+    ]
+  },
+  {
+    id: 11, category: 'water', emoji: '💦🗻', imgClass: 'canyon',
+    title: 'Canyoning Morette — Thônes Vallei',
+    tagline: '45m waterval · Dichter bij · Perfect warm-up',
+    difficulty: 'easy', diffLabel: 'Beginner',
+    stats: [{ icon: '🚗', label: '25 min rijden' }, { icon: '⏱️', label: '3–4 uur' }, { icon: '💦', label: '45m waterval' }, { icon: '🏕️', label: 'Dichterbij' }],
+    desc: 'De Morette waterval in de Thônes vallei is een van de meest toegankelijke canyons van de regio. Hét ideaal voor wie voor het eerst wil canyonen of een kortere optie zoekt. De 45m repel in de Morette waterval is onvergetelijk. Minder ver rijden dan Angon — perfecte optie voor een beknoptere dag.',
+    lat: 45.8781, lng: 6.3642,
+    waypoints: [
+      { lat: 45.9442, lng: 6.4303, label: 'Chalet Elomaz (vertrek)' },
+      { lat: 45.8900, lng: 6.3700, label: 'Thônes (Vallée de Thônes)' },
+      { lat: 45.8781, lng: 6.3642, label: 'Canyon de la Morette' }
+    ],
+    praktisch: ['Rij naar Thônes (25 min via D909)', 'Boek via lokale gids of Aravis Canyoning', 'Prijs: ±€45-55/pers', 'Neoprenpak voorzien door gids', 'Goed voor beginners en families'],
+    tips: ['Ideaal als eerste canyoningervaring', 'Korter dan Angon maar net zo spectacular bij de waterval', 'Combineer met koffie en kaas in Thônes daarna', 'Thônes = kaashaupstad van Haute-Savoie (Reblochon!)'],
+    links: [
+      { url: 'https://evolution2.com/en/blog/best-canyons-haute-savoie', label: '📍 Beste canyons Haute-Savoie' }
+    ]
+  },
+  {
+    id: 12, category: 'water', emoji: '🏖️', imgClass: 'lake',
+    title: 'Lac d\'Annecy — Zwemdag + Stad Bezoek',
+    tagline: 'Zuiverste meer van Europa · Annecy stad',
+    difficulty: 'easy', diffLabel: 'Makkelijk',
+    stats: [{ icon: '🚗', label: '40 min rijden' }, { icon: '⏱️', label: 'Hele dag' }, { icon: '🏊', label: '25°C water' }, { icon: '🏙️', label: 'Stad erbij' }],
+    desc: 'Lac d\'Annecy is het zuiverste meer van Europa (geen motorboats!) met kristalhelder water tot 25°C in augustus. Strand bij Talloires of Albigny zijn de mooiste plekjes. Combineer met een wandeling in de Vieille Ville van Annecy (kanaalstad = "klein Venetië"). Een rustdag voor lichaam én hoofd.',
+    lat: 45.8667, lng: 6.1667,
+    waypoints: [
+      { lat: 45.9442, lng: 6.4303, label: 'Chalet Elomaz (vertrek)' },
+      { lat: 45.8419, lng: 6.2553, label: 'Plage de Talloires (het mooiste strand)' },
+      { lat: 45.8992, lng: 6.1294, label: 'Vieille Ville Annecy (middag)' }
+    ],
+    praktisch: ['Rij via Thônes naar Talloires (40 min)', 'Parking Talloires: vroeg vol → kom voor 9u', 'Gratis strandbad in Talloires en Albigny', 'Middag: Annecy stad (20 min van Talloires)', 'Pont des Amours, Château, marché du vieux Annecy'],
+    tips: ['Talloires strand is mooier dan het meer bij Annecy stad', 'Breng picknick mee (super setting)', 'Water is echt kristalhelder: snorkelen is geweldig', 'Annecy stad: Café de Paris voor ijsje aan het water', 'Parking Annecy centrum: Parking des Marquisats'],
+    links: [
+      { url: 'https://en.lac-annecy.com/ideas-for-a-stay/thematic/days-along-the-water/', label: '🏖️ Lac Annecy toerisme' }
+    ]
+  }
+];
+
+const restaurants = [
+  {
+    emoji: '⭐',
+    name: 'Le Cin5 (1 Michelin ster)',
+    location: 'La Clusaz',
+    distance: '10 min',
+    desc: 'Chef Vincent Deforce combineert Mauritiaanse invloeden met Savoie producten. Inventieve, elegante gerechten. Reservatie verplicht en ver op voorhand. Dé fine dining ervaring van de regio.',
+    tags: ['Gastronomisch', 'Michelin ⭐', 'Frans-creatief'],
+    stars: '★★★★★',
+    price: '€€€€',
+    link: 'https://guide.michelin.com/en/auvergne-rhone-alpes/la-clusaz/restaurant/le-cinq'
+  },
+  {
+    emoji: '🌿',
+    name: 'Le Cairn',
+    location: 'Saint-Jean-de-Sixt',
+    distance: '2 min',
+    desc: 'Adrien Pollet serveert creatieve gastronomie vanuit de tuin. Twee verrassingsmenu\'s met topproducten uit de streek. Rustiek maar verfijnd — en vlakbij het chalet!',
+    tags: ['Creatief', 'Gastronomisch', 'Lokale producten'],
+    stars: '★★★★☆',
+    price: '€€€',
+    link: 'https://www.gillespudlowski.com/364153/restaurants/saint-jean-de-sixt-les-fines-saveurs-du-cairn'
+  },
+  {
+    emoji: '🏔️',
+    name: 'Confins des Sens',
+    location: 'Le Grand-Bornand',
+    distance: '15 min',
+    desc: 'Jean-Sébastien Faber kookt inventief met seizoensproducten. Fantastisch terras met uitzicht op de Aravis. Een van de beste adressen van de vallei — combineerbaar met een na-etens wandeling.',
+    tags: ['Inventief', 'Terras', 'Aravis view'],
+    stars: '★★★★☆',
+    price: '€€€',
+    link: 'https://www.restaurant-grand-bornand.com/le-restaurant-1182'
+  },
+  {
+    emoji: '🍕',
+    name: 'La Pizz\' de Saint Jean',
+    location: 'Saint-Jean-de-Sixt',
+    distance: '1 min',
+    desc: 'De lokale favoriet: genereuze, heerlijke pizza\'s. Ideaal voor een casual avond na een zware dag. Ook afhalen mogelijk — perfect voor op het chalet. Goede prijs/kwaliteit.',
+    tags: ['Pizza', 'Casual', 'Afhalen'],
+    stars: '★★★★☆',
+    price: '€€',
+    link: '#'
+  },
+  {
+    emoji: '🧀',
+    name: 'La Ferme de Lormay',
+    location: 'La Clusaz',
+    distance: '12 min',
+    desc: 'Traditionele Savoyard keuken op een authentieke bergboerderij. Fondue, raclette, tartiflette... Moet je gegeten hebben in de Haute-Savoie. Reserveer op voorhand.',
+    tags: ['Savoyard', 'Fondue/Raclette', 'Authentiek'],
+    stars: '★★★★☆',
+    price: '€€',
+    link: '#'
+  },
+  {
+    emoji: '🍺',
+    name: 'Le Flambeau — La Clusaz',
+    location: 'La Clusaz',
+    distance: '10 min',
+    desc: 'Bruine kroeg / après-ski sfeer ook in de zomer. Goede lokale bieren, snacks, burger. Ideaal na de bike park. Terras op de bergflank met uitzicht op het dorp.',
+    tags: ['Bar', 'Burger', 'Na het sporten'],
+    stars: '★★★☆☆',
+    price: '€€',
+    link: '#'
+  },
+  {
+    emoji: '🐟',
+    name: 'L\'Auberge du Père Bise',
+    location: 'Talloires (Lac d\'Annecy)',
+    distance: '45 min',
+    desc: 'Legendarisch 2-Michelin ster restaurant met ongelofelijk uitzicht op Lac d\'Annecy. Als je 1 bijzondere avond hebt: hier. Reserveer weken op voorhand. Bezoek op weg terug van het meer.',
+    tags: ['2 Michelin ⭐⭐', 'Legendair', 'Meer-uitzicht'],
+    stars: '★★★★★',
+    price: '€€€€€',
+    link: '#'
+  },
+  {
+    emoji: '🥐',
+    name: 'Boulangerie Aravis',
+    location: 'Saint-Jean-de-Sixt',
+    distance: '1 min',
+    desc: 'Dagelijkse verse broodjes, croissants en viennoiseries. Open vroeg — ideaal voor ontbijt voor een dag in de bergen. Neem sandwiches mee als picknick voor onderweg.',
+    tags: ['Bakkerij', 'Ontbijt', 'Picknick'],
+    stars: '★★★★☆',
+    price: '€',
+    link: '#'
+  }
+];
+
+const events = [
+  {
+    day: '8', month: 'AUG', during: true,
+    title: 'Arrivée du groupe & BBQ d\'inauguration',
+    desc: 'Aankomst in Chalet Elomaz, koffers uitpakken, BBQ in de tuin — de Cyclonereis is begonnen! (Niet echt een event maar verplicht op de planning.)',
+    location: 'Chalet Elomaz, Saint-Jean-de-Sixt',
+    type: '🏠'
+  },
+  {
+    day: '9-14', month: 'AUG', during: true,
+    title: 'Critérium du Dauphiné Région / Étapes locales',
+    desc: 'Lennert bevestigde in de chat: etappe 8 van de Tour Auvergne-Rhône-Alpes passeert door de streek. Fietsers in de groep rijden dezelfde cols. Kans om langs de weg te supporteren!',
+    location: 'Aravis, Haute-Savoie',
+    type: '🚴'
+  },
+  {
+    day: '9-12', month: 'AUG', during: true,
+    title: 'Marché de Saint-Jean-de-Sixt (wekelijkse markt)',
+    desc: 'Wekelijkse boerenmarkt in het centrum van Saint-Jean-de-Sixt. Verse lokale producten: Reblochon, Beaufort, charcuterie, groenten, honing. Ideaal voor proviand en souvenirs.',
+    location: 'Centre Saint-Jean-de-Sixt',
+    type: '🥛'
+  },
+  {
+    day: '10-13', month: 'AUG', during: true,
+    title: 'Festival de musique La Clusaz (zomer)',
+    desc: 'Zomermuziekfestival in het centrum van La Clusaz met live optredens in openlucht. Mix van folk, jazz en chanson française. Gratis toegang voor de meeste concerten.',
+    location: 'La Clusaz (10 min)',
+    type: '🎵'
+  },
+  {
+    day: '14-15', month: 'AUG', during: false,
+    title: 'DAHU FESTIVAL',
+    desc: 'Groot muziekfestival in Les Carroz d\'Arraches, net na jullie verblijf (vertrek vrijdag 14/8). Wie wil kan eventueel later vertrekken! Alternatief: last dag langer blijven.',
+    location: 'Les Carroz d\'Arraches (45 min)',
+    type: '🎪'
+  },
+  {
+    day: '23-27', month: 'AUG', during: false,
+    title: 'Au Bonheur des Mômes — Le Grand-Bornand',
+    desc: 'Beroemd familietheater- en circusfestival in Le Grand-Bornand. 300+ voorstellingen: theater, dans, poppen, circus. Net na jullie verblijf maar voor wie terugkomt.',
+    location: 'Le Grand-Bornand',
+    type: '🎭'
+  },
+  {
+    day: '15', month: 'AUG', during: false,
+    title: 'Assomption — Nationale Feestdag (BE) / Fête Nationale (FR)',
+    desc: '15 augustus is feestdag in beide landen. Op vrijdag 14 aug verlaat de groep het chalet. Hou rekening met extra verkeer op A40 en snelwegen richting België.',
+    location: 'Overal',
+    type: '🇫🇷'
+  },
+  {
+    day: '8-22', month: 'AUG', during: true,
+    title: 'Musique et Nature en Bauges',
+    desc: 'Klassieke muziek festival verspreid over Haute-Savoie, lopend van 15 juli t.e.m. 22 augustus. Optreden in prachtige bergkerkjes en openlucht. Check programma voor data dicht bij Saint-Jean-de-Sixt.',
+    location: 'Haute-Savoie (div. locaties)',
+    type: '🎻'
+  }
+];
+
+const shops = [
+  {
+    emoji: '🏪', name: 'Intermarché Aravis', type: 'Supermarkt', dist: '3 min rijden',
+    desc: 'De grootste supermarkt van de regio. Volledig assortiment: vers vlees, vis, groenten, wijn, bier, huishoudproducten. Ideale uitvalbasis voor grote boodschappen op aankomst.',
+    hours: 'Ma-Za 8u30-20u, Zo 9u-13u'
+  },
+  {
+    emoji: '🛒', name: 'Carrefour Express La Clusaz', type: 'Supermarkt', dist: '10 min rijden',
+    desc: 'Handige dagelijkse supermarkt in het centrum van La Clusaz. Goed gesorteerd voor een kleinere winkel. Ideaal tussendoor of als Intermarché dicht is.',
+    hours: 'Elke dag 8u-20u (augustus)'
+  },
+  {
+    emoji: '🥖', name: 'Sherpa Les Villards-sur-Thônes', type: 'Bergsupermarkt', dist: '8 min rijden',
+    desc: 'Sherpa is de typische berg-supermarkt: goede lokale producten, weinig merken maar veel reblochon, beaufort en lokale charcuterie. Warm aanbevolen voor kaas en worst.',
+    hours: 'Ma-Za 8u-19u30, Zo 8u30-12u30'
+  },
+  {
+    emoji: '🧀', name: 'Fromagerie Paccard', type: 'Kaaswinkel', dist: '20 min rijden',
+    desc: 'De beste fromagerie van de Aravis — Reblochon AOC, Beaufort, Abondance. Bezoek verplicht! Neem een kaasplank mee voor het chalet. Gelegen richting Thônes.',
+    hours: 'Di-Za 9u-12u & 15u-19u'
+  },
+  {
+    emoji: '⛷️', name: 'Saint-Jean Sport', type: 'Sportwinkel', dist: '1 min',
+    desc: 'De lokale sportwinkel van Saint-Jean-de-Sixt: via ferrata equipment verhuur, wandelstokken, beschermers, helmen. Boek je harnais + longe hier voor de via ferrata.',
+    hours: 'Elke dag 9u-12u30 & 15u-19u30 (aug)'
+  },
+  {
+    emoji: '🏪', name: 'Décathlon Annecy', type: 'Sportmegawinkel', dist: '40 min rijden',
+    desc: 'Grote Décathlon aan de ingang van Annecy (Cran-Gevrier). Alles voor sport aan goede prijs: wandelschoenen, rugzakken, sportkleding, fietsonderdelen. Handig op weg naar/van het meer.',
+    hours: 'Ma-Za 9u-20u, Zo 9u-13u'
+  },
+  {
+    emoji: '🛍️', name: 'Centre Bonlieu Annecy', type: 'Winkelcentrum', dist: '40 min rijden',
+    desc: 'Groot winkelcentrum in Annecy centrum. H&M, FNAC, diverse kledingwinkels. Ideaal te combineren met een bezoek aan de oude stad en het meer. Parkeren aan Place de la Libération.',
+    hours: 'Ma-Za 10u-19u30, Zo gesloten'
+  },
+  {
+    emoji: '🍷', name: 'Cave des Aravis', type: 'Wijnwinkel', dist: '5 min',
+    desc: 'Lokale wijnwinkelier met uitstekende selectie Savoie wijnen: Roussette, Apremont, Mondeuse... Perfect voor een chalet-avond met lokale wijn en kaas.',
+    hours: 'Di-Za 10u-12u & 16u-19u'
+  },
+  {
+    emoji: '🏕️', name: 'Maison de la Montagne', type: 'Berguitrusting', dist: '10 min (La Clusaz)',
+    desc: 'Professionele berguitrusting voor wandelen, klimmen en via ferrata. Goede service en advies. Ook wandelkaarten en GPX tracks voor de regio.',
+    hours: 'Elke dag 9u-19u (aug)'
+  }
+];
+
+// ---- INIT ----
+let heroMap, modalMap, currentActivity = null;
+let activeFilter = 'all';
+
+function initApp() {
+  renderActivities();
+  renderRestaurants();
+  renderEvents();
+  renderShops();
+  setTimeout(() => initHeroMap(), 100);
+}
+
+function initHeroMap() {
+  if (heroMap) { heroMap.remove(); heroMap = null; }
+  heroMap = L.map('hero-map', { zoomControl: true, scrollWheelZoom: false }).setView([45.93, 6.45], 11);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap', maxZoom: 18
+  }).addTo(heroMap);
+
+  // Chalet marker
+  const chaletIcon = L.divIcon({ html: '🏠', className: 'leaflet-div-icon', iconSize: [28, 28], iconAnchor: [14, 14] });
+  L.marker([CHALET.lat, CHALET.lng], { icon: chaletIcon }).addTo(heroMap)
+    .bindPopup('<b>Chalet Elomaz</b><br>Saint-Jean-de-Sixt<br>8–14 augustus 2026');
+
+  // Activity markers
+  const icons = { downhill: '🚵', hiking: '🥾', ferrata: '🧗', water: '🌊' };
+  activities.forEach(a => {
+    const icon = L.divIcon({ html: icons[a.category] || '📍', className: 'leaflet-div-icon', iconSize: [26, 26], iconAnchor: [13, 13] });
+    L.marker([a.lat, a.lng], { icon }).addTo(heroMap)
+      .bindPopup(`<b>${a.title}</b><br>${a.stats.map(s => s.icon + ' ' + s.label).join(' · ')}`);
+  });
+}
+
+// ---- ACTIVITIES ----
+function renderActivities() {
+  const grid = document.getElementById('activity-grid');
+  grid.innerHTML = activities.filter(a => activeFilter === 'all' || a.category === activeFilter).map(a => `
+    <div class="activity-card" onclick="openActivity(${a.id})" data-cat="${a.category}">
+      <div class="card-img ${a.imgClass}">
+        <span style="font-size:3rem">${a.emoji}</span>
+        <span class="card-difficulty diff-${a.difficulty}">${a.diffLabel}</span>
+        <span class="card-tag">#${a.id}</span>
+      </div>
+      <div class="card-body">
+        <h3>${a.title}</h3>
+        <p>${a.tagline}</p>
+        <div class="card-stats">
+          ${a.stats.map(s => `<div class="stat"><span class="stat-icon">${s.icon}</span>${s.label}</div>`).join('')}
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function filterActivities(cat, el) {
+  document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  activeFilter = cat;
+  renderActivities();
+}
+
+// ---- MODAL ----
+function openActivity(id) {
+  const a = activities.find(x => x.id === id);
+  if (!a) return;
+  currentActivity = a;
+
+  document.getElementById('modal-title').textContent = a.emoji + ' ' + a.title;
+  document.getElementById('modal-desc').textContent = a.desc;
+
+  document.getElementById('modal-meta').innerHTML = [
+    ...a.stats.map(s => `<div class="badge">${s.icon} ${s.label}</div>`),
+    `<div class="badge diff-${a.difficulty}" style="border-color: currentColor">${a.diffLabel}</div>`
+  ].join('');
+
+  document.getElementById('modal-sections').innerHTML = `
+    <div class="modal-section">
+      <h4>🔧 Praktisch</h4>
+      <ul>${a.praktisch.map(t => `<li>${t}</li>`).join('')}</ul>
+    </div>
+    <div class="modal-section">
+      <h4>💡 Tips</h4>
+      <ul>${a.tips.map(t => `<li>${t}</li>`).join('')}</ul>
+    </div>
+  `;
+
+  document.getElementById('modal-cta').innerHTML = a.links.map(l =>
+    `<a class="btn btn-primary" href="${l.url}" target="_blank">${l.label}</a>`
+  ).join('') + `<button class="btn btn-secondary" onclick="openGoogleMaps(${a.lat}, ${a.lng})">🗺️ Open in Maps</button>`;
+
+  document.getElementById('modal-overlay').classList.add('open');
+
+  setTimeout(() => {
+    if (modalMap) { modalMap.remove(); modalMap = null; }
+    modalMap = L.map('modal-map').setView([a.lat, a.lng], 12);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap', maxZoom: 18
+    }).addTo(modalMap);
+
+    // Draw route
+    const latlngs = a.waypoints.map(w => [w.lat, w.lng]);
+    L.polyline(latlngs, { color: '#2dd4bf', weight: 3, dashArray: '8 4', opacity: 0.8 }).addTo(modalMap);
+
+    a.waypoints.forEach((w, i) => {
+      const isStart = i === 0;
+      const isEnd = i === a.waypoints.length - 1;
+      const html = isStart ? '🏠' : (isEnd ? '🎯' : '⚡');
+      const icon = L.divIcon({ html, className: 'leaflet-div-icon', iconSize: [28, 28], iconAnchor: [14, 14] });
+      L.marker([w.lat, w.lng], { icon }).addTo(modalMap).bindPopup(`<b>${w.label}</b>`);
+    });
+
+    // Fit map
+    const group = L.featureGroup(latlngs.map(ll => L.marker(ll)));
+    modalMap.fitBounds(group.getBounds().pad(0.2));
+  }, 100);
+}
+
+function openGoogleMaps(lat, lng) {
+  window.open(`https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`, '_blank');
+}
+
+function closeModal(e) {
+  if (e.target === document.getElementById('modal-overlay')) closeModalDirect();
+}
+function closeModalDirect() {
+  document.getElementById('modal-overlay').classList.remove('open');
+  if (modalMap) { modalMap.remove(); modalMap = null; }
+}
+
+// ---- RESTAURANTS ----
+function renderRestaurants() {
+  document.getElementById('restaurant-list').innerHTML = restaurants.map(r => `
+    <div class="restaurant-card">
+      <div class="restaurant-emoji">${r.emoji}</div>
+      <div class="restaurant-info">
+        <h3>${r.name} <span class="stars">${r.stars}</span></h3>
+        <div class="restaurant-location">📍 ${r.location}</div>
+        <p>${r.desc}</p>
+        <div class="restaurant-tags">${r.tags.map(t => `<span class="rtag">${t}</span>`).join('')}</div>
+      </div>
+      <div class="restaurant-right">
+        <div class="dist">🚗 ${r.distance}</div>
+        <div class="price">${r.price}</div>
+        ${r.link && r.link !== '#' ? `<br><a href="${r.link}" target="_blank" class="btn btn-secondary" style="font-size:.72rem;padding:.35rem .7rem;margin-top:.4rem">↗ Info</a>` : ''}
+      </div>
+    </div>
+  `).join('');
+}
+
+// ---- EVENTS ----
+function renderEvents() {
+  document.getElementById('events-list').innerHTML = events.map(e => `
+    <div class="event-card ${e.during ? 'event-during' : ''}">
+      <div class="event-date" style="${e.during ? '' : 'background: linear-gradient(135deg, #374151, #1f2937); color: #9ca3af;'}">
+        <div class="day">${e.day}</div>
+        <div class="month">${e.month}</div>
+      </div>
+      <div class="event-info">
+        <h3>${e.type} ${e.title} ${e.during ? '<span class="event-during-badge">TIJDENS VERBLIJF</span>' : ''}</h3>
+        <p>${e.desc}</p>
+        <div class="event-loc">📍 ${e.location}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ---- SHOPS ----
+function renderShops() {
+  document.getElementById('shops-grid').innerHTML = shops.map(s => `
+    <div class="shop-card">
+      <h3>${s.emoji} ${s.name}</h3>
+      <div class="shop-type">${s.type}</div>
+      <p>${s.desc}</p>
+      <div class="shop-hours">🕐 ${s.hours}</div>
+      <div class="shop-dist">🚗 ${s.dist}</div>
+    </div>
+  `).join('');
+}
+
+// ---- TABS ----
+function showSection(name, tabEl) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('section-' + name).classList.add('active');
+  tabEl.classList.add('active');
+
+  if (name === 'activities' && !heroMap) {
+    setTimeout(() => initHeroMap(), 100);
+  }
+}
+</script>
+</body>
+</html>
