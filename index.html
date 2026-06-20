@@ -1309,7 +1309,7 @@ function openActModal(id){
   const a=activities.find(x=>x.id===id);
   if(!a) return;
   const overlay=document.getElementById('act-modal');
-  overlay.classList.add('open');
+  overlay.classList.add('open');_lockScroll();_resetModalScroll('act-modal');
   document.getElementById('am-ico').textContent=a.e;
   document.getElementById('am-ico').className=`m-ico ${a.ico}`;
   document.getElementById('am-title').textContent=a.title;
@@ -1365,6 +1365,7 @@ function openActModal(id){
 function closeActModal(){
   document.getElementById('act-modal').classList.remove('open');
   if(modalMapObj){modalMapObj.remove();modalMapObj=null;}
+  _unlockScroll();
 }
 
 // ---- GENERIC MODAL (restaurants, events, etc.) ----
@@ -1372,7 +1373,7 @@ let genModalMapObj=null;
 function openGenModal(item){
   if(typeof item==='string') try{item=JSON.parse(item);}catch(e){return;}
   const overlay=document.getElementById('gen-modal');
-  overlay.classList.add('open');
+  overlay.classList.add('open');_lockScroll();_resetModalScroll('gen-modal');
   document.getElementById('gm-title').textContent=((item.e?item.e+' ':'')+( item.name||item.title||''));
   document.getElementById('gm-desc').textContent=(item.desc||'');
   document.getElementById('gm-meta').innerHTML=
@@ -2391,7 +2392,7 @@ function openNewActModal(date){
   document.getElementById('new-act-author').value=getAuthorName();
   document.getElementById('new-act-emoji').value='🏔️';
   document.getElementById('diary-emo-disp').textContent='🏔️';
-  document.getElementById('diary-new-act-modal').classList.add('open');
+  document.getElementById('diary-new-act-modal').classList.add('open');_lockScroll();_resetModalScroll('diary-new-act-modal');
 }
 
 
