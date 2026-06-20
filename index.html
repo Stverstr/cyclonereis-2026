@@ -204,6 +204,72 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 .leaflet-popup-tip{background:#fff;}
 .leaflet-popup-content{margin:.5rem .7rem;font-size:.78rem;}
 .leaflet-popup-content b{color:var(--accent);}
+
+
+/* ============ GROUP PLANNING ============ */
+.groups-layout{display:grid;grid-template-columns:1fr 1fr;gap:.9rem;margin-bottom:1rem;}
+@media(max-width:860px){.groups-layout{grid-template-columns:1fr;}}
+.group-col{background:#fff;border:2px solid var(--border);border-radius:13px;overflow:hidden;}
+.group-col-hdr{padding:.65rem 1rem;display:flex;align-items:center;justify-content:space-between;gap:.5rem;}
+.group-col-hdr h4{font-size:.88rem;font-weight:800;display:flex;align-items:center;gap:.4rem;}
+.group-col-body{padding:.7rem .8rem;}
+.group-add-btn{background:rgba(255,255,255,.3);border:1px solid rgba(255,255,255,.4);border-radius:7px;color:#fff;font-size:.72rem;padding:.2rem .55rem;cursor:pointer;white-space:nowrap;}
+.group-add-btn:hover{background:rgba(255,255,255,.45);}
+.group-slot{background:#f8fafc;border:1px solid var(--border);border-radius:8px;padding:.5rem .65rem;margin-bottom:.4rem;display:flex;align-items:center;gap:.5rem;}
+.group-slot-times{display:flex;flex-direction:column;gap:.15rem;flex-shrink:0;}
+.group-meals{margin-top:.6rem;border-top:1px solid var(--border);padding-top:.6rem;}
+.group-meal-row{display:flex;align-items:center;gap:.4rem;margin-bottom:.35rem;}
+.group-meal-label{font-size:.68rem;color:var(--muted);width:44px;flex-shrink:0;}
+.group-meal-input{flex:1;background:#f8fafc;border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:.75rem;padding:.3rem .5rem;outline:none;}
+.group-meal-input:focus{border-color:var(--accent);}
+.group-route-btn{background:rgba(255,255,255,.25);border:1px solid rgba(255,255,255,.35);border-radius:7px;color:#fff;font-size:.7rem;padding:.2rem .55rem;cursor:pointer;}
+.group-route-btn:hover{background:rgba(255,255,255,.4);}
+.group-route-info{font-size:.72rem;padding:.3rem .5rem;margin-top:.4rem;border-radius:6px;background:rgba(255,255,255,.15);color:#fff;min-height:1.5rem;}
+.day-notes-row{background:#fff;border:1px solid var(--border);border-radius:10px;padding:.6rem .8rem;margin-bottom:.9rem;}
+.day-notes-label{font-size:.72rem;color:var(--muted);margin-bottom:.3rem;}
+.day-notes-input{width:100%;background:transparent;border:none;color:var(--text);font-size:.8rem;outline:none;resize:none;}
+.plan-map-section{background:#fff;border:1px solid var(--border);border-radius:13px;padding:.8rem;margin-top:.5rem;}
+.plan-map-section h4{font-size:.8rem;font-weight:700;margin-bottom:.6rem;color:var(--muted);}
+.parallel-slots{display:grid;gap:.4rem;}
+.parallel-notice{font-size:.65rem;background:#fef3c7;color:#92400e;border-radius:4px;padding:.15rem .4rem;text-align:center;margin-bottom:.3rem;}
+
+/* ============ WEGFIETSEN STYLES ============ */
+.cycling-route-card{background:#fff;border:1px solid var(--border);border-radius:13px;overflow:hidden;cursor:pointer;transition:all .2s;box-shadow:0 1px 4px rgba(0,0,0,.06);margin-bottom:.75rem;}
+.cycling-route-card:hover{border-color:var(--accent);box-shadow:0 4px 14px rgba(14,165,233,.15);transform:translateY(-1px);}
+.crc-hdr{display:flex;align-items:center;gap:.85rem;padding:.9rem 1rem;}
+.crc-ico{width:50px;height:50px;border-radius:12px;background:linear-gradient(135deg,#0369a1,#0ea5e9);display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0;}
+.crc-meta{flex:1;min-width:0;}
+.crc-title{font-size:.92rem;font-weight:700;margin-bottom:.25rem;}
+.crc-desc{font-size:.75rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.crc-stats{display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.3rem;}
+.crc-stat{background:#e0f2fe;color:#0369a1;border-radius:6px;padding:.12rem .5rem;font-size:.68rem;font-weight:700;}
+.crc-stat.hm{background:#fef3c7;color:#92400e;}
+.crc-actions{display:flex;gap:.4rem;align-items:center;flex-shrink:0;padding-right:.5rem;}
+.crc-body{padding:0 1rem .9rem;border-top:1px solid var(--border);display:none;}
+.crc-body.open{display:block;}
+.crc-body-desc{font-size:.82rem;color:#475569;line-height:1.6;padding:.7rem 0 .5rem;}
+.crc-start-row{display:flex;align-items:center;gap:.5rem;margin-bottom:.6rem;}
+.crc-start-label{font-size:.72rem;color:var(--muted);flex-shrink:0;}
+.crc-start-val{font-size:.78rem;font-weight:600;color:var(--text);}
+.crc-map{height:220px;border-radius:10px;overflow:hidden;border:1px solid var(--border);margin-bottom:.6rem;}
+.crc-route-info{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.6rem;min-height:1.5rem;}
+.gpx-download-btn{display:inline-flex;align-items:center;gap:.4rem;background:#e0f2fe;border:1px solid rgba(14,165,233,.3);border-radius:8px;color:#0369a1;font-size:.78rem;font-weight:600;padding:.4rem .8rem;text-decoration:none;transition:background .15s;}
+.gpx-download-btn:hover{background:#bae6fd;}
+.new-cycling-btn{background:linear-gradient(135deg,#0369a1,#0ea5e9);border:none;border-radius:10px;color:#fff;font-size:.82rem;font-weight:700;padding:.5rem 1rem;cursor:pointer;display:flex;align-items:center;gap:.4rem;transition:opacity .2s;}
+.new-cycling-btn:hover{opacity:.88;}
+.del-route-btn{background:#fee2e2;border:1px solid rgba(239,68,68,.2);border-radius:7px;color:#ef4444;font-size:.72rem;padding:.25rem .5rem;cursor:pointer;}
+.del-route-btn:hover{background:#fecaca;}
+.start-search-row{display:flex;gap:.5rem;align-items:flex-start;}
+.start-search-btn{background:#0ea5e9;border:none;border-radius:8px;color:#fff;font-size:.78rem;padding:.5rem .75rem;cursor:pointer;white-space:nowrap;flex-shrink:0;}
+.start-search-btn:hover{background:#0284c7;}
+.geocode-result{font-size:.73rem;padding:.35rem .6rem;border-radius:6px;margin-top:.3rem;}
+.geocode-result.ok{background:#dcfce7;color:#166534;}
+.geocode-result.err{background:#fee2e2;color:#991b1b;}
+.gpx-upload-label{display:inline-flex;align-items:center;gap:.35rem;background:#f0f9ff;border:1px dashed rgba(14,165,233,.4);border-radius:8px;color:#0369a1;font-size:.78rem;padding:.45rem .8rem;cursor:pointer;transition:all .15s;}
+.gpx-upload-label:hover{background:#e0f2fe;border-style:solid;}
+.gpx-upload-label input{display:none;}
+.gpx-selected{font-size:.73rem;color:#16a34a;margin-top:.3rem;display:flex;align-items:center;gap:.3rem;}
+
 /* ============ DAGBOEK STYLES ============ */
 .diary-day-strip{display:flex;gap:.5rem;overflow-x:auto;padding-bottom:.5rem;margin-bottom:1.2rem;-webkit-overflow-scrolling:touch;}
 .diary-day-btn{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:.55rem .9rem;cursor:pointer;flex-shrink:0;text-align:center;transition:all .2s;min-width:68px;}
@@ -356,6 +422,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
       <div class="nav-tab" onclick="showSec('nightlife',this)" id="tab-nightlife">🍸 Uitgaan</div>
       <div class="nav-tab" onclick="showSec('rentals',this)" id="tab-rentals">🚲 Verhuur</div>
       <div class="nav-tab" onclick="showSec('shops',this)" id="tab-shops">🛍️ Winkels</div>
+      <div class="nav-tab" style="color:#0369a1;" onclick="showSec('cycling',this)" id="tab-cycling">🚴 Wegfietsen</div>
       <div class="nav-tab diary-tab" onclick="showSec('diary',this)" id="tab-diary">📖 Dagboek</div>
     </div>
   </nav>
@@ -476,6 +543,25 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
             <div class="rb-info" id="rbi-shops"></div>
             <button class="rb-reset" onclick="resetTabMap('shops')">✕ Reset kaart</button>
           </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ===== WEGFIETSEN ===== -->
+    <div id="sec-cycling" class="section">
+      <div class="split-layout">
+        <div class="list-panel">
+          <div class="sec-hdr"><h2>🚴 Wegfietsen</h2><p>Fietsroutes vanuit het chalet · GPX downloaden</p></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.9rem;">
+            <div id="cycling-count" style="font-size:.8rem;color:var(--muted);"></div>
+            <button class="new-cycling-btn" onclick="openNewRouteModal()">+ Nieuwe route</button>
+          </div>
+          <div id="cycling-list"></div>
+        </div>
+        <div class="map-panel">
+          <div class="tab-map" id="map-cycling"></div>
+          <div class="route-bar" id="rb-cycling"><div class="rb-info" id="rbi-cycling"></div><button class="rb-reset" onclick="resetTabMap('cycling')">✕ Reset</button></div>
         </div>
       </div>
     </div>
@@ -882,6 +968,7 @@ function initTabMap(tab){
   else if(tab==='nightlife') populateGenMap(map,nightlife,'#a855f7');
   else if(tab==='rentals') populateGenMap(map,rentals,'#22c55e');
   else if(tab==='shops') populateGenMap(map,shops,'#22c55e');
+  else if(tab==='cycling') populateCyclingMap(map);
 }
 
 function populateActMap(map){
@@ -1137,14 +1224,25 @@ function closeModal(id){
 }
 
 // ---- DAGPLANNING ----
+const DEFAULT_GROUPS=[
+  {id:'g0',name:'Fietsers',emoji:'🚴',color:'#0369a1'},
+  {id:'g1',name:'Avonturiers',emoji:'🏔️',color:'#ea580c'}
+];
 let dayPlans={};
 let selectedDay=null;
 let pickingForDay=null;
+let pickingForGroup=null;
 let mealPickerField=null;
 let mealPickerDay=null;
+let mealPickerGroup=null;
+let planRouteInfoTimers={};
+
+function makeEmptyGroupPlan(){
+  return DEFAULT_GROUPS.map(g=>({...g,activities:[],lunch:'',dinner:'',evening:''}));
+}
 
 function initPlanning(){
-  TRIP_DAYS.forEach(d=>dayPlans[d]={activities:[],lunch:'',dinner:'',evening:'',notes:''});
+  TRIP_DAYS.forEach(d=>dayPlans[d]={groups:makeEmptyGroupPlan(),notes:''});
   renderWeekStrip();
   loadAllPlans();
   setTimeout(initPlanMap,150);
@@ -1161,14 +1259,14 @@ function initPlanMap(){
 
 function renderWeekStrip(){
   document.getElementById('plan-week-strip').innerHTML=TRIP_DAYS.map((d,i)=>{
-    const p=dayPlans[d]||{};
-    const acts=p.activities||[];
-    const icons=acts.slice(0,3).map(s=>{const a=activities.find(x=>x.id===s.id);return a?a.e:'';}).join('');
-    return `<div class="day-card ${d===selectedDay?'selected':''} ${acts.length>0?'has-items':''}" onclick="selectPlanDay('${d}')">
+    const p=dayPlans[d]||{groups:[]};
+    const allActs=(p.groups||[]).flatMap(g=>g.activities||[]);
+    const icons=[...new Set(allActs.slice(0,4).map(s=>{const a=activities.find(x=>x.id===s.id);return a?a.e:''}))].join('');
+    const hasItems=allActs.length>0;
+    return `<div class="day-card ${d===selectedDay?'selected':''} ${hasItems?'has-items':''}" onclick="selectPlanDay('${d}')">
       <div class="dc-name">${DAY_NAMES[i]}</div>
       <div class="dc-date">${parseInt(d.split('-')[2])}</div>
       <div class="dc-icons">${icons||'&nbsp;'}</div>
-      <div class="dc-meals">${p.lunch?'🍽️':''} ${p.dinner?'🌙':''}</div>
     </div>`;
   }).join('');
 }
@@ -1187,7 +1285,17 @@ async function loadAllPlans(){
       if(dayPlans[r.day_date]){
         try{
           const data=typeof r.plan_data==='string'?JSON.parse(r.plan_data):r.plan_data;
-          dayPlans[r.day_date]={...dayPlans[r.day_date],...data};
+          // Migrate old format (single activities array) to new groups format
+          if(data.groups){
+            dayPlans[r.day_date]={...dayPlans[r.day_date],...data};
+          } else if(data.activities){
+            // Old format: put in first group
+            dayPlans[r.day_date].groups[0].activities=data.activities||[];
+            dayPlans[r.day_date].groups[0].lunch=data.lunch||'';
+            dayPlans[r.day_date].groups[0].dinner=data.dinner||'';
+            dayPlans[r.day_date].groups[0].evening=data.evening||'';
+            dayPlans[r.day_date].notes=data.notes||'';
+          }
         }catch(e){}
       }
     });
@@ -1207,7 +1315,7 @@ async function savePlan(date){
     });
     if(ind) ind.textContent=res.ok?'✓ Opgeslagen':'⚠️ Fout';
     setTimeout(()=>{if(ind) ind.textContent='';},3000);
-  }catch(e){if(ind) ind.textContent='⚠️ Netwerk fout';}
+  }catch(e){if(ind) ind.textContent='⚠️ Fout';}
 }
 
 function renderDayDetail(date){
@@ -1219,86 +1327,152 @@ function renderDayDetail(date){
   left.innerHTML=`
     <div class="day-hdr">
       <h3>${dayName} ${dateNum} augustus</h3>
-      <button class="day-add-btn" onclick="openActPicker('${date}')">+ Activiteit</button>
     </div>
-    <div id="slots-${date}">
-      ${plan.activities.length===0?`<div style="color:var(--muted);font-size:.82rem;padding:.8rem 0">Nog geen activiteiten. Klik "+ Activiteit".</div>`:''}
-      ${plan.activities.map((slot,si)=>{
-        const ac=activities.find(x=>x.id===slot.id);
-        if(!ac) return '';
-        return `<div class="plan-slot">
-          <div class="slot-times">
-            <input class="time-input" type="time" value="${slot.start||'09:00'}" onchange="updateSlotTime('${date}',${si},'start',this.value)">
-            <input class="time-input" type="time" value="${slot.end||'17:00'}" onchange="updateSlotTime('${date}',${si},'end',this.value)">
-          </div>
-          <div class="slot-ico">${ac.e}</div>
-          <div class="slot-name">${ac.title}</div>
-          <button class="slot-del" onclick="removeSlot('${date}',${si})">🗑️</button>
-        </div>`;
-      }).join('')}
+    <div class="groups-layout" id="groups-layout-${date}">
+      ${(plan.groups||[]).map((g,gi)=>renderGroupCol(date,g,gi)).join('')}
     </div>
-    <div class="meals-section">
-      <div class="meal-row"><div class="meal-label">🍽️ Lunch</div>
-        <input class="meal-input" id="lunch-${date}" value="${plan.lunch}" placeholder="bijv. Picknick op Col des Aravis" oninput="updateMeal('${date}','lunch',this.value)">
-        <button class="meal-rest-btn" onclick="openRestPicker('${date}','lunch')">🍽️ Rest.</button></div>
-      <div class="meal-row"><div class="meal-label">🌙 Diner</div>
-        <input class="meal-input" id="dinner-${date}" value="${plan.dinner}" placeholder="bijv. La Ferme de Lormay" oninput="updateMeal('${date}','dinner',this.value)">
-        <button class="meal-rest-btn" onclick="openRestPicker('${date}','dinner')">🍽️ Rest.</button></div>
-      <div class="meal-row"><div class="meal-label">🎉 Avond</div>
-        <input class="meal-input" id="evening-${date}" value="${plan.evening}" placeholder="bijv. Aperitief Le Moulin" oninput="updateMeal('${date}','evening',this.value)"></div>
-      <div class="meal-row"><div class="meal-label">📝 Notities</div>
-        <input class="meal-input" id="notes-${date}" value="${plan.notes}" placeholder="Extra info..." oninput="updateMeal('${date}','notes',this.value)"></div>
+    <div class="day-notes-row">
+      <div class="day-notes-label">📝 Gedeelde notities</div>
+      <textarea class="day-notes-input" rows="2" placeholder="Extra info voor de volledige dag..." oninput="updateNotes('${date}',this.value)">${plan.notes||''}</textarea>
     </div>
     <div class="plan-save-bar">
-      <button class="btn btn-primary" onclick="calcDayRoute('${date}')">🗺️ Bereken dagroute</button>
       <button class="btn btn-sec" onclick="savePlan('${date}')">💾 Opslaan</button>
       <span class="save-indicator" id="save-ind"></span>
     </div>`;
 }
 
-function updateSlotTime(date,si,field,val){
-  if(!dayPlans[date]||!dayPlans[date].activities[si]) return;
-  dayPlans[date].activities[si][field]=val;
+function renderGroupCol(date,g,gi){
+  const slots=g.activities||[];
+  const groups=groupOverlapping(slots);
+  const hdrStyle=`background:${g.color};`;
+  return `<div class="group-col" style="border-color:${g.color}40;">
+    <div class="group-col-hdr" style="${hdrStyle}">
+      <h4 style="color:#fff">${g.emoji} ${g.name}</h4>
+      <div style="display:flex;gap:.35rem;align-items:center;">
+        <button class="group-route-btn" onclick="calcGroupRoute('${date}',${gi})">🗺️ Route</button>
+        <button class="group-add-btn" onclick="openActPicker('${date}',${gi})">+ Activiteit</button>
+      </div>
+    </div>
+    <div class="group-col-body">
+      ${slots.length===0?`<div style="color:var(--muted);font-size:.78rem;padding:.5rem 0 .3rem">Nog geen activiteiten.</div>`:''}
+      ${groups.map(group=>renderSlotGroup(date,gi,group,slots)).join('')}
+      <div class="group-meals">
+        <div class="group-meal-row">
+          <div class="group-meal-label">🍽️ Lunch</div>
+          <input class="group-meal-input" value="${g.lunch||''}" placeholder="Lunch..." oninput="updateGroupMeal('${date}',${gi},'lunch',this.value)"/>
+          <button style="background:${g.color}20;border:1px solid ${g.color}40;border-radius:5px;color:${g.color};font-size:.62rem;padding:.18rem .4rem;cursor:pointer;white-space:nowrap;" onclick="openRestPicker('${date}','lunch',${gi})">🍽️</button>
+        </div>
+        <div class="group-meal-row">
+          <div class="group-meal-label">🌙 Diner</div>
+          <input class="group-meal-input" value="${g.dinner||''}" placeholder="Diner..." oninput="updateGroupMeal('${date}',${gi},'dinner',this.value)"/>
+          <button style="background:${g.color}20;border:1px solid ${g.color}40;border-radius:5px;color:${g.color};font-size:.62rem;padding:.18rem .4rem;cursor:pointer;white-space:nowrap;" onclick="openRestPicker('${date}','dinner',${gi})">🍽️</button>
+        </div>
+        <div class="group-meal-row">
+          <div class="group-meal-label">🎉 Avond</div>
+          <input class="group-meal-input" value="${g.evening||''}" placeholder="Avondactiviteit..." oninput="updateGroupMeal('${date}',${gi},'evening',this.value)"/>
+        </div>
+      </div>
+      <div class="group-route-info" id="route-info-${date}-${gi}" style="background:${g.color}15;color:${g.color};border-radius:7px;font-size:.72rem;min-height:1.4rem;padding:.3rem .5rem;margin-top:.5rem;"></div>
+    </div>
+  </div>`;
 }
-function updateMeal(date,field,val){if(!dayPlans[date]) return;dayPlans[date][field]=val;}
 
-function removeSlot(date,si){
-  if(!dayPlans[date]) return;
-  dayPlans[date].activities.splice(si,1);
+// Group overlapping slots within one group column
+function groupOverlapping(slots){
+  if(slots.length===0) return [];
+  const indexed=slots.map((s,i)=>({...s,_si:i}))
+    .sort((a,b)=>(a.start||'00:00').localeCompare(b.start||'00:00'));
+  const groups=[];
+  let cur=[],curEnd='';
+  for(const slot of indexed){
+    const st=slot.start||'00:00', en=slot.end||'23:59';
+    if(cur.length===0){cur=[slot];curEnd=en;}
+    else if(st<curEnd){cur.push(slot);if(en>curEnd)curEnd=en;}
+    else{groups.push(cur);cur=[slot];curEnd=en;}
+  }
+  if(cur.length>0) groups.push(cur);
+  return groups;
+}
+
+function renderSlotGroup(date,gi,group,allSlots){
+  if(group.length===1){
+    return renderSingleSlot(date,gi,group[0]);
+  }
+  return `<div>
+    <div class="parallel-notice">⚡ Gelijktijdig</div>
+    <div style="display:grid;grid-template-columns:repeat(${group.length},1fr);gap:.35rem;">
+      ${group.map(slot=>renderSingleSlot(date,gi,slot,true)).join('')}
+    </div>
+  </div>`;
+}
+
+function renderSingleSlot(date,gi,slot,compact=false){
+  const ac=activities.find(x=>x.id===slot.id);
+  if(!ac) return '';
+  const si=slot._si;
+  return `<div class="group-slot" style="${compact?'flex-direction:column;align-items:flex-start;gap:.25rem;':''}">
+    <div class="group-slot-times">
+      <input class="time-input" type="time" value="${slot.start||'09:00'}" onchange="updateGroupSlotTime('${date}',${gi},${si},'start',this.value)">
+      <input class="time-input" type="time" value="${slot.end||'17:00'}" onchange="updateGroupSlotTime('${date}',${gi},${si},'end',this.value)">
+    </div>
+    <div style="font-size:1.1rem;flex-shrink:0;">${ac.e}</div>
+    <div style="font-size:.75rem;font-weight:600;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;${compact?'white-space:normal;':'white-space:nowrap;'}">${ac.title}</div>
+    <button class="slot-del" onclick="removeGroupSlot('${date}',${gi},${si})">🗑️</button>
+  </div>`;
+}
+
+function updateGroupSlotTime(date,gi,si,field,val){
+  const g=dayPlans[date]?.groups?.[gi];
+  if(!g||!g.activities[si]) return;
+  g.activities[si][field]=val;
+  renderDayDetail(date);
+}
+function updateGroupMeal(date,gi,field,val){
+  const g=dayPlans[date]?.groups?.[gi];
+  if(g) g[field]=val;
+}
+function updateNotes(date,val){
+  if(dayPlans[date]) dayPlans[date].notes=val;
+}
+function removeGroupSlot(date,gi,si){
+  const g=dayPlans[date]?.groups?.[gi];
+  if(!g) return;
+  g.activities.splice(si,1);
   renderWeekStrip();renderDayDetail(date);
 }
 
-function openActPicker(date){
-  pickingForDay=date;
+function openActPicker(date,gi){
+  pickingForDay=date;pickingForGroup=gi;
   const list=document.getElementById('act-picker-list');
   list.innerHTML=sortWithFavs(activities,'act').map(a=>`
     <div class="picker-item">
       <div class="pi-icon">${a.e}</div>
       <div class="pi-name">${a.title}</div>
       <div class="pi-dist">${a.dist} km</div>
-      <button class="pi-add" onclick="addActToDay(${a.id})">+ Toevoegen</button>
+      <button class="pi-add" onclick="addActToGroup(${a.id})">+ Toevoegen</button>
     </div>`).join('');
   document.getElementById('act-pick-modal').classList.add('open');
 }
-function closeActPicker(){document.getElementById('act-pick-modal').classList.remove('open');pickingForDay=null;}
+function closeActPicker(){document.getElementById('act-pick-modal').classList.remove('open');pickingForDay=null;pickingForGroup=null;}
 function filterActPicker(){
   const q=document.getElementById('act-pick-search').value.toLowerCase();
-  document.querySelectorAll('#act-picker-list .picker-item').forEach(el=>{
-    el.style.display=el.textContent.toLowerCase().includes(q)?'':'none';
-  });
+  document.querySelectorAll('#act-picker-list .picker-item').forEach(el=>{el.style.display=el.textContent.toLowerCase().includes(q)?'':'none';});
 }
-function addActToDay(actId){
-  if(!pickingForDay||!dayPlans[pickingForDay]) return;
-  dayPlans[pickingForDay].activities.push({id:actId,start:'09:00',end:'17:00'});
+function addActToGroup(actId){
+  if(pickingForDay==null||pickingForGroup==null) return;
+  const g=dayPlans[pickingForDay]?.groups?.[pickingForGroup];
+  if(!g) return;
+  g.activities.push({id:actId,start:'09:00',end:'17:00'});
   renderWeekStrip();renderDayDetail(pickingForDay);closeActPicker();
 }
 function quickAddToPlan(actId){
-  if(!selectedDay){const d=TRIP_DAYS[0];selectPlanDay(d);showSec('planning',document.getElementById('tab-planning'));}
-  if(selectedDay&&dayPlans[selectedDay]){dayPlans[selectedDay].activities.push({id:actId,start:'09:00',end:'17:00'});renderWeekStrip();renderDayDetail(selectedDay);}
+  if(!selectedDay){selectPlanDay(TRIP_DAYS[0]);showSec('planning',document.getElementById('tab-planning'));}
+  const g=dayPlans[selectedDay]?.groups?.[0];
+  if(g){g.activities.push({id:actId,start:'09:00',end:'17:00'});renderWeekStrip();renderDayDetail(selectedDay);}
 }
 
-function openRestPicker(date,field){
-  mealPickerDay=date;mealPickerField=field;
+function openRestPicker(date,field,gi=0){
+  mealPickerDay=date;mealPickerField=field;mealPickerGroup=gi;
   document.getElementById('rest-picker-list').innerHTML=restaurants.map(r=>`
     <div class="rest-pick-item" onclick="pickRestaurant('${r.name}')">
       <div style="font-size:1.2rem">${r.e}</div>
@@ -1306,67 +1480,283 @@ function openRestPicker(date,field){
     </div>`).join('');
   document.getElementById('rest-pick-modal').classList.add('open');
 }
-function closeRestPicker(){document.getElementById('rest-pick-modal').classList.remove('open');mealPickerDay=null;mealPickerField=null;}
+function closeRestPicker(){document.getElementById('rest-pick-modal').classList.remove('open');mealPickerDay=null;mealPickerField=null;mealPickerGroup=null;}
 function filterRestPicker(){
   const q=document.getElementById('rest-pick-search').value.toLowerCase();
   document.querySelectorAll('#rest-picker-list .rest-pick-item').forEach(el=>{el.style.display=el.textContent.toLowerCase().includes(q)?'':'none';});
 }
 function pickRestaurant(name){
-  if(!mealPickerDay||!mealPickerField||!dayPlans[mealPickerDay]) return;
-  dayPlans[mealPickerDay][mealPickerField]=name;
-  const inp=document.getElementById(`${mealPickerField}-${mealPickerDay}`);
-  if(inp) inp.value=name;
+  if(!mealPickerDay||!mealPickerField) return;
+  const g=dayPlans[mealPickerDay]?.groups?.[mealPickerGroup||0];
+  if(g) g[mealPickerField]=name;
   closeRestPicker();
+  renderDayDetail(mealPickerDay||selectedDay);
 }
 
-// ---- FIXED CALC DAY ROUTE ----
-async function calcDayRoute(date){
+// ---- ROUTE PER GROUP ----
+// ---- ROUTE PER GROUP ----
+async function calcGroupRoute(date,gi){
   const plan=dayPlans[date];
-  if(!plan||plan.activities.length===0){alert('Voeg eerst activiteiten toe!');return;}
+  const g=plan?.groups?.[gi];
+  if(!g||g.activities.length===0){
+    const el=document.getElementById(`route-info-${date}-${gi}`);
+    if(el) el.textContent='⚠️ Geen activiteiten om te routeren';
+    return;
+  }
   if(!planMap){initPlanMap();await new Promise(r=>setTimeout(r,300));}
-  if(!planMap) return;
-  // Clear old route and markers
+  // Clear old route + markers
   if(planRouteLayer){planMap.removeLayer(planRouteLayer);planRouteLayer=null;}
   planDotMarkers.forEach(m=>planMap.removeLayer(m));
   planDotMarkers=[];
-  const info=document.getElementById('route-day-info');
-  info.innerHTML='<span style="color:var(--muted);font-size:.8rem">🗺️ Route berekenen...</span>';
-  const stops=[CHALET,...plan.activities.map(s=>{const a=activities.find(x=>x.id===s.id);return a?{lat:a.lat,lng:a.lng,e:a.e,title:a.title}:null;}).filter(Boolean),CHALET];
+  const infoEl=document.getElementById(`route-info-${date}-${gi}`);
+  if(infoEl) infoEl.textContent='🗺️ Route berekenen...';
+  const col=g.color;
+  const stops=[CHALET,...g.activities.map(s=>{const a=activities.find(x=>x.id===s.id);return a?{lat:a.lat,lng:a.lng,e:a.e,title:a.title}:null;}).filter(Boolean),CHALET];
   const coordStr=stops.map(s=>`${s.lng},${s.lat}`).join(';');
   const route=await calcRoute(coordStr,'driving');
   if(route){
-    planRouteLayer=L.geoJSON(route.geometry,{style:{color:'#818cf8',weight:4,opacity:.85}}).addTo(planMap);
+    planRouteLayer=L.geoJSON(route.geometry,{style:{color:col,weight:4,opacity:.85}}).addTo(planMap);
     stops.forEach((s,i)=>{
-      const bg=i===0||i===stops.length-1?'#2dd4bf':'#f97316';
+      const bg=i===0||i===stops.length-1?'#2dd4bf':col;
       const lbl=i===0?'🏠':i===stops.length-1?'🏠':(s.e||'📍');
-      const ic=makeIco(`<div style="background:${bg};border:2.5px solid #fff;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:13px;box-shadow:0 2px 6px rgba(0,0,0,.5)">${lbl}</div>`,28);
+      const ic=makeIco(`<div style="background:${bg};border:2.5px solid #fff;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:13px;box-shadow:0 2px 6px rgba(0,0,0,.3)">${lbl}</div>`,28);
       const m=L.marker([s.lat,s.lng],{icon:ic}).addTo(planMap);
-      if(s.title) m.bindPopup(`<b>${s.e||''} ${s.title}</b>`);
+      if(s.title) m.bindPopup(`<b>${g.emoji} ${s.e} ${s.title}</b>`);
       planDotMarkers.push(m);
     });
     const pts=route.geometry.coordinates.map(c=>[c[1],c[0]]);
     planMap.fitBounds(L.polyline(pts).getBounds(),{padding:[30,30]});
     const km=(route.distance/1000).toFixed(1);
-    const actNames=plan.activities.map(s=>{const a=activities.find(x=>x.id===s.id);return a?a.e:'';}).join(' → ');
-    info.innerHTML=`<span class="route-chip">🏠 → ${actNames} → 🏠</span><span class="route-chip">📏 ${km} km totaal</span><span class="route-chip">🚗 ${fmtDuration(route.duration,'driving')}</span>`;
+    if(infoEl) infoEl.innerHTML=`🏠 → ${g.activities.map(s=>{const a=activities.find(x=>x.id===s.id);return a?a.e:'';}).join(' → ')} → 🏠 &nbsp;|&nbsp; 📏 ${km} km &nbsp;|&nbsp; 🚗 ${fmtDuration(route.duration,'driving')}`;
   } else {
-    // Fallback: draw straight lines between stops
-    if(stops.length>=2){
-      const pts=stops.map(s=>[s.lat,s.lng]);
-      planRouteLayer=L.polyline(pts,{color:'#818cf8',weight:3,dashArray:'8 4',opacity:.7}).addTo(planMap);
-      stops.forEach((s,i)=>{
-        const bg=i===0||i===stops.length-1?'#2dd4bf':'#f97316';
-        const lbl=i===0?'🏠':i===stops.length-1?'🏠':(s.e||'📍');
-        const ic=makeIco(`<div style="background:${bg};border:2.5px solid #fff;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:13px">${lbl}</div>`,28);
-        const m=L.marker([s.lat,s.lng],{icon:ic}).addTo(planMap);
-        planDotMarkers.push(m);
-      });
-      planMap.fitBounds(L.polyline(pts).getBounds(),{padding:[30,30]});
-    }
-    const actNames=plan.activities.map(s=>{const a=activities.find(x=>x.id===s.id);return a?a.e:'';}).join(' → ');
-    info.innerHTML=`<span class="route-chip">🏠 → ${actNames} → 🏠</span><span style="color:#fbbf24;font-size:.75rem">⚠️ Routeberekening tijdelijk niet beschikbaar — rechte lijnen getoond</span>`;
+    const pts=stops.map(s=>[s.lat,s.lng]);
+    planRouteLayer=L.polyline(pts,{color:col,weight:3,dashArray:'8 4'}).addTo(planMap);
+    stops.forEach((s,i)=>{
+      const lbl=i===0||i===stops.length-1?'🏠':(s.e||'📍');
+      const m=L.marker([s.lat,s.lng],{icon:makeIco(`<div style="background:${col};border:2px solid #fff;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:12px">${lbl}</div>`,26)}).addTo(planMap);
+      planDotMarkers.push(m);
+    });
+    planMap.fitBounds(L.polyline(pts).getBounds(),{padding:[30,30]});
+    if(infoEl) infoEl.textContent='⚠️ Routeberekening niet beschikbaar — rechte lijnen getoond';
   }
 }
+
+// Legacy alias for quick-add
+function calcDayRoute(date){ calcGroupRoute(date,0); }
+
+// ---- WEGFIETSEN (CYCLING ROUTES) ----
+let cyclingRoutes=[];
+let cyclingMaps={};  // routeId -> leaflet map
+let newRouteGpxFile=null;
+let newRouteLat=null;
+let newRouteLng=null;
+let expandedRouteId=null;
+
+async function loadCyclingRoutes(){
+  try{
+    const res=await fetch(`${SUPA_URL}/rest/v1/cycling_routes?order=created_at.desc`,{headers:supaHeaders()});
+    const data=await res.json();
+    cyclingRoutes=Array.isArray(data)?data:[];
+  }catch(e){cyclingRoutes=[];}
+  renderCyclingRoutes();
+  if(!tabMaps['cycling']){initTabMap('cycling');}
+  else populateCyclingMap(tabMaps['cycling']);
+}
+
+function populateCyclingMap(map){
+  const bounds=[[CHALET.lat,CHALET.lng]];
+  (tabMarkers['cycling']||[]).forEach(m=>map.removeLayer(m));
+  tabMarkers['cycling']=[];
+  cyclingRoutes.forEach(r=>{
+    if(!r.start_lat) return;
+    const m=L.marker([r.start_lat,r.start_lng],{icon:colorIco('🚴','#0369a1')}).addTo(map)
+      .bindPopup(`<b>🚴 ${r.title}</b><br>${r.distance_km?'📏 '+r.distance_km+' km · ':''}${r.elevation_hm?'⛰️ '+r.elevation_hm+' hm':''}<br><span style="color:var(--accent)">Startplaats: ${r.start_place||''}</span>`);
+    m.on('click',e=>{L.DomEvent.stopPropagation(e);showTabRoute('cycling',{lat:r.start_lat,lng:r.start_lng,name:r.title,rtype:'drive'});});
+    tabMarkers['cycling'].push(m);
+    bounds.push([r.start_lat,r.start_lng]);
+  });
+  if(bounds.length>1){const b=L.latLngBounds(bounds);tabBounds['cycling']=b;map.fitBounds(b,{padding:[30,30]});}
+}
+
+function renderCyclingRoutes(){
+  const el=document.getElementById('cycling-list');
+  const cnt=document.getElementById('cycling-count');
+  if(cnt) cnt.textContent=cyclingRoutes.length>0?`${cyclingRoutes.length} route${cyclingRoutes.length>1?'s':''}`:' ';
+  if(!el) return;
+  if(cyclingRoutes.length===0){
+    el.innerHTML=`<div class="empty-state"><div class="es-icon">🚴</div><p>Nog geen routes. Voeg de eerste toe!</p></div>`;
+    return;
+  }
+  el.innerHTML=cyclingRoutes.map(r=>renderRouteCard(r)).join('');
+}
+
+function renderRouteCard(r){
+  const isExp=expandedRouteId===r.id;
+  return `<div class="cycling-route-card" id="crc-${r.id}">
+    <div class="crc-hdr" onclick="toggleRoute('${r.id}')">
+      <div class="crc-ico">🚴</div>
+      <div class="crc-meta">
+        <div class="crc-title">${r.title}</div>
+        ${r.start_place?`<div class="crc-desc">📍 Start: ${r.start_place}</div>`:''}
+        <div class="crc-stats">
+          ${r.distance_km?`<span class="crc-stat">📏 ${r.distance_km} km</span>`:''}
+          ${r.elevation_hm?`<span class="crc-stat hm">⛰️ ${r.elevation_hm} hm</span>`:''}
+          ${r.created_by?`<span class="crc-stat" style="background:#f1f5f9;color:var(--muted);">👤 ${r.created_by}</span>`:''}
+        </div>
+      </div>
+      <div class="crc-actions">
+        <span style="color:var(--muted);font-size:.8rem">${isExp?'▲':'▼'}</span>
+        ${isMaster()?`<button class="del-route-btn" onclick="event.stopPropagation();deleteCyclingRoute('${r.id}')">🗑️</button>`:''}
+      </div>
+    </div>
+    <div class="crc-body ${isExp?'open':''}" id="crb-${r.id}">
+      ${r.description?`<div class="crc-body-desc">${r.description}</div>`:''}
+      ${r.start_place?`<div class="crc-start-row"><span class="crc-start-label">🏁 Start:</span><span class="crc-start-val">${r.start_place}</span></div>`:''}
+      <div class="crc-map" id="crm-${r.id}"></div>
+      <div class="crc-route-info" id="crri-${r.id}"></div>
+      ${r.gpx_url?`<a class="gpx-download-btn" href="${r.gpx_url}" download="${r.title.replace(/\s+/g,'-')}.gpx" target="_blank">⬇️ Download GPX</a>`:''}
+    </div>
+  </div>`;
+}
+
+async function toggleRoute(id){
+  if(expandedRouteId===id){expandedRouteId=null;renderCyclingRoutes();return;}
+  expandedRouteId=id;
+  renderCyclingRoutes();
+  // Init mini map
+  await new Promise(r=>setTimeout(r,80));
+  const r=cyclingRoutes.find(x=>x.id===id);
+  if(!r) return;
+  const el=document.getElementById('crm-'+id);
+  if(!el||cyclingMaps[id]) return;
+  const ctr=r.start_lat?[r.start_lat,r.start_lng]:[CHALET.lat,CHALET.lng];
+  const map=L.map(el,{scrollWheelZoom:false,zoomControl:true}).setView(ctr,12);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OSM',maxZoom:18}).addTo(map);
+  cyclingMaps[id]=map;
+  L.marker([CHALET.lat,CHALET.lng],{icon:chaletIco(),zIndexOffset:1000}).addTo(map).bindPopup('<b>🏠 Chalet Elomaz</b>');
+  if(r.start_lat){
+    L.marker([r.start_lat,r.start_lng],{icon:colorIco('🚴','#0369a1')}).addTo(map).bindPopup(`<b>🏁 Start: ${r.start_place||''}</b>`);
+    const infoEl=document.getElementById('crri-'+id);
+    if(infoEl) infoEl.innerHTML='<span style="color:var(--muted);font-size:.75rem">🗺️ Route van chalet naar startplaats berekenen...</span>';
+    const coordStr=`${CHALET.lng},${CHALET.lat};${r.start_lng},${r.start_lat}`;
+    const route=await calcRoute(coordStr,'driving');
+    if(route){
+      L.geoJSON(route.geometry,{style:{color:'#0369a1',weight:4,opacity:.85}}).addTo(map);
+      const pts=route.geometry.coordinates.map(c=>[c[1],c[0]]);
+      map.fitBounds(L.polyline(pts).getBounds(),{padding:[30,30]});
+      const km=(route.distance/1000).toFixed(1);
+      if(infoEl) infoEl.innerHTML=`<span class="route-chip" style="background:#dbeafe;color:#1d4ed8;border:1px solid #bfdbfe;">🚗 ${km} km van chalet naar startplaats · ${fmtDuration(route.duration,'driving')}</span>`;
+    } else {
+      const pts=[[CHALET.lat,CHALET.lng],[r.start_lat,r.start_lng]];
+      L.polyline(pts,{color:'#0369a1',weight:3,dashArray:'8 4'}).addTo(map);
+      map.fitBounds(L.polyline(pts).getBounds(),{padding:[30,30]});
+      if(infoEl) infoEl.innerHTML=`<span style="color:#fbbf24;font-size:.75rem">⚠️ Route niet beschikbaar — rechte lijn</span>`;
+    }
+  }
+}
+
+function openNewRouteModal(){
+  newRouteGpxFile=null;newRouteLat=null;newRouteLng=null;
+  document.getElementById('nr-title').value='';
+  document.getElementById('nr-start').value='';
+  document.getElementById('nr-km').value='';
+  document.getElementById('nr-hm').value='';
+  document.getElementById('nr-desc').value='';
+  document.getElementById('nr-author').value=getAuthorName();
+  document.getElementById('nr-geocode-result').innerHTML='';
+  document.getElementById('nr-gpx-selected').innerHTML='';
+  document.getElementById('nr-lat').value='';
+  document.getElementById('nr-lng').value='';
+  document.getElementById('new-route-modal').classList.add('open');
+}
+
+async function geocodeStart(){
+  const q=document.getElementById('nr-start').value.trim();
+  if(!q) return;
+  const res_el=document.getElementById('nr-geocode-result');
+  res_el.innerHTML='<div class="geocode-result">🔍 Zoeken...</div>';
+  try{
+    const res=await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q+', France')}&format=json&limit=1`,{headers:{'Accept-Language':'nl'}});
+    const data=await res.json();
+    if(data.length>0){
+      const place=data[0];
+      newRouteLat=parseFloat(place.lat);
+      newRouteLng=parseFloat(place.lon);
+      document.getElementById('nr-lat').value=newRouteLat;
+      document.getElementById('nr-lng').value=newRouteLng;
+      res_el.innerHTML=`<div class="geocode-result ok">✓ Gevonden: ${place.display_name.split(',').slice(0,3).join(', ')}</div>`;
+    } else {
+      res_el.innerHTML='<div class="geocode-result err">❌ Niet gevonden. Probeer een andere naam.</div>';
+    }
+  }catch(e){res_el.innerHTML='<div class="geocode-result err">❌ Zoekfout</div>';}
+}
+
+function handleGpxSelect(input){
+  newRouteGpxFile=input.files[0]||null;
+  const el=document.getElementById('nr-gpx-selected');
+  if(newRouteGpxFile){el.innerHTML=`<div class="gpx-selected">✓ ${newRouteGpxFile.name}</div>`;}
+  else{el.innerHTML='';}
+}
+
+async function submitNewRoute(){
+  const title=document.getElementById('nr-title').value.trim();
+  const author=document.getElementById('nr-author').value.trim();
+  const start=document.getElementById('nr-start').value.trim();
+  if(!title){alert('Titel is verplicht');return;}
+  if(!author){alert('Jouw naam is verplicht');return;}
+  if(start&&!newRouteLat){alert('Klik op "📍 Zoek" om de startplaats op te zoeken op de kaart');return;}
+  setAuthorName(author);
+  const btn=document.getElementById('nr-submit-btn');
+  btn.disabled=true;btn.textContent='Opslaan...';
+  try{
+    let gpxUrl=null,gpxPath=null;
+    if(newRouteGpxFile){
+      const path=`gpx/${Date.now()}-${newRouteGpxFile.name.replace(/[^a-zA-Z0-9._-]/g,'-')}`;
+      const upRes=await fetch(`${SUPA_URL}/storage/v1/object/cyclonereis-gpx/${path}`,{
+        method:'POST',
+        headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Content-Type':'application/gpx+xml'},
+        body:newRouteGpxFile
+      });
+      if(upRes.ok){
+        gpxPath=path;
+        gpxUrl=`${SUPA_URL}/storage/v1/object/public/cyclonereis-gpx/${path}`;
+      }
+    }
+    const res=await fetch(`${SUPA_URL}/rest/v1/cycling_routes`,{
+      method:'POST',
+      headers:{...supaHeaders(),'Prefer':'return=representation'},
+      body:JSON.stringify({
+        title,
+        description:document.getElementById('nr-desc').value.trim()||null,
+        start_place:start||null,
+        start_lat:newRouteLat||null,
+        start_lng:newRouteLng||null,
+        distance_km:document.getElementById('nr-km').value?parseFloat(document.getElementById('nr-km').value):null,
+        elevation_hm:document.getElementById('nr-hm').value?parseInt(document.getElementById('nr-hm').value):null,
+        gpx_path:gpxPath,gpx_url:gpxUrl,
+        created_by:author
+      })
+    });
+    if(!res.ok) throw new Error('Opslaan mislukt');
+    closeModal('new-route-modal');
+    await loadCyclingRoutes();
+  }catch(e){alert('Fout: '+e.message);}
+  finally{btn.disabled=false;btn.textContent='Route toevoegen ✓';}
+}
+
+async function deleteCyclingRoute(id){
+  if(!isMaster()){alert('Geen toegang');return;}
+  if(!confirm('Route verwijderen?')) return;
+  try{
+    await fetch(`${SUPA_URL}/rest/v1/cycling_routes?id=eq.${id}`,{method:'DELETE',headers:supaHeaders()});
+    if(expandedRouteId===id) expandedRouteId=null;
+    if(cyclingMaps[id]){cyclingMaps[id].remove();delete cyclingMaps[id];}
+    await loadCyclingRoutes();
+  }catch(e){alert('Fout: '+e.message);}
+}
+
+// Legacy stub - no longer used
+function renderSlotGroups(){return '';}
 
 // ---- DAGBOEK ----
 let currentDiaryDay=null;
@@ -1816,6 +2206,7 @@ function showSec(name,el){
   setTimeout(()=>{
     if(name==='planning'){if(planMap)planMap.invalidateSize();}
     else if(name==='diary'){initDiary();}
+    else if(name==='cycling'){loadCyclingRoutes();}
     else{initTabMap(name);if(tabMaps[name])tabMaps[name].invalidateSize();}
   },120);
 }
@@ -1904,6 +2295,63 @@ function initApp(){
       <div style="display:flex;gap:.6rem;justify-content:flex-end;margin-top:.5rem;">
         <button class="btn btn-sec" onclick="closeModal('diary-new-act-modal')">Annuleren</button>
         <button class="btn btn-rose" onclick="submitNewDiaryAct()">Toevoegen ✓</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ===== WEGFIETSEN: NIEUWE ROUTE MODAL ===== -->
+<div class="modal-overlay" id="new-route-modal">
+  <div class="modal act-form-modal" style="max-width:540px;">
+    <div class="modal-hdr">
+      <h2>🚴 Nieuwe fietsroute</h2>
+      <button class="modal-close" onclick="closeModal('new-route-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-field">
+        <label>Titel *</label>
+        <input type="text" id="nr-title" placeholder="bv. Col des Aravis klassiek"/>
+      </div>
+      <div class="form-field">
+        <label>Startplaats * <span style="color:var(--muted);font-weight:400">(wordt opgezocht op kaart)</span></label>
+        <div class="start-search-row">
+          <input type="text" id="nr-start" placeholder="bv. Saint-Jean-de-Sixt" style="flex:1;"/>
+          <button class="start-search-btn" onclick="geocodeStart()">📍 Zoek</button>
+        </div>
+        <div id="nr-geocode-result"></div>
+        <input type="hidden" id="nr-lat" value=""/>
+        <input type="hidden" id="nr-lng" value=""/>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.7rem;">
+        <div class="form-field">
+          <label>Afstand (km)</label>
+          <input type="number" id="nr-km" placeholder="bv. 85" min="0" step="0.1"/>
+        </div>
+        <div class="form-field">
+          <label>Hoogtemeters (hm)</label>
+          <input type="number" id="nr-hm" placeholder="bv. 1800" min="0" step="10"/>
+        </div>
+      </div>
+      <div class="form-field">
+        <label>Beschrijving</label>
+        <textarea id="nr-desc" placeholder="Vertel iets over de route..." rows="3"></textarea>
+      </div>
+      <div class="form-field">
+        <label>GPX bestand (optioneel)</label>
+        <label class="gpx-upload-label">
+          📁 Kies GPX bestand
+          <input type="file" id="nr-gpx-file" accept=".gpx,application/gpx+xml,application/xml" onchange="handleGpxSelect(this)"/>
+        </label>
+        <div id="nr-gpx-selected"></div>
+      </div>
+      <div class="form-field">
+        <label>Jouw naam *</label>
+        <input type="text" id="nr-author" placeholder="Jouw naam"/>
+      </div>
+      <div style="display:flex;gap:.6rem;justify-content:flex-end;margin-top:.5rem;">
+        <button class="btn btn-sec" onclick="closeModal('new-route-modal')">Annuleren</button>
+        <button class="btn btn-primary" onclick="submitNewRoute()" id="nr-submit-btn">Route toevoegen ✓</button>
       </div>
     </div>
   </div>
