@@ -1521,9 +1521,36 @@ function closeGenModal(){
 }
 
 let _scrollY=0;
-function _lockScroll(){if(document.body.classList.contains('modal-open'))return;_scrollY=window.scrollY;document.body.style.top='-'+_scrollY+'px';document.body.classList.add('modal-open');}
-function _unlockScroll(){document.body.classList.remove('modal-open');document.body.style.top='';window.scrollTo(0,_scrollY);}
-function _resetModalScroll(id){const m=document.getElementById(id);if(m){const box=m.querySelector('.modal,.modal-box,.picker-modal');if(box)box.scrollTop=0;}}
+function _lockScroll(){
+  if(document.body.classList.contains('modal-open'))return;
+  _scrollY=window.scrollY;
+  document.documentElement.classList.add('modal-open');
+  document.body.classList.add('modal-open');
+  document.body.addEventListener('touchmove',_preventBodyScroll,{passive:false});
+}
+function _preventBodyScroll(e){
+  // Allow scroll within modal content
+  if(e.target.closest('.modal,.modal-box,.picker-modal,.modal-body'))return;
+  e.preventDefault();
+}
+function _unlockScroll(){
+  document.documentElement.classList.remove('modal-open');
+  document.body.classList.remove('modal-open');
+  document.body.removeEventListener('touchmove',_preventBodyScroll);
+  window.scrollTo(0,_scrollY);
+}
+function _resetModalScroll(id){
+  const m=document.getElementById(id);
+  if(!m)return;
+  const box=m.querySelector('.modal,.modal-box,.picker-modal');
+  if(!box)return;
+  box.scrollTop=0;
+  // iOS fix: if at scrollTop=0, upward swipe passes to browser instead of element
+  // Add touchstart listener to nudge to 1px so scroll works in both directions
+  box._iosTouchStart=function(){if(box.scrollTop===0)box.scrollTop=1;else if(box.scrollTop+box.clientHeight>=box.scrollHeight)box.scrollTop-=1;};
+  box.removeEventListener('touchstart',box._iosTouchStart);
+  box.addEventListener('touchstart',box._iosTouchStart,{passive:true});
+}
 function closeModal(id){
   document.getElementById(id).classList.remove('open');
   if(id==='act-modal'&&modalMapObj){modalMapObj.remove();modalMapObj=null;}
@@ -3525,7 +3552,7 @@ function showToast(msg) {
 }
 
 /* Fix: prevent body scroll when modal open + iOS scroll */
-body.modal-open{overflow:hidden;position:fixed;width:100%;left:0;right:0;}
+html.modal-open,body.modal-open{overflow:hidden;height:100%;}
 .modal-overlay .modal,.modal-overlay .modal-box,.modal-overlay .picker-modal{
   -webkit-overflow-scrolling:touch;
   overscroll-behavior:contain;
