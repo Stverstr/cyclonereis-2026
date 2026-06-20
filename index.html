@@ -279,6 +279,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 .diary-day-btn:hover{border-color:var(--accent);}
 .diary-day-btn.active{border-color:#f43f5e;background:rgba(244,63,94,.08);}
 .diary-day-btn.has-content{border-color:rgba(244,63,94,.3);}
+.diary-day-btn.diary-edge-day{opacity:.75;border-style:dashed;}
 .ddb-name{font-size:.66rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.3px;}
 .ddb-date{font-size:1.05rem;font-weight:800;margin:.1rem 0;}
 .ddb-count{font-size:.64rem;color:#f43f5e;}
@@ -602,6 +603,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
     <!-- ===== DAGBOEK ===== -->
     <div id="sec-diary" class="section">
       <div class="sec-hdr"><h2>📖 Dagboek</h2><p>Activiteiten, verhalen en foto\'s van onze reis</p></div>
+      <div class="filter-bar" id="diary-group-tabs" style="margin-bottom:.75rem"></div>
       <div class="diary-day-strip" id="diary-day-strip"></div>
       <div class="diary-content" id="diary-content">
         <div class="empty-state"><div class="es-icon">📅</div><p>Selecteer een dag hierboven</p></div>
@@ -669,6 +671,8 @@ const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJ
 const PHOTO_BUCKET='cyclonereis-photos';
 const TRIP_DAYS=['2026-08-08','2026-08-09','2026-08-10','2026-08-11','2026-08-12','2026-08-13','2026-08-14'];
 const DAY_NAMES=['Za','Zo','Ma','Di','Wo','Do','Vr'];
+const DIARY_DAYS=['2026-08-07','2026-08-08','2026-08-09','2026-08-10','2026-08-11','2026-08-12','2026-08-13','2026-08-14','2026-08-15'];
+const DIARY_DAY_NAMES=['Vr','Za','Zo','Ma','Di','Wo','Do','Vr','Za'];
 
 
 // ---- HAVERSINE ----
@@ -1908,6 +1912,7 @@ function renderSlotGroups(){return '';}
 
 // ---- DAGBOEK ----
 let currentDiaryDay=null;
+let currentDiaryGroup='all'; // 'all','fietsers','avonturiers'
 let diaryActivities={};    // {date: [act,...]}
 let diaryComments={};      // {actId: [comment,...]}
 let diaryPhotos={};        // {actId: [photo,...]}
@@ -1922,16 +1927,32 @@ function setAuthorName(n){localStorage.setItem('diary_author',n);}
 
 // ---- INIT DIARY ----
 function initDiary(){
+  renderDiaryGroupTabs();
   renderDiaryDayStrip();
 }
 
+function renderDiaryGroupTabs(){
+  const tabs=document.getElementById('diary-group-tabs');
+  if(!tabs) return;
+  const groups=[['all','👥 Allemaal'],['fietsers','🚴 Fietsers'],['avonturiers','🏔️ Avonturiers']];
+  tabs.innerHTML=groups.map(([v,l])=>`<button class="filter-btn${currentDiaryGroup===v?' active':''}" onclick="setDiaryGroup('${v}')">${l}</button>`).join('');
+}
+function setDiaryGroup(g){
+  currentDiaryGroup=g;
+  renderDiaryGroupTabs();
+  renderDiaryDayStrip();
+  if(currentDiaryDay) renderDiaryDay(currentDiaryDay);
+}
 function renderDiaryDayStrip(){
-  document.getElementById('diary-day-strip').innerHTML=TRIP_DAYS.map((d,i)=>{
-    const acts=diaryActivities[d]||[];
-    return `<div class="diary-day-btn ${d===currentDiaryDay?'active':''} ${acts.length>0?'has-content':''}" onclick="selectDiaryDay('${d}')">
-      <div class="ddb-name">${DAY_NAMES[i]}</div>
+  renderDiaryGroupTabs();
+  document.getElementById('diary-day-strip').innerHTML=DIARY_DAYS.map((d,i)=>{
+    const allActs=diaryActivities[d]||[];
+    const acts=currentDiaryGroup==='all'?allActs:allActs.filter(a=>(a.group_name||'').toLowerCase()===currentDiaryGroup);
+    const isEdge=(d==='2026-08-07'||d==='2026-08-15');
+    return `<div class="diary-day-btn ${d===currentDiaryDay?'active':''} ${acts.length>0?'has-content':''} ${isEdge?'diary-edge-day':''}" onclick="selectDiaryDay('${d}')">
+      <div class="ddb-name">${DIARY_DAY_NAMES[i]}</div>
       <div class="ddb-date">${parseInt(d.split('-')[2])}</div>
-      <div class="ddb-count">${acts.length>0?acts.length+' activiteit'+(acts.length>1?'en':''):''}</div>
+      <div class="ddb-count">${isEdge?(d==='2026-08-07'?'Aankomst':'Vertrek'):(acts.length>0?acts.length+' act.':'')}</div>
     </div>`;
   }).join('');
 }
@@ -1975,9 +1996,10 @@ async function loadActPhotos(actId){
 }
 
 function renderDiaryDay(date){
-  const acts=diaryActivities[date]||[];
-  const dayIdx=TRIP_DAYS.indexOf(date);
-  const dayLabel=`${DAY_NAMES[dayIdx]} ${parseInt(date.split('-')[2])} augustus`;
+  const allActs=diaryActivities[date]||[];
+  const acts=currentDiaryGroup==='all'?allActs:allActs.filter(a=>(a.group_name||'').toLowerCase()===currentDiaryGroup);
+  const dayIdx=DIARY_DAYS.indexOf(date);
+  const dayLabel=`${DIARY_DAY_NAMES[dayIdx]||''} ${parseInt(date.split('-')[2])} augustus`;
   // Collect all photos for gallery
   let allPhotos=[];
   acts.forEach(a=>{(diaryPhotos[a.id]||[]).forEach(p=>allPhotos.push({...p,actTitle:a.title}));});
@@ -1994,7 +2016,7 @@ function renderDiaryDay(date){
     </div>
     ${allPhotos.length>0?`
     <div class="day-gallery">
-      <h3>📸 Alle foto's van ${DAY_NAMES[dayIdx]} ${parseInt(date.split('-')[2])} augustus <span style="color:var(--muted);font-weight:400;font-size:.82rem">(${allPhotos.length})</span></h3>
+      <h3>📸 Alle foto's van ${DIARY_DAY_NAMES[dayIdx]||''} ${parseInt(date.split('-')[2])} augustus <span style="color:var(--muted);font-weight:400;font-size:.82rem">(${allPhotos.length})</span></h3>
       <div class="gallery-grid">
         ${allPhotos.map((p,i)=>`<img class="gallery-thumb" src="${p.public_url}" alt="${p.caption||''}" onclick="openLightbox(${JSON.stringify(allPhotos.map(x=>x.public_url)).replace(/"/g,'&quot;')},${JSON.stringify(allPhotos.map(x=>({caption:x.caption,author:x.uploaded_by,act:x.actTitle}))).replace(/"/g,'&quot;')},${i})" loading="lazy"/>`).join('')}
       </div>
@@ -2101,7 +2123,7 @@ function openNewActModal(date){
   document.getElementById('new-act-title').value='';
   document.getElementById('new-act-desc').value='';
   document.getElementById('new-act-people').value='';
-  document.getElementById('new-act-group').value='';
+  document.getElementById('new-act-group').value='fietsers';
   document.getElementById('new-act-author').value=getAuthorName();
   document.getElementById('new-act-emoji').value='🏔️';
   document.getElementById('diary-emo-disp').textContent='🏔️';
@@ -2766,7 +2788,12 @@ function initApp(){
       <div class="form-field"><label>Titel *</label><input type="text" id="new-act-title" placeholder="bv. Downhillen La Clusaz"/></div>
       <div class="form-field"><label>Beschrijving</label><textarea id="new-act-desc" placeholder="Vertel wat er gebeurde..."></textarea></div>
       <div class="form-field"><label>Deelnemers</label><input type="text" id="new-act-people" placeholder="bv. Stijn, Rik, Tom"/></div>
-      <div class="form-field"><label>Groepsnaam (optioneel)</label><input type="text" id="new-act-group" placeholder="bv. Niet-fietsers"/></div>
+      <div class="form-field"><label>Groep</label>
+        <select id="new-act-group" style="width:100%;padding:.55rem .7rem;border:1px solid var(--border);border-radius:9px;background:var(--card);color:var(--text);font-size:.88rem">
+          <option value="fietsers">🚴 Fietsers</option>
+          <option value="avonturiers">🏔️ Avonturiers</option>
+          <option value="gemengd">👥 Gemengd</option>
+        </select></div>
       <div class="form-field"><label>Jouw naam *</label><input type="text" id="new-act-author" placeholder="Jouw naam"/></div>
       <div style="display:flex;gap:.6rem;justify-content:flex-end;margin-top:.5rem;">
         <button class="btn btn-sec" onclick="closeModal('diary-new-act-modal')">Annuleren</button>
