@@ -706,6 +706,24 @@ function addDist(arr){return arr.map(x=>({...x,dist:x.lat?hav(CHALET.lat,CHALET.
 function getFavs(type){try{return JSON.parse(localStorage.getItem('cf_'+type)||'[]');}catch{return[];}}
 function toggleFav(type,id,e){e.stopPropagation();const f=getFavs(type);const i=f.indexOf(id);if(i>-1)f.splice(i,1);else f.push(id);localStorage.setItem('cf_'+type,JSON.stringify(f));renderAll();}
 function isFav(type,id){return getFavs(type).includes(id);}
+
+let _amFavType=null,_amFavId=null,_gmFavType=null,_gmFavId=null;
+function _toggleActFav(){
+  if(!_amFavType||_amFavId===null) return;
+  const f=getFavs(_amFavType);const i=f.indexOf(_amFavId);
+  if(i>-1) f.splice(i,1); else f.push(_amFavId);
+  localStorage.setItem('cf_'+_amFavType,JSON.stringify(f));
+  document.getElementById('am-fav-btn').textContent=isFav(_amFavType,_amFavId)?'⭐':'☆';
+  renderAll();
+}
+function _toggleGenFav(){
+  if(!_gmFavType||_gmFavId===null) return;
+  const f=getFavs(_gmFavType);const i=f.indexOf(_gmFavId);
+  if(i>-1) f.splice(i,1); else f.push(_gmFavId);
+  localStorage.setItem('cf_'+_gmFavType,JSON.stringify(f));
+  document.getElementById('gm-fav-btn').textContent=isFav(_gmFavType,_gmFavId)?'⭐':'☆';
+  renderAll();
+}
 function sortWithFavs(arr,type){const favs=getFavs(type);return [...arr.filter(x=>favs.includes(x.id||x.name)),...arr.filter(x=>!favs.includes(x.id||x.name))];}
 function supaHeaders(){return{'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Content-Type':'application/json'};}
 
@@ -1310,6 +1328,7 @@ function openActModal(id){
   if(!a) return;
   const overlay=document.getElementById('act-modal');
   overlay.classList.add('open');_lockScroll();_resetModalScroll('act-modal');
+  _amFavType='act';_amFavId=a.id;document.getElementById('am-fav-btn').textContent=isFav('act',a.id)?'⭐':'☆';
   document.getElementById('am-ico').textContent=a.e;
   document.getElementById('am-ico').className=`m-ico ${a.ico}`;
   document.getElementById('am-title').textContent=a.title;
@@ -1374,6 +1393,8 @@ function openGenModal(item){
   if(typeof item==='string') try{item=JSON.parse(item);}catch(e){return;}
   const overlay=document.getElementById('gen-modal');
   overlay.classList.add('open');_lockScroll();_resetModalScroll('gen-modal');
+  const _gFavType=item.cat?'rest':(item.vibe!==undefined?'uit':'rest');_gmFavType=_gFavType;_gmFavId=item.id;
+  document.getElementById('gm-fav-btn').textContent=isFav(_gFavType,item.id)?'⭐':'☆';
   document.getElementById('gm-title').textContent=((item.e?item.e+' ':'')+( item.name||item.title||''));
   document.getElementById('gm-desc').textContent=(item.desc||'');
   document.getElementById('gm-meta').innerHTML=
@@ -3118,7 +3139,10 @@ function showToast(msg) {
   <div class="modal">
     <div class="modal-hdr">
       <h2><div class="m-ico" id="am-ico"></div><span id="am-title"></span></h2>
-      <button class="modal-close" onclick="closeActModal()">✕</button>
+      <div style="display:flex;gap:.4rem;align-items:center">
+        <button id="am-fav-btn" class="fav-btn" style="font-size:1.4rem;min-width:36px;min-height:36px" onclick="_toggleActFav()" title="Favoriet">☆</button>
+        <button class="modal-close" onclick="closeActModal()">✕</button>
+      </div>
     </div>
     <div class="modal-body">
       <div id="am-meta" style="display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.7rem;"></div>
@@ -3145,7 +3169,10 @@ function showToast(msg) {
   <div class="modal" style="max-width:600px;">
     <div class="modal-hdr">
       <h2 id="gm-title"></h2>
-      <button class="modal-close" onclick="closeGenModal()">✕</button>
+      <div style="display:flex;gap:.4rem;align-items:center">
+        <button id="gm-fav-btn" class="fav-btn" style="font-size:1.4rem;min-width:36px;min-height:36px" onclick="_toggleGenFav()" title="Favoriet">☆</button>
+        <button class="modal-close" onclick="closeGenModal()">✕</button>
+      </div>
     </div>
     <div class="modal-body">
       <div id="gm-meta" style="display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.6rem;"></div>
