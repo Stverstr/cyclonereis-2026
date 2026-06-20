@@ -1245,9 +1245,10 @@ function renderEvents(){
       </div>
     </div>`).join('');
   document.getElementById('events-list').innerHTML=data.map((ev,i)=>`
-    <div class="ev-card ${ev.during?'during':''}" onclick="openGenModal(${JSON.stringify(ev).replace(/"/g,'&quot;')})">
+    <div class="ev-card ${ev.during?'during':''} ${isFav('event',ev.name)?'favd':''}" onclick="openGenModal(${JSON.stringify(ev).replace(/"/g,'&quot;')})">
       <div class="ev-date"><div class="ev-day">${ev.day}</div><div class="ev-mo">${ev.mo}</div></div>
       <div class="ev-body"><h3>${ev.e} ${ev.name}${ev.during?'<span class="during-tag">✓ Tijdens verblijf</span>':''}</h3><p>${ev.desc}</p><div class="ev-loc">📍 ${ev.loc}</div></div>
+      <div style="display:flex;align-items:center;padding-right:.6rem"><button class="fav-btn" onclick="toggleFav('event','${ev.name.replace(/'/g,'')}',event)">${isFav('event',ev.name)?'⭐':'☆'}</button></div>
     </div>`).join('');
 }
 
@@ -1297,12 +1298,12 @@ function renderRentals(){
       <div class="lc-right"><button class="del-eigen-btn" onclick="deleteCustomItem('${ci.id}','${ci.name.replace(/'/g,"\'").replace(/"/g,'')}',event)">🗑</button></div>
     </div>`).join('');
   document.getElementById('rental-list').innerHTML=rentals.map(r=>`
-    <div class="rental-card" onclick="openGenModal(${JSON.stringify(r).replace(/"/g,'&quot;')})">
+    <div class="rental-card ${isFav('rental',r.id)?'favd':''}" onclick="openGenModal(${JSON.stringify(r).replace(/"/g,'&quot;')})">
       <div class="lc-ico ${r.ico}">${r.e}</div>
       <div class="rental-body"><h3>${r.name}</h3><p>${r.desc}</p><p style="font-size:.72rem;color:var(--accent)">🕐 ${r.hours} · ${r.price}</p>
         <div class="spec-tags">${r.specs.map(s=>({dh:'<span class="st st-dh">Downhill</span>',mtb:'<span class="st st-mtb">MTB</span>',emtb:'<span class="st st-emtb">eMTB</span>',road:'<span class="st st-road">Road</span>',kids:'<span class="st st-kids">Kids</span>'})[s]||'').join('')}</div>
       </div>
-      <div class="lc-right"><div class="lc-dist">${r.dist} km</div></div>
+      <div class="lc-right"><div class="lc-dist">${r.dist} km</div><button class="fav-btn" onclick="toggleFav('rental','${r.id}',event)">${isFav('rental',r.id)?'⭐':'☆'}</button></div>
     </div>`).join('')+customRentalsHtml;
 }
 
@@ -1315,10 +1316,10 @@ function renderShops(){
       <div class="lc-right"><button class="del-eigen-btn" onclick="deleteCustomItem('${ci.id}','${ci.name.replace(/'/g,"\'").replace(/"/g,'')}',event)">🗑</button></div>
     </div>`).join('');
   document.getElementById('shops-list').innerHTML=shops.map(s=>`
-    <div class="list-card" onclick="openGenModal(${JSON.stringify(s).replace(/"/g,'&quot;')})">
+    <div class="list-card ${isFav('shop',s.id)?'favd':''}" onclick="openGenModal(${JSON.stringify(s).replace(/"/g,'&quot;')})">
       <div class="lc-ico ${s.ico}">${s.e}</div>
       <div class="lc-body"><h3>${s.name}</h3><div class="bar-type">${s.type}</div><p>${s.desc}</p><p style="font-size:.72rem;color:#22c55e;margin-top:.2rem">🕐 ${s.hours}</p></div>
-      <div class="lc-right"><div class="lc-dist">${s.dist} km</div></div>
+      <div class="lc-right"><div class="lc-dist">${s.dist} km</div><button class="fav-btn" onclick="toggleFav('shop','${s.id}',event)">${isFav('shop',s.id)?'⭐':'☆'}</button></div>
     </div>`).join('')+customShopsHtml;
 }
 
@@ -1393,7 +1394,7 @@ function openGenModal(item){
   if(typeof item==='string') try{item=JSON.parse(item);}catch(e){return;}
   const overlay=document.getElementById('gen-modal');
   overlay.classList.add('open');_lockScroll();_resetModalScroll('gen-modal');
-  const _gFavType=item.cat?'rest':(item.vibe!==undefined?'uit':'rest');_gmFavType=_gFavType;_gmFavId=item.id;
+  const _gFavType=item.vibe!==undefined?'uit':item.type&&(item.type.includes('Verhuur')||item.specs)?'rental':item.day?'event':item.cat?'rest':'shop';_gmFavType=_gFavType;_gmFavId=item.id||item.name;
   document.getElementById('gm-fav-btn').textContent=isFav(_gFavType,item.id)?'⭐':'☆';
   document.getElementById('gm-title').textContent=((item.e?item.e+' ':'')+( item.name||item.title||''));
   document.getElementById('gm-desc').textContent=(item.desc||'');
@@ -1535,12 +1536,10 @@ function _unlockScroll(){
 function _resetModalScroll(id){
   const m=document.getElementById(id);
   if(!m)return;
-  // Target the scrollable body, not the outer container
   const body=m.querySelector('.modal-body');
-  if(body){body.scrollTop=0;return;}
-  // Fallback for picker-modal (uses .picker-list)
+  if(body){body.scrollTop=1;return;}
   const list=m.querySelector('.picker-list');
-  if(list) list.scrollTop=0;
+  if(list) list.scrollTop=1;
 }
 function closeModal(id){
   document.getElementById(id).classList.remove('open');
