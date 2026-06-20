@@ -433,8 +433,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 .del-eigen-btn{background:rgba(239,68,68,.12);color:#f87171;border:1px solid rgba(239,68,68,.2);border-radius:6px;padding:.2rem .5rem;font-size:.72rem;cursor:pointer;white-space:nowrap;}
 .del-eigen-btn:hover{background:rgba(239,68,68,.25);}
 /* custom item modal */
-#ci-type-fields > div{display:none;}
-#ci-type-fields > div.active{display:block;}
+#ci-type-fields > .ci-section{display:none;}
+#ci-type-fields > .ci-section.active{display:block;}
 </style>
 </head>
 <body>
@@ -715,22 +715,22 @@ const activities_raw=[
    wp:[{lat:45.9203,lng:6.4154,l:'🏠 Chalet'},{lat:45.9035,lng:6.4255,l:'🅿️ La Clusaz Bike Park (parking)'}],
    prak:['Rij via D909 richting La Clusaz (10 min)','Dagpass: ca. €35-40/persoon','Huurbike DH: ca. €55-70/dag','Bescherming aangeraden'],
    tips:['Ga vroeg (9u) voor de drukte','Probeer Spider (rood), La Combe (zwart)','Lunch in het dorp na de ochtend'],
-   links:[{u:'https://www.laclusaz.com/en/mountain-bike/bikepark/',l:'🌐 La Clusaz Bike Park',c:'btn-primary'}]},
+   links:[{u:'https://www.laclusaz.com/en/mountain-bike/bikepark/',l:'🌐 La Clusaz Bike Park',c:'btn-primary'},{u:'https://www.trailforks.com/region/la-clusaz-bike-park/',l:'🗺️ Trailforks',c:'btn-green'}]},
   {id:2,cat:'downhill',e:'🏔️',ico:'ico-dh',title:'Downhill MTB — Grand-Bornand',addr:'La Joyère, 74450 Le Grand-Bornand',parking:'🅿️ Parking Télécabine La Joyère — gratis in zomer',sub:'Minder druk, net zo fun',diff:'medium',dl:'Gemiddeld',rtype:'drive',
    stats:[{i:'⏱️',l:'4–6u'},{i:'🎿',l:'10 tracks'},{i:'🔼',l:'Lift'}],
    desc:"Le Grand-Bornand heeft 10 downhill trails, iets minder toeristisch dan La Clusaz. Prachtig uitzicht op de Aravis.",
    lat:45.9437,lng:6.4826,
-   wp:[{lat:45.9203,lng:6.4154,l:'🏠 Chalet'},{lat:45.9420,lng:6.4850,l:'🅿️ Grand-Bornand Bike Park (parking)'}],
+   wp:[{lat:45.9203,lng:6.4154,l:'🏠 Chalet'},{lat:45.9437,lng:6.4826,l:'🅿️ Grand-Bornand Bike Park (parking)'}],
    prak:['Rij richting Le Grand-Bornand (15 min, D4)','Dagpass: ca. €32/persoon'],
    tips:['Rustiger dan La Clusaz','Ideaal voor beginners DH'],
-   links:[{u:'https://en.legrandbornand.com/mountain-biking-trails.html',l:'🌐 Grand-Bornand MTB',c:'btn-primary'}]},
+   links:[{u:'https://en.legrandbornand.com/mountain-biking-trails.html',l:'🌐 Grand-Bornand MTB',c:'btn-primary'},{u:'https://www.trailforks.com/region/le-grand-bornand/',l:'🗺️ Trailforks',c:'btn-green'}]},
   {id:3,cat:'downhill',e:'🎯',ico:'ico-dh',title:'Dubbele DH dag: 2 parken',addr:'La Clusaz + Le Grand-Bornand',parking:'🅿️ Ochtend: Parking des Pistes La Clusaz · Namiddag: La Joyère Grand-Bornand',sub:'La Clusaz ochtend + Grand-Bornand namiddag',diff:'hard',dl:'Zwaar',rtype:'drive',
    stats:[{i:'⏱️',l:'Hele dag'},{i:'🎿',l:'2 parken'},{i:'💪',l:'Full send'}],
    desc:"Ochtend in La Clusaz (9u-13u), lunch, dan door naar Le Grand-Bornand (14u-17u). Twee complete bike parks op één dag.",
    lat:45.9035,lng:6.4255,
    wp:[{lat:45.9203,lng:6.4154,l:'🏠 Chalet'},{lat:45.9035,lng:6.4255,l:'🅿️ Parking La Clusaz'},{lat:45.9420,lng:6.4850,l:'🅿️ Parking Grand-Bornand'}],
    prak:['Vertrek 8u30 naar La Clusaz','Ochtendpas 9u-13u','Lunch dorp','Namiddagpas 14u-17u30 GBornand'],
-   tips:['Koop dagpas per park','Beenspieren = de bottleneck'],links:[]},
+   tips:['Koop dagpas per park','Beenspieren = de bottleneck'],links:[{u:'https://www.laclusaz.com/en/mountain-bike/bikepark/',l:'🌐 La Clusaz Park',c:'btn-primary'},{u:'https://en.legrandbornand.com/mountain-biking-trails.html',l:'🌐 GB Park',c:'btn-green'}]},
   {id:16,cat:'emtb',e:'⚡',ico:'ico-dh',title:'eMTB Aravis Grand Tour',addr:'130 Impasse de la Clairière, 74450 Saint-Jean-de-Sixt',parking:'🅿️ Vertrek vanuit chalet — geen parkeerplaats nodig',sub:'55 km lus · 1400 hm · Vanuit chalet',diff:'medium',dl:'Gemiddeld',rtype:'drive',
    stats:[{i:'⏱️',l:'5–7u'},{i:'📏',l:'55 km'},{i:'🔋',l:'Volle batterij'}],
    desc:"Epische eMTB-lus vanuit het chalet: via Col des Aravis, La Clusaz, Col de la Croix-Fry en terug. Ideaal voor de eMTB — geen shuttle nodig.",
@@ -809,7 +809,7 @@ const activities_raw=[
    lat:45.8810,lng:6.3085,
    wp:[{lat:45.9203,lng:6.4154,l:'🏠 Chalet'},{lat:45.8810,lng:6.3085,l:'🅿️ Parking Gorges de Morette (naast zaagmolen, Thônes)'}],
    prak:['Rij naar Thônes (25 min)'],
-   tips:['Combineer met kaas in Thônes'],links:[]},
+   tips:['Combineer met kaas in Thônes'],links:[{u:'https://www.komoot.com/guide/1829/e-mtb-rides-in-aravis',l:'🗺️ Komoot Aravis',c:'btn-green'},{u:'https://www.laclusaz.com/en/mountain-bike/',l:'🌐 La Clusaz MTB',c:'btn-primary'}]},
   {id:12,cat:'water',e:'🏖️',ico:'ico-lake',title:"Lac d'Annecy — Zwemdag + Stad",addr:'Plage de Talloires, 74290 Talloires-Montmin',parking:'🅿️ Parking Plage de Talloires (€2-4/u) · Stad: Parking Bonlieu of P+R Courier',sub:"Zuiverste meer Europa · Talloires",diff:'easy',dl:'Makkelijk',rtype:'drive',
    stats:[{i:'⏱️',l:'Hele dag'},{i:'🏊',l:'25°C water'},{i:'🏙️',l:'Annecy stad'}],
    desc:"Talloires strand — kristalhelder water tot 25°C in augustus. Combineer met Annecy oude stad.",
@@ -824,14 +824,14 @@ const activities_raw=[
    lat:45.9400,lng:6.4240,
    wp:[{lat:45.9203,lng:6.4154,l:'🏠 Chalet'},{lat:45.9400,lng:6.4283,l:'🅿️ Parking Camping l\'Escale (naast rivier)'}],
    prak:['Rij naar Le Grand-Bornand (15 min)','Parkeer in het centrum','5 min stappen'],
-   tips:['Water koud — handdoek mee','Vroeg gaan = rustig'],links:[]},
+   tips:['Water koud — handdoek mee','Vroeg gaan = rustig'],links:[{u:'https://www.visit-grandmassif.com/en/discover/waterways/grand-bornand-natural-swimming-spots/',l:'🏖️ Zwemspots info',c:'btn-green'}]},
   {id:14,cat:'water',e:'💧',ico:'ico-river',title:"Fier rivier — wilde pools Thônes",addr:'Pont Saint-Clair, D16, 74230 Thônes',parking:'🅿️ Klein parkeerterrein bij brug Saint-Clair — gratis',sub:'Rotsige pools · 20 min',diff:'easy',dl:'Makkelijk',rtype:'drive',
    stats:[{i:'🚗',l:'20 min'},{i:'🌡️',l:'~15°C'},{i:'🏞️',l:'Rotsig'}],
    desc:"Spectaculaire rotsige pools bij Thônes. Populair bij locals. Beste plek bij de brug Saint-Clair.",
    lat:45.8978,lng:6.2630,
    wp:[{lat:45.9203,lng:6.4154,l:'🏠 Chalet'},{lat:45.8978,lng:6.2630,l:'🅿️ Parking Pont Saint-Clair — Dingy-Saint-Clair (Fier gorge)'}],
    prak:['Rij richting Thônes (20 min)','Brug Saint-Clair parking'],
-   tips:['Rotsige bodem: strandschoentjes','Kaas in Thônes combineren'],links:[]}
+   tips:['Rotsige bodem: strandschoentjes','Kaas in Thônes combineren'],links:[{u:'https://www.alltrails.com/trail/france/haute-savoie/gorges-du-fier',l:'🗺️ Gorges du Fier',c:'btn-green'}]}
 ];
 
 const restaurants_raw=[
@@ -2928,8 +2928,7 @@ async function loadCustomItems() {
 
 function openCustomItemModal(type) {
   _ciType = type || 'activity';
-  document.getElementById('ci-type').value = _ciType;
-  ciTypeChange();
+  ciSetType(_ciType);
   // reset form
   ['ci-name','ci-desc','ci-addr','ci-parking','ci-hours','ci-closed','ci-tags','ci-bar-tags',
    'ci-act-cat','ci-distance','ci-elevation','ci-duration','ci-event-day','ci-event-month',
@@ -2949,6 +2948,14 @@ function openCustomItemModal(type) {
   document.getElementById('ci-modal').classList.add('open');
 }
 
+function ciSetType(type){
+  document.getElementById('ci-type').value=type;
+  // Update pill active state
+  ['activity','restaurant','bar','event','shop','rental'].forEach(t=>{
+    document.getElementById('cipill-'+t).classList.toggle('active',t===type);
+  });
+  ciTypeChange();
+}
 function ciTypeChange() {
   _ciType = document.getElementById('ci-type').value;
   // hide all type-specific divs, show active one
@@ -3326,6 +3333,26 @@ function showToast(msg) {
 #act-grid,#rest-list,#events-list,#night-list,#rental-list,#shops-list{display:flex;flex-direction:column;gap:.65rem;}
 .plan-detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
 @media(max-width:860px){.plan-detail-grid{grid-template-columns:1fr;}}
+
+/* ===== CI MODAL REDESIGN ===== */
+.ci-type-pills{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:1rem;}
+.ci-type-pill{display:flex;flex-direction:column;align-items:center;gap:.2rem;padding:.45rem .6rem;border:1.5px solid var(--border);border-radius:10px;cursor:pointer;background:var(--bg);min-width:3.5rem;font-size:.65rem;font-weight:700;color:var(--muted);transition:all .15s;}
+.ci-type-pill .pill-ico{font-size:1.3rem;line-height:1;}
+.ci-type-pill.active{border-color:var(--accent);background:rgba(14,165,233,.1);color:var(--accent);}
+.ci-section{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:.85rem 1rem;margin-bottom:.75rem;}
+.ci-section-title{font-size:.67rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:.65rem;}
+.ci-row{display:grid;gap:.5rem;margin-bottom:.5rem;}
+.ci-row.two{grid-template-columns:1fr 1fr;}
+.ci-row.three{grid-template-columns:1fr 1fr 1fr;}
+.ci-field label{font-size:.72rem;font-weight:700;color:var(--text);margin-bottom:.25rem;display:block;}
+.ci-field input,.ci-field select,.ci-field textarea{width:100%;padding:.42rem .6rem;border:1.5px solid var(--border);border-radius:8px;background:var(--surface);color:var(--text);font-size:.82rem;font-family:inherit;box-sizing:border-box;transition:border-color .15s;}
+.ci-field input:focus,.ci-field select:focus,.ci-field textarea:focus{outline:none;border-color:var(--accent);}
+.ci-field textarea{resize:vertical;min-height:60px;}
+.ci-emoji-btn{font-size:2rem;background:var(--bg);border:2px solid var(--border);border-radius:12px;cursor:pointer;padding:.4rem .8rem;min-width:3.5rem;text-align:center;transition:all .15s;display:block;}
+.ci-emoji-btn:hover{border-color:var(--accent);}
+.ci-addr-row{display:flex;gap:.5rem;align-items:flex-start;}
+.ci-addr-row input{flex:1;}
+.ci-addr-row .btn{white-space:nowrap;flex-shrink:0;margin-top:0;}
 </style>
 
 
@@ -3358,105 +3385,113 @@ function showToast(msg) {
 
 <!-- ===== CUSTOM ITEM MODAL ===== -->
 <div class="modal-overlay" id="ci-modal">
-  <div class="modal" style="max-width:520px;">
-    <div class="modal-hdr">
-      <h2>➕ <span id="ci-modal-title">Eigen item toevoegen</span></h2>
-      <button class="modal-close" onclick="closeModal('ci-modal')">✕</button>
+  <div class="modal" style="max-width:540px;">
+    <div class="modal-hdr" style="background:linear-gradient(135deg,var(--accent),#0ea5e9);border-radius:14px 14px 0 0;padding:1rem 1.2rem;">
+      <h2 style="color:#fff;font-size:1rem;font-weight:800;display:flex;align-items:center;gap:.5rem;">➕ <span id="ci-modal-title">Eigen item toevoegen</span></h2>
+      <button class="modal-close" onclick="closeModal('ci-modal')" style="color:#fff;background:rgba(255,255,255,.2);border:none;border-radius:8px;width:28px;height:28px;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;">✕</button>
     </div>
-    <div class="modal-body" style="max-height:75vh;overflow-y:auto;">
-      <!-- Type selector -->
-      <div class="form-group">
-        <label class="form-label">Type</label>
-        <select class="form-input" id="ci-type" onchange="ciTypeChange()">
-          <option value="activity">🎿 Activiteit</option>
-          <option value="restaurant">🍽️ Restaurant</option>
-          <option value="bar">🍸 Bar / Uitgaan</option>
-          <option value="event">🎪 Event</option>
-          <option value="shop">🛍️ Winkel</option>
-          <option value="rental">🚲 Verhuur</option>
-        </select>
-      </div>
-      <!-- Common fields -->
-      <div class="form-group">
-        <label class="form-label">Emoji</label>
-        <div style="display:flex;align-items:center;gap:.6rem;">
-          <button class="emo-trigger" id="ci-emoji-disp" onclick="openEmojiPicker('ci-emoji','ci-emoji-disp',this)">📍</button>
-          <span style="font-size:.75rem;color:var(--muted)">Klik om emoji te kiezen</span>
+    <div class="modal-body" style="max-height:78vh;overflow-y:auto;padding:1rem 1rem .75rem;">
+
+      <!-- TYPE SELECTOR -->
+      <div style="margin-bottom:.85rem;">
+        <div class="ci-section-title" style="margin-bottom:.45rem">Type item</div>
+        <div class="ci-type-pills">
+          <div class="ci-type-pill active" id="cipill-activity" onclick="ciSetType('activity')"><span class="pill-ico">🎿</span>Activiteit</div>
+          <div class="ci-type-pill" id="cipill-restaurant" onclick="ciSetType('restaurant')"><span class="pill-ico">🍽️</span>Restaurant</div>
+          <div class="ci-type-pill" id="cipill-bar" onclick="ciSetType('bar')"><span class="pill-ico">🍸</span>Bar</div>
+          <div class="ci-type-pill" id="cipill-event" onclick="ciSetType('event')"><span class="pill-ico">🎪</span>Event</div>
+          <div class="ci-type-pill" id="cipill-shop" onclick="ciSetType('shop')"><span class="pill-ico">🛍️</span>Winkel</div>
+          <div class="ci-type-pill" id="cipill-rental" onclick="ciSetType('rental')"><span class="pill-ico">🚲</span>Verhuur</div>
         </div>
-        <input type="hidden" id="ci-emoji" value="📍">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Naam *</label>
-        <input class="form-input" id="ci-name" placeholder="Naam van het item">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Beschrijving</label>
-        <textarea class="form-input" id="ci-desc" rows="3" placeholder="Korte beschrijving..."></textarea>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Adres</label>
-        <div style="display:flex;gap:.5rem;">
-          <input class="form-input" id="ci-addr" placeholder="Straat, nr, gemeente" style="flex:1">
-          <button class="btn btn-sec" onclick="ciGeocode()" style="white-space:nowrap">📍 Zoek</button>
-        </div>
-        <div id="ci-geocode-result" style="font-size:.75rem;color:#22c55e;margin-top:.3rem;"></div>
-        <input type="hidden" id="ci-lat"><input type="hidden" id="ci-lng">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Parking / Hoe er raken</label>
-        <input class="form-input" id="ci-parking" placeholder="bijv. 🅿️ Parking Centre La Clusaz">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Openingsuren</label>
-        <input class="form-input" id="ci-hours" placeholder="bijv. Ma–Za 9u–18u">
+        <input type="hidden" id="ci-type" value="activity">
       </div>
 
-      <!-- Type-specific fields -->
+      <!-- BASISINFO -->
+      <div class="ci-section">
+        <div class="ci-section-title">Basisinfo</div>
+        <div class="ci-row" style="grid-template-columns:auto 1fr;align-items:center;gap:.75rem;margin-bottom:.6rem;">
+          <div>
+            <div class="ci-field" style="margin:0"><label>Emoji</label></div>
+            <button class="ci-emoji-btn" id="ci-emoji-disp" onclick="openEmojiPicker('ci-emoji','ci-emoji-disp',this)">📍</button>
+            <input type="hidden" id="ci-emoji" value="📍">
+          </div>
+          <div class="ci-field">
+            <label>Naam *</label>
+            <input id="ci-name" placeholder="Naam van het item">
+          </div>
+        </div>
+        <div class="ci-field">
+          <label>Beschrijving</label>
+          <textarea id="ci-desc" rows="2" placeholder="Korte beschrijving..."></textarea>
+        </div>
+      </div>
+
+      <!-- LOCATIE -->
+      <div class="ci-section">
+        <div class="ci-section-title">Locatie</div>
+        <div class="ci-field" style="margin-bottom:.5rem">
+          <label>Adres</label>
+          <div class="ci-addr-row">
+            <input id="ci-addr" placeholder="Straat, nr, gemeente">
+            <button class="btn btn-sec" onclick="ciGeocode()" style="font-size:.78rem;padding:.4rem .7rem">📍 Zoek</button>
+          </div>
+          <div id="ci-geocode-result" style="font-size:.72rem;color:#22c55e;margin-top:.25rem;"></div>
+          <input type="hidden" id="ci-lat"><input type="hidden" id="ci-lng">
+        </div>
+        <div class="ci-field">
+          <label>Parking / Hoe er raken</label>
+          <input id="ci-parking" placeholder="bijv. 🅿️ Parking Centre La Clusaz">
+        </div>
+      </div>
+
+      <!-- UREN -->
+      <div class="ci-section">
+        <div class="ci-section-title">Openingsuren</div>
+        <div class="ci-field">
+          <label>Uren</label>
+          <input id="ci-hours" placeholder="bijv. Ma–Za 9u–18u">
+        </div>
+      </div>
+
+      <!-- TYPE-SPECIFIC FIELDS -->
       <div id="ci-type-fields">
+
         <!-- ACTIVITY -->
-        <div id="ci-fields-activity">
-          <div class="form-group">
-            <label class="form-label">Categorie activiteit</label>
-            <select class="form-input" id="ci-act-cat">
+        <div id="ci-fields-activity" class="ci-section">
+          <div class="ci-section-title">Activiteit details</div>
+          <div class="ci-field" style="margin-bottom:.5rem">
+            <label>Categorie</label>
+            <select id="ci-act-cat">
               <option value="hiking">🥾 Wandelen</option>
-              <option value="downhill">🚵 Downhill</option>
+              <option value="downhill">🚵 Downhill MTB</option>
               <option value="emtb">⚡ eMTB</option>
               <option value="ferrata">🧗 Via Ferrata</option>
-              <option value="water">💧 Water</option>
+              <option value="water">💧 Water / Rivier</option>
             </select>
           </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;">
-            <div class="form-group">
-              <label class="form-label">Afstand (km)</label>
-              <input class="form-input" id="ci-distance" placeholder="bijv. 12" type="number" min="0" step="0.5">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Hoogteverschil (m)</label>
-              <input class="form-input" id="ci-elevation" placeholder="bijv. 650" type="number" min="0">
-            </div>
+          <div class="ci-row two">
+            <div class="ci-field"><label>Afstand (km)</label><input id="ci-distance" placeholder="bijv. 12" type="number" min="0" step="0.5"></div>
+            <div class="ci-field"><label>Hoogteverschil (m)</label><input id="ci-elevation" placeholder="bijv. 650" type="number" min="0"></div>
           </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;">
-            <div class="form-group">
-              <label class="form-label">Duur</label>
-              <input class="form-input" id="ci-duration" placeholder="bijv. 3u30">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Moeilijkheidsgraad</label>
-              <select class="form-input" id="ci-difficulty">
-                <option value="E">Makkelijk</option>
-                <option value="M">Gemiddeld</option>
-                <option value="Z">Moeilijk</option>
-                <option value="ZZ">Zeer Moeilijk</option>
+          <div class="ci-row two">
+            <div class="ci-field"><label>Duur</label><input id="ci-duration" placeholder="bijv. 3u30"></div>
+            <div class="ci-field"><label>Moeilijkheid</label>
+              <select id="ci-difficulty">
+                <option value="E">🟢 Makkelijk</option>
+                <option value="M">🟡 Gemiddeld</option>
+                <option value="Z">🔴 Moeilijk</option>
+                <option value="ZZ">⚫ Zeer Moeilijk</option>
               </select>
             </div>
           </div>
         </div>
+
         <!-- RESTAURANT -->
-        <div id="ci-fields-restaurant">
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;">
-            <div class="form-group">
-              <label class="form-label">Categorie</label>
-              <select class="form-input" id="ci-rest-cat">
+        <div id="ci-fields-restaurant" class="ci-section">
+          <div class="ci-section-title">Restaurant details</div>
+          <div class="ci-row two">
+            <div class="ci-field"><label>Categorie</label>
+              <select id="ci-rest-cat">
                 <option value="gastro">⭐ Gastronomisch</option>
                 <option value="savoyard">🧀 Savoyard</option>
                 <option value="pizza">🍕 Pizza</option>
@@ -3464,107 +3499,90 @@ function showToast(msg) {
                 <option value="bakkerij">🥐 Boulangerie</option>
               </select>
             </div>
-            <div class="form-group">
-              <label class="form-label">Prijs</label>
-              <select class="form-input" id="ci-price">
-                <option value="€">€ (goedkoop)</option>
-                <option value="€€">€€ (gemiddeld)</option>
-                <option value="€€€">€€€ (duur)</option>
-                <option value="€€€€">€€€€ (luxe)</option>
+            <div class="ci-field"><label>Prijs</label>
+              <select id="ci-price">
+                <option value="€">€ goedkoop</option>
+                <option value="€€">€€ gemiddeld</option>
+                <option value="€€€">€€€ duur</option>
+                <option value="€€€€">€€€€ luxe</option>
               </select>
             </div>
           </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;">
-            <div class="form-group">
-              <label class="form-label">Sterren (TA)</label>
-              <select class="form-input" id="ci-stars">
-                <option value="★★★★★">★★★★★ (5)</option>
-                <option value="★★★★☆">★★★★☆ (4)</option>
-                <option value="★★★☆☆">★★★☆☆ (3)</option>
-                <option value="★★☆☆☆">★★☆☆☆ (2)</option>
-                <option value="★☆☆☆☆">★☆☆☆☆ (1)</option>
+          <div class="ci-row two">
+            <div class="ci-field"><label>Sterren (TA)</label>
+              <select id="ci-stars">
+                <option value="★★★★★">★★★★★ (5.0)</option>
+                <option value="★★★★☆">★★★★☆ (4.0)</option>
+                <option value="★★★☆☆">★★★☆☆ (3.0)</option>
+                <option value="★★☆☆☆">★★☆☆☆ (2.0)</option>
               </select>
             </div>
-            <div class="form-group">
-              <label class="form-label">Gesloten op</label>
-              <input class="form-input" id="ci-closed" placeholder="bijv. Ma gesloten">
-            </div>
+            <div class="ci-field"><label>Gesloten op</label><input id="ci-closed" placeholder="bijv. Ma gesloten"></div>
           </div>
-          <div class="form-group">
-            <label class="form-label">Tags (komma gescheiden)</label>
-            <input class="form-input" id="ci-tags" placeholder="bijv. Savoyard, Terras, Fondue">
-          </div>
+          <div class="ci-field"><label>Tags (komma gescheiden)</label><input id="ci-tags" placeholder="bijv. Savoyard, Terras, Fondue"></div>
         </div>
+
         <!-- BAR -->
-        <div id="ci-fields-bar">
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;">
-            <div class="form-group">
-              <label class="form-label">Type</label>
-              <input class="form-input" id="ci-bar-type" placeholder="bijv. Cocktailbar, Club">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Sfeer</label>
-              <select class="form-input" id="ci-vibe">
+        <div id="ci-fields-bar" class="ci-section">
+          <div class="ci-section-title">Bar details</div>
+          <div class="ci-row two">
+            <div class="ci-field"><label>Type</label><input id="ci-bar-type" placeholder="bijv. Cocktailbar, Club"></div>
+            <div class="ci-field"><label>Sfeer</label>
+              <select id="ci-vibe">
                 <option value="quiet">😌 Gezellig</option>
                 <option value="busy">🔥 Druk</option>
                 <option value="party">💃 Party</option>
               </select>
             </div>
           </div>
-          <div class="form-group">
-            <label class="form-label">Tags (komma gescheiden)</label>
-            <input class="form-input" id="ci-bar-tags" placeholder="bijv. Cocktails, Terras, Live muziek">
-          </div>
+          <div class="ci-field"><label>Tags</label><input id="ci-bar-tags" placeholder="bijv. Cocktails, Terras, Live muziek"></div>
         </div>
+
         <!-- EVENT -->
-        <div id="ci-fields-event">
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;">
-            <div class="form-group">
-              <label class="form-label">Dag(en)</label>
-              <input class="form-input" id="ci-event-day" placeholder="bijv. Za/Zo, Elke dag">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Maand</label>
-              <input class="form-input" id="ci-event-month" placeholder="bijv. AUG">
-            </div>
+        <div id="ci-fields-event" class="ci-section">
+          <div class="ci-section-title">Event details</div>
+          <div class="ci-row two">
+            <div class="ci-field"><label>Dag(en)</label><input id="ci-event-day" placeholder="bijv. Za/Zo, 10–14"></div>
+            <div class="ci-field"><label>Maand</label><input id="ci-event-month" placeholder="bijv. AUG"></div>
           </div>
         </div>
+
         <!-- SHOP -->
-        <div id="ci-fields-shop">
-          <div class="form-group">
-            <label class="form-label">Type winkel</label>
-            <input class="form-input" id="ci-shop-type" placeholder="bijv. Supermarkt, Kaaswinkel, Wijnwinkel">
-          </div>
+        <div id="ci-fields-shop" class="ci-section">
+          <div class="ci-section-title">Winkel details</div>
+          <div class="ci-field"><label>Type winkel</label><input id="ci-shop-type" placeholder="bijv. Supermarkt, Kaaswinkel, Wijnwinkel"></div>
         </div>
+
         <!-- RENTAL -->
-        <div id="ci-fields-rental">
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;">
-            <div class="form-group">
-              <label class="form-label">Prijs / dag</label>
-              <input class="form-input" id="ci-rental-price" placeholder="bijv. eMTB ca. €60/dag">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Types (komma)</label>
-              <input class="form-input" id="ci-specs" placeholder="bijv. mtb, emtb, road">
-            </div>
+        <div id="ci-fields-rental" class="ci-section">
+          <div class="ci-section-title">Verhuur details</div>
+          <div class="ci-row two">
+            <div class="ci-field"><label>Prijs / dag</label><input id="ci-rental-price" placeholder="bijv. eMTB ca. €60/dag"></div>
+            <div class="ci-field"><label>Types (komma)</label><input id="ci-specs" placeholder="bijv. mtb, emtb, road"></div>
           </div>
+        </div>
+
+      </div>
+
+      <!-- LINKS -->
+      <div class="ci-section">
+        <div class="ci-section-title">Links (optioneel)</div>
+        <div class="ci-field" style="margin-bottom:.5rem">
+          <label>🌐 Website URL</label>
+          <input id="ci-website" placeholder="https://..." type="url">
+        </div>
+        <div class="ci-field">
+          <label>⭐ TripAdvisor URL</label>
+          <input id="ci-tripadvisor" placeholder="https://www.tripadvisor.com/..." type="url">
         </div>
       </div>
 
-      <!-- Links section -->
-      <div class="form-group">
-        <label class="form-label">Website URL (optioneel)</label>
-        <input class="form-input" id="ci-website" placeholder="https://..." type="url">
-      </div>
-      <div class="form-group">
-        <label class="form-label">TripAdvisor URL (optioneel)</label>
-        <input class="form-input" id="ci-tripadvisor" placeholder="https://www.tripadvisor.com/..." type="url">
-      </div>
+      <div id="ci-error" style="color:var(--warn);font-size:.82rem;display:none;margin-bottom:.5rem;padding:.4rem .6rem;background:rgba(239,68,68,.08);border-radius:8px;border:1px solid rgba(239,68,68,.2);"></div>
 
-      <div id="ci-error" style="color:var(--warn);font-size:.82rem;display:none;margin-bottom:.5rem;"></div>
-      <div style="display:flex;gap:.5rem;justify-content:flex-end;margin-top:.8rem;">
+      <!-- FOOTER BUTTONS -->
+      <div style="display:flex;gap:.5rem;justify-content:flex-end;margin-top:.5rem;">
         <button class="btn btn-sec" onclick="closeModal('ci-modal')">Annuleren</button>
-        <button class="btn btn-pri" id="ci-submit-btn" onclick="submitCustomItem()">💾 Opslaan</button>
+        <button class="btn btn-accent" id="ci-submit-btn" onclick="submitCustomItem()" style="min-width:110px;">💾 Opslaan</button>
       </div>
     </div>
   </div>
