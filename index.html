@@ -1335,10 +1335,11 @@ function updateSlotTime(date,si,field,val){
 }
 function updateMeal(date,field,val){if(!dayPlans[date]) return;dayPlans[date][field]=val;}
 
-function removeSlot(date,si){
+async function removeSlot(date,si){
   if(!dayPlans[date]) return;
   dayPlans[date].activities.splice(si,1);
   renderWeekStrip();renderDayDetail(date);
+  await savePlan(date);
 }
 
 let currentPickType='activity';
