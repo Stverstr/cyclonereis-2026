@@ -210,6 +210,38 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 .leaflet-popup-tip{background:var(--card);}
 .leaflet-popup-content{margin:.5rem .7rem;font-size:.78rem;}
 .leaflet-popup-content b{color:var(--accent);}
+/* ============ WEGFIETSEN STYLES ============ */
+.cycling-route-card{background:var(--card);border:1px solid var(--border);border-radius:13px;overflow:hidden;cursor:pointer;transition:all .2s;margin-bottom:.75rem;}
+.cycling-route-card:hover{border-color:#0ea5e9;}
+.crc-hdr{display:flex;align-items:center;gap:.85rem;padding:.9rem 1rem;}
+.crc-ico{width:50px;height:50px;border-radius:12px;background:linear-gradient(135deg,#0369a1,#0ea5e9);display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0;}
+.crc-meta{flex:1;min-width:0;}.crc-title{font-size:.92rem;font-weight:700;margin-bottom:.25rem;}
+.crc-desc{font-size:.75rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.crc-stats{display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.3rem;}
+.crc-stat{background:rgba(14,165,233,.15);color:#38bdf8;border-radius:6px;padding:.12rem .5rem;font-size:.68rem;font-weight:700;}
+.crc-stat.hm{background:rgba(251,191,36,.12);color:#fbbf24;}
+.crc-actions{display:flex;gap:.4rem;align-items:center;flex-shrink:0;padding-right:.5rem;}
+.crc-body{padding:0 1rem .9rem;border-top:1px solid var(--border);display:none;}
+.crc-body.open{display:block;}
+.crc-body-desc{font-size:.82rem;color:var(--muted);line-height:1.6;padding:.7rem 0 .5rem;}
+.crc-start-row{display:flex;align-items:center;gap:.5rem;margin-bottom:.6rem;}
+.crc-start-label{font-size:.72rem;color:var(--muted);flex-shrink:0;}.crc-start-val{font-size:.78rem;font-weight:600;}
+.crc-map{height:220px;border-radius:10px;overflow:hidden;border:1px solid var(--border);margin-bottom:.6rem;}
+.crc-route-info{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.6rem;min-height:1.5rem;}
+.gpx-download-btn{display:inline-flex;align-items:center;gap:.4rem;background:rgba(14,165,233,.12);border:1px solid rgba(14,165,233,.25);border-radius:8px;color:#38bdf8;font-size:.78rem;font-weight:600;padding:.4rem .8rem;text-decoration:none;transition:background .15s;}
+.gpx-download-btn:hover{background:rgba(14,165,233,.2);}
+.new-cycling-btn{background:linear-gradient(135deg,#0369a1,#0ea5e9);border:none;border-radius:10px;color:#fff;font-size:.82rem;font-weight:700;padding:.5rem 1rem;cursor:pointer;display:flex;align-items:center;gap:.4rem;transition:opacity .2s;}
+.new-cycling-btn:hover{opacity:.88;}
+.del-route-btn{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);border-radius:7px;color:#ef4444;font-size:.72rem;padding:.25rem .5rem;cursor:pointer;}
+.del-route-btn:hover{background:rgba(239,68,68,.2);}
+.start-search-row{display:flex;gap:.5rem;align-items:flex-start;}
+.start-search-btn{background:#0ea5e9;border:none;border-radius:8px;color:#fff;font-size:.78rem;padding:.5rem .75rem;cursor:pointer;white-space:nowrap;flex-shrink:0;}
+.geocode-result{font-size:.73rem;padding:.35rem .6rem;border-radius:6px;margin-top:.3rem;}
+.geocode-result.ok{background:rgba(34,197,94,.12);color:#22c55e;}.geocode-result.err{background:rgba(239,68,68,.1);color:#ef4444;}
+.gpx-upload-label{display:inline-flex;align-items:center;gap:.35rem;background:rgba(14,165,233,.08);border:1px dashed rgba(14,165,233,.3);border-radius:8px;color:#38bdf8;font-size:.78rem;padding:.45rem .8rem;cursor:pointer;transition:all .15s;}
+.gpx-upload-label:hover{background:rgba(14,165,233,.15);border-style:solid;}
+.gpx-upload-label input{display:none;}
+.gpx-selected{font-size:.73rem;color:#22c55e;margin-top:.3rem;}
 /* ============ DAGBOEK STYLES ============ */
 .diary-day-strip{display:flex;gap:.5rem;overflow-x:auto;padding-bottom:.5rem;margin-bottom:1.2rem;-webkit-overflow-scrolling:touch;}
 .diary-day-btn{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:.55rem .9rem;cursor:pointer;flex-shrink:0;text-align:center;transition:all .2s;min-width:68px;}
@@ -362,6 +394,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
       <div class="nav-tab" onclick="showSec('nightlife',this)" id="tab-nightlife">🍸 Uitgaan</div>
       <div class="nav-tab" onclick="showSec('rentals',this)" id="tab-rentals">🚲 Verhuur</div>
       <div class="nav-tab" onclick="showSec('shops',this)" id="tab-shops">🛍️ Winkels</div>
+      <div class="nav-tab" style="color:#0369a1;" onclick="showSec('cycling',this)" id="tab-cycling">🚴 Wegfietsen</div>
       <div class="nav-tab diary-tab" onclick="showSec('diary',this)" id="tab-diary">📖 Dagboek</div>
     </div>
   </nav>
@@ -482,6 +515,24 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
             <div class="rb-info" id="rbi-shops"></div>
             <button class="rb-reset" onclick="resetTabMap('shops')">✕ Reset kaart</button>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== WEGFIETSEN ===== -->
+    <div id="sec-cycling" class="section">
+      <div class="split-layout">
+        <div class="list-panel">
+          <div class="sec-hdr"><h2>🚴 Wegfietsen</h2><p>Fietsroutes vanuit het chalet · GPX downloaden</p></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.9rem;">
+            <div id="cycling-count" style="font-size:.8rem;color:var(--muted);"></div>
+            <button class="new-cycling-btn" onclick="openNewRouteModal()">+ Nieuwe route</button>
+          </div>
+          <div id="cycling-list"></div>
+        </div>
+        <div class="map-panel">
+          <div class="tab-map" id="map-cycling"></div>
+          <div class="route-bar" id="rb-cycling"><div class="rb-info" id="rbi-cycling"></div><button class="rb-reset" onclick="resetTabMap('cycling')">✕ Reset</button></div>
         </div>
       </div>
     </div>
@@ -623,6 +674,7 @@ function sortWithFavs(arr,type){const favs=getFavs(type);return [...arr.filter(x
 function getSlotItem(slot){
   const type=slot.type||'activity';const id=slot.id;
   if(type==='activity') return{item:activities.find(x=>x.id==id),type};
+  if(type==='cycling') return{item:cyclingRoutes.find(x=>x.id===id),type};
   if(type==='event') return{item:events.find(x=>(x.id||x.name)===id),type};
   if(type==='restaurant') return{item:restaurants.find(x=>x.id===id),type};
   if(type==='nightlife') return{item:nightlife.find(x=>x.id===id),type};
@@ -900,6 +952,7 @@ function initTabMap(tab){
   else if(tab==='nightlife') populateGenMap(map,nightlife,'#a855f7');
   else if(tab==='rentals') populateGenMap(map,rentals,'#22c55e');
   else if(tab==='shops') populateGenMap(map,shops,'#22c55e');
+  else if(tab==='cycling') populateCyclingMap(map);
 }
 
 function populateActMap(map){
@@ -1291,6 +1344,7 @@ function removeSlot(date,si){
 let currentPickType='activity';
 const PICK_TYPES=[
   {type:'activity',label:'🎿 Activiteiten'},
+  {type:'cycling',label:'🚴 Wegfietsen'},
   {type:'event',label:'🎪 Events'},
   {type:'restaurant',label:'🍽️ Restaurants'},
   {type:'nightlife',label:'🍸 Bars'},
@@ -1299,6 +1353,7 @@ const PICK_TYPES=[
 ];
 function getPickData(type){
   if(type==='activity') return sortWithFavs(activities,'act');
+  if(type==='cycling') return cyclingRoutes.map(r=>({...r,e:'🚴',title:r.title,dist:r.start_lat?hav(CHALET.lat,CHALET.lng,r.start_lat,r.start_lng):null}));
   if(type==='event') return events;
   if(type==='restaurant') return restaurants;
   if(type==='nightlife') return nightlife;
@@ -1422,6 +1477,211 @@ async function calcDayRoute(date){
     const actNames=plan.activities.map(s=>{const a=activities.find(x=>x.id===s.id);return a?a.e:'';}).join(' → ');
     info.innerHTML=`<span class="route-chip">🏠 → ${actNames} → 🏠</span><span style="color:#fbbf24;font-size:.75rem">⚠️ Routeberekening tijdelijk niet beschikbaar — rechte lijnen getoond</span>`;
   }
+}
+
+// ---- WEGFIETSEN (CYCLING ROUTES) ----
+let cyclingRoutes=[];
+let cyclingMaps={};
+let newRouteGpxFile=null;
+let newRouteLat=null;
+let newRouteLng=null;
+let expandedRouteId=null;
+
+async function loadCyclingRoutes(){
+  try{
+    const res=await fetch(`${SUPA_URL}/rest/v1/cycling_routes?order=created_at.desc`,{headers:supaHeaders()});
+    const data=await res.json();
+    cyclingRoutes=Array.isArray(data)?data:[];
+  }catch(e){cyclingRoutes=[];}
+  renderCyclingRoutes();
+  if(!tabMaps['cycling']){initTabMap('cycling');}
+  else populateCyclingMap(tabMaps['cycling']);
+}
+
+function populateCyclingMap(map){
+  const bounds=[[CHALET.lat,CHALET.lng]];
+  (tabMarkers['cycling']||[]).forEach(m=>map.removeLayer(m));
+  tabMarkers['cycling']=[];
+  cyclingRoutes.forEach(r=>{
+    if(!r.start_lat) return;
+    const m=L.marker([r.start_lat,r.start_lng],{icon:colorIco('🚴','#0369a1')}).addTo(map)
+      .bindPopup(`<b>🚴 ${r.title}</b><br>${r.distance_km?'📏 '+r.distance_km+' km · ':''}${r.elevation_hm?'⛰️ '+r.elevation_hm+' hm':''}<br><span style="color:var(--accent)">Start: ${r.start_place||''}</span>`);
+    m.on('click',e=>{L.DomEvent.stopPropagation(e);showTabRoute('cycling',{lat:r.start_lat,lng:r.start_lng,name:r.title,rtype:'drive'});});
+    tabMarkers['cycling'].push(m);
+    bounds.push([r.start_lat,r.start_lng]);
+  });
+  if(bounds.length>1){const b=L.latLngBounds(bounds);tabBounds['cycling']=b;map.fitBounds(b,{padding:[30,30]});}
+}
+
+function renderCyclingRoutes(){
+  const el=document.getElementById('cycling-list');
+  const cnt=document.getElementById('cycling-count');
+  if(cnt) cnt.textContent=cyclingRoutes.length>0?`${cyclingRoutes.length} route${cyclingRoutes.length>1?'s':''}`:' ';
+  if(!el) return;
+  if(cyclingRoutes.length===0){
+    el.innerHTML=`<div class="empty-state"><div class="es-icon">🚴</div><p>Nog geen routes. Voeg de eerste toe!</p></div>`;
+    return;
+  }
+  el.innerHTML=cyclingRoutes.map(r=>renderRouteCard(r)).join('');
+}
+
+function renderRouteCard(r){
+  const isExp=expandedRouteId===r.id;
+  return `<div class="cycling-route-card" id="crc-${r.id}">
+    <div class="crc-hdr" onclick="toggleRoute('${r.id}')">
+      <div class="crc-ico">🚴</div>
+      <div class="crc-meta">
+        <div class="crc-title">${r.title}</div>
+        ${r.start_place?`<div class="crc-desc">📍 Start: ${r.start_place}</div>`:''}
+        <div class="crc-stats">
+          ${r.distance_km?`<span class="crc-stat">📏 ${r.distance_km} km</span>`:''}
+          ${r.elevation_hm?`<span class="crc-stat hm">⛰️ ${r.elevation_hm} hm</span>`:''}
+          ${r.created_by?`<span class="crc-stat" style="background:rgba(255,255,255,.06);color:var(--muted);">👤 ${r.created_by}</span>`:''}
+        </div>
+      </div>
+      <div class="crc-actions">
+        <span style="color:var(--muted);font-size:.8rem">${isExp?'▲':'▼'}</span>
+        ${isMaster()?`<button class="del-route-btn" onclick="event.stopPropagation();deleteCyclingRoute('${r.id}')">🗑️</button>`:''}
+      </div>
+    </div>
+    <div class="crc-body ${isExp?'open':''}" id="crb-${r.id}">
+      ${r.description?`<div class="crc-body-desc">${r.description}</div>`:''}
+      ${r.start_place?`<div class="crc-start-row"><span class="crc-start-label">🏁 Start:</span><span class="crc-start-val">${r.start_place}</span></div>`:''}
+      <div class="crc-map" id="crm-${r.id}"></div>
+      <div class="crc-route-info" id="crri-${r.id}"></div>
+      ${r.gpx_url?`<a class="gpx-download-btn" href="${r.gpx_url}" download="${r.title.replace(/\s+/g,'-')}.gpx" target="_blank">⬇️ Download GPX</a>`:''}
+    </div>
+  </div>`;
+}
+
+async function toggleRoute(id){
+  if(expandedRouteId===id){expandedRouteId=null;renderCyclingRoutes();return;}
+  expandedRouteId=id;
+  renderCyclingRoutes();
+  await new Promise(r=>setTimeout(r,80));
+  const r=cyclingRoutes.find(x=>x.id===id);
+  if(!r) return;
+  const el=document.getElementById('crm-'+id);
+  if(!el||cyclingMaps[id]) return;
+  const ctr=r.start_lat?[r.start_lat,r.start_lng]:[CHALET.lat,CHALET.lng];
+  const map=L.map(el,{scrollWheelZoom:false,zoomControl:true}).setView(ctr,12);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OSM',maxZoom:18}).addTo(map);
+  cyclingMaps[id]=map;
+  L.marker([CHALET.lat,CHALET.lng],{icon:chaletIco(),zIndexOffset:1000}).addTo(map).bindPopup('<b>🏠 Chalet Elomaz</b>');
+  if(r.start_lat){
+    L.marker([r.start_lat,r.start_lng],{icon:colorIco('🚴','#0369a1')}).addTo(map).bindPopup(`<b>🏁 Start: ${r.start_place||''}</b>`);
+    const infoEl=document.getElementById('crri-'+id);
+    if(infoEl) infoEl.innerHTML='<span style="color:var(--muted);font-size:.75rem">🗺️ Route berekenen...</span>';
+    const coordStr=`${CHALET.lng},${CHALET.lat};${r.start_lng},${r.start_lat}`;
+    const route=await calcRoute(coordStr,'driving');
+    if(route){
+      L.geoJSON(route.geometry,{style:{color:'#0369a1',weight:4,opacity:.85}}).addTo(map);
+      const pts=route.geometry.coordinates.map(c=>[c[1],c[0]]);
+      map.fitBounds(L.polyline(pts).getBounds(),{padding:[30,30]});
+      const km=(route.distance/1000).toFixed(1);
+      if(infoEl) infoEl.innerHTML=`<span class="route-chip" style="background:rgba(14,165,233,.15);color:#38bdf8;border:1px solid rgba(14,165,233,.25);">🚗 ${km} km van chalet · ${fmtDuration(route.duration,'driving')}</span>`;
+    } else {
+      const pts=[[CHALET.lat,CHALET.lng],[r.start_lat,r.start_lng]];
+      L.polyline(pts,{color:'#0369a1',weight:3,dashArray:'8 4'}).addTo(map);
+      map.fitBounds(L.polyline(pts).getBounds(),{padding:[30,30]});
+      if(infoEl) infoEl.innerHTML=`<span style="color:#fbbf24;font-size:.75rem">⚠️ Route niet beschikbaar</span>`;
+    }
+  }
+}
+
+function openNewRouteModal(){
+  newRouteGpxFile=null;newRouteLat=null;newRouteLng=null;
+  document.getElementById('nr-title').value='';
+  document.getElementById('nr-start').value='';
+  document.getElementById('nr-km').value='';
+  document.getElementById('nr-hm').value='';
+  document.getElementById('nr-desc').value='';
+  document.getElementById('nr-author').value=getAuthorName();
+  document.getElementById('nr-geocode-result').innerHTML='';
+  document.getElementById('nr-gpx-selected').innerHTML='';
+  document.getElementById('nr-lat').value='';
+  document.getElementById('nr-lng').value='';
+  document.getElementById('new-route-modal').classList.add('open');
+}
+
+async function geocodeStart(){
+  const q=document.getElementById('nr-start').value.trim();
+  if(!q) return;
+  const res_el=document.getElementById('nr-geocode-result');
+  res_el.innerHTML='<div class="geocode-result">🔍 Zoeken...</div>';
+  try{
+    const res=await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q+', France')}&format=json&limit=1`,{headers:{'Accept-Language':'nl'}});
+    const data=await res.json();
+    if(data.length>0){
+      const place=data[0];
+      newRouteLat=parseFloat(place.lat);
+      newRouteLng=parseFloat(place.lon);
+      document.getElementById('nr-lat').value=newRouteLat;
+      document.getElementById('nr-lng').value=newRouteLng;
+      res_el.innerHTML=`<div class="geocode-result ok">✓ Gevonden: ${place.display_name.split(',').slice(0,3).join(', ')}</div>`;
+    } else {
+      res_el.innerHTML='<div class="geocode-result err">❌ Niet gevonden. Probeer een andere naam.</div>';
+    }
+  }catch(e){res_el.innerHTML='<div class="geocode-result err">❌ Zoekfout</div>';}
+}
+
+function handleGpxSelect(input){
+  newRouteGpxFile=input.files[0]||null;
+  const el=document.getElementById('nr-gpx-selected');
+  el.innerHTML=newRouteGpxFile?`<div class="gpx-selected">✓ ${newRouteGpxFile.name}</div>`:'';
+}
+
+async function submitNewRoute(){
+  const title=document.getElementById('nr-title').value.trim();
+  const author=document.getElementById('nr-author').value.trim();
+  const start=document.getElementById('nr-start').value.trim();
+  if(!title){alert('Titel is verplicht');return;}
+  if(!author){alert('Jouw naam is verplicht');return;}
+  if(start&&!newRouteLat){alert('Klik op "📍 Zoek" om de startplaats op te zoeken');return;}
+  setAuthorName(author);
+  const btn=document.getElementById('nr-submit-btn');
+  btn.disabled=true;btn.textContent='Opslaan...';
+  try{
+    let gpxUrl=null,gpxPath=null;
+    if(newRouteGpxFile){
+      const path=`gpx/${Date.now()}-${newRouteGpxFile.name.replace(/[^a-zA-Z0-9._-]/g,'-')}`;
+      const upRes=await fetch(`${SUPA_URL}/storage/v1/object/cyclonereis-gpx/${path}`,{
+        method:'POST',headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Content-Type':'application/gpx+xml'},
+        body:newRouteGpxFile
+      });
+      if(upRes.ok){gpxPath=path;gpxUrl=`${SUPA_URL}/storage/v1/object/public/cyclonereis-gpx/${path}`;}
+    }
+    const res=await fetch(`${SUPA_URL}/rest/v1/cycling_routes`,{
+      method:'POST',
+      headers:{...supaHeaders(),'Prefer':'return=representation'},
+      body:JSON.stringify({
+        title,
+        description:document.getElementById('nr-desc').value.trim()||null,
+        start_place:start||null,
+        start_lat:newRouteLat||null,
+        start_lng:newRouteLng||null,
+        distance_km:document.getElementById('nr-km').value?parseFloat(document.getElementById('nr-km').value):null,
+        elevation_hm:document.getElementById('nr-hm').value?parseInt(document.getElementById('nr-hm').value):null,
+        gpx_path:gpxPath,gpx_url:gpxUrl,
+        created_by:author
+      })
+    });
+    if(!res.ok) throw new Error('Opslaan mislukt');
+    closeModal('new-route-modal');
+    await loadCyclingRoutes();
+  }catch(e){alert('Fout: '+e.message);}
+  finally{btn.disabled=false;btn.textContent='Route toevoegen ✓';}
+}
+
+async function deleteCyclingRoute(id){
+  if(!isMaster()){alert('Geen toegang');return;}
+  if(!confirm('Route verwijderen?')) return;
+  try{
+    await fetch(`${SUPA_URL}/rest/v1/cycling_routes?id=eq.${id}`,{method:'DELETE',headers:supaHeaders()});
+    if(expandedRouteId===id) expandedRouteId=null;
+    if(cyclingMaps[id]){cyclingMaps[id].remove();delete cyclingMaps[id];}
+    await loadCyclingRoutes();
+  }catch(e){alert('Fout: '+e.message);}
 }
 
 // ---- DAGBOEK ----
@@ -1908,6 +2168,7 @@ function showSec(name,el){
   setTimeout(()=>{
     if(name==='planning'){if(planMap)planMap.invalidateSize();}
     else if(name==='diary'){initDiary();}
+    else if(name==='cycling'){loadCyclingRoutes();}
     else{initTabMap(name);if(tabMaps[name])tabMaps[name].invalidateSize();}
   },120);
 }
@@ -1998,6 +2259,43 @@ function initApp(){
       <div style="display:flex;gap:.6rem;justify-content:flex-end;margin-top:.5rem;">
         <button class="btn btn-sec" onclick="closeModal('diary-new-act-modal')">Annuleren</button>
         <button class="btn btn-rose" onclick="submitNewDiaryAct()">Toevoegen ✓</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Nieuwe fietsroute modal -->
+<div class="modal-overlay" id="new-route-modal" onclick="if(event.target===this)closeModal('new-route-modal')">
+  <div class="modal act-form-modal" style="max-width:540px;" onclick="event.stopPropagation()">
+    <div class="modal-hdr">
+      <h2>🚴 Nieuwe fietsroute</h2>
+      <button class="modal-close" onclick="closeModal('new-route-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-field"><label>Titel *</label><input type="text" id="nr-title" placeholder="bv. Col des Aravis klassiek"/></div>
+      <div class="form-field">
+        <label>Startplaats <span style="color:var(--muted);font-weight:400">(wordt op kaart opgezocht)</span></label>
+        <div class="start-search-row">
+          <input type="text" id="nr-start" placeholder="bv. Saint-Jean-de-Sixt" style="flex:1;"/>
+          <button class="start-search-btn" onclick="geocodeStart()">📍 Zoek</button>
+        </div>
+        <div id="nr-geocode-result"></div>
+        <input type="hidden" id="nr-lat" value=""/><input type="hidden" id="nr-lng" value=""/>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.7rem;">
+        <div class="form-field"><label>Afstand (km)</label><input type="number" id="nr-km" placeholder="bv. 85" min="0" step="0.1"/></div>
+        <div class="form-field"><label>Hoogtemeters (hm)</label><input type="number" id="nr-hm" placeholder="bv. 1800" min="0" step="10"/></div>
+      </div>
+      <div class="form-field"><label>Beschrijving</label><textarea id="nr-desc" placeholder="Vertel iets over de route..." rows="3"></textarea></div>
+      <div class="form-field">
+        <label>GPX bestand (optioneel)</label>
+        <label class="gpx-upload-label">📁 Kies GPX bestand<input type="file" id="nr-gpx-file" accept=".gpx,application/gpx+xml,application/xml" onchange="handleGpxSelect(this)"/></label>
+        <div id="nr-gpx-selected"></div>
+      </div>
+      <div class="form-field"><label>Jouw naam *</label><input type="text" id="nr-author" placeholder="Jouw naam"/></div>
+      <div style="display:flex;gap:.6rem;justify-content:flex-end;margin-top:.5rem;">
+        <button class="btn btn-sec" onclick="closeModal('new-route-modal')">Annuleren</button>
+        <button class="btn btn-primary" onclick="submitNewRoute()" id="nr-submit-btn">Route toevoegen ✓</button>
       </div>
     </div>
   </div>
