@@ -186,6 +186,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 .route-day-info{margin-top:.5rem;display:flex;gap:.4rem;flex-wrap:wrap;}
 /* PICKERS */
 .picker-modal{background:var(--card);border:1px solid var(--border);border-radius:16px;width:100%;max-width:600px;max-height:88vh;overflow-y:auto;}
+.picker-tabs{display:flex;overflow-x:auto;border-bottom:1px solid var(--border);padding:0 .5rem;-webkit-overflow-scrolling:touch;flex-shrink:0;}
+.pick-tab{padding:.55rem .75rem;font-size:.73rem;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all .15s;flex-shrink:0;}
+.pick-tab:hover{color:var(--text);}.pick-tab.active{color:var(--accent);border-bottom-color:var(--accent);}
+.edit-act-btn{background:rgba(45,212,191,.1);border:1px solid rgba(45,212,191,.2);border-radius:7px;color:var(--accent);font-size:.72rem;padding:.25rem .5rem;cursor:pointer;}
+.edit-act-btn:hover{background:rgba(45,212,191,.2);}
 .picker-hdr{padding:1rem 1rem .5rem;display:flex;align-items:center;justify-content:space-between;}
 .picker-hdr h3{font-size:1rem;font-weight:800;}
 .picker-search{display:block;width:calc(100% - 2rem);margin:.5rem 1rem;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:.82rem;padding:.5rem .7rem;outline:none;}
@@ -614,6 +619,17 @@ function getFavs(type){try{return JSON.parse(localStorage.getItem('cf_'+type)||'
 function toggleFav(type,id,e){e.stopPropagation();const f=getFavs(type);const i=f.indexOf(id);if(i>-1)f.splice(i,1);else f.push(id);localStorage.setItem('cf_'+type,JSON.stringify(f));renderAll();}
 function isFav(type,id){return getFavs(type).includes(id);}
 function sortWithFavs(arr,type){const favs=getFavs(type);return [...arr.filter(x=>favs.includes(x.id||x.name)),...arr.filter(x=>!favs.includes(x.id||x.name))];}
+function getSlotItem(slot){
+  const type=slot.type||'activity';const id=slot.id;
+  if(type==='activity') return{item:activities.find(x=>x.id==id),type};
+  if(type==='event') return{item:events.find(x=>(x.id||x.name)===id),type};
+  if(type==='restaurant') return{item:restaurants.find(x=>x.id===id),type};
+  if(type==='nightlife') return{item:nightlife.find(x=>x.id===id),type};
+  if(type==='rental') return{item:rentals.find(x=>x.id===id),type};
+  if(type==='shop') return{item:shops.find(x=>x.id===id),type};
+  return{item:null,type};
+}
+function getItemName(item){return item?(item.title||item.name||'?'):'?';}
 function supaHeaders(){return{'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Content-Type':'application/json'};}
 
 // ---- DATA ----
@@ -1166,7 +1182,7 @@ function renderWeekStrip(){
   document.getElementById('plan-week-strip').innerHTML=TRIP_DAYS.map((d,i)=>{
     const p=dayPlans[d]||{};
     const acts=p.activities||[];
-    const icons=acts.slice(0,3).map(s=>{const a=activities.find(x=>x.id===s.id);return a?a.e:'';}).join('');
+    const icons=acts.slice(0,3).map(s=>{const{item}=getSlotItem(s);return item?item.e:'';}).join('');
     return `<div class="day-card ${d===selectedDay?'selected':''} ${acts.length>0?'has-items':''}" onclick="selectPlanDay('${d}')">
       <div class="dc-name">${DAY_NAMES[i]}</div>
       <div class="dc-date">${parseInt(d.split('-')[2])}</div>
@@ -1222,20 +1238,20 @@ function renderDayDetail(date){
   left.innerHTML=`
     <div class="day-hdr">
       <h3>${dayName} ${dateNum} augustus</h3>
-      <button class="day-add-btn" onclick="openActPicker('${date}')">+ Activiteit</button>
+      <button class="day-add-btn" onclick="openUniversalPicker('${date}')">+ Toevoegen</button>
     </div>
     <div id="slots-${date}">
       ${plan.activities.length===0?`<div style="color:var(--muted);font-size:.82rem;padding:.8rem 0">Nog geen activiteiten. Klik "+ Activiteit".</div>`:''}
       ${plan.activities.map((slot,si)=>{
-        const ac=activities.find(x=>x.id===slot.id);
-        if(!ac) return '';
+        const{item}=getSlotItem(slot);
+        if(!item) return '';
         return `<div class="plan-slot">
           <div class="slot-times">
             <input class="time-input" type="time" value="${slot.start||'09:00'}" onchange="updateSlotTime('${date}',${si},'start',this.value)">
             <input class="time-input" type="time" value="${slot.end||'17:00'}" onchange="updateSlotTime('${date}',${si},'end',this.value)">
           </div>
-          <div class="slot-ico">${ac.e}</div>
-          <div class="slot-name">${ac.title}</div>
+          <div class="slot-ico">${item.e}</div>
+          <div class="slot-name">${getItemName(item)}</div>
           <button class="slot-del" onclick="removeSlot('${date}',${si})">🗑️</button>
         </div>`;
       }).join('')}
@@ -1271,33 +1287,69 @@ function removeSlot(date,si){
   renderWeekStrip();renderDayDetail(date);
 }
 
-function openActPicker(date){
+let currentPickType='activity';
+const PICK_TYPES=[
+  {type:'activity',label:'🎿 Activiteiten'},
+  {type:'event',label:'🎪 Events'},
+  {type:'restaurant',label:'🍽️ Restaurants'},
+  {type:'nightlife',label:'🍸 Bars'},
+  {type:'rental',label:'🚲 Verhuur'},
+  {type:'shop',label:'🛍️ Winkels'}
+];
+function getPickData(type){
+  if(type==='activity') return sortWithFavs(activities,'act');
+  if(type==='event') return events;
+  if(type==='restaurant') return restaurants;
+  if(type==='nightlife') return nightlife;
+  if(type==='rental') return rentals;
+  if(type==='shop') return shops;
+  return [];
+}
+function openUniversalPicker(date){
   pickingForDay=date;
-  const list=document.getElementById('act-picker-list');
-  list.innerHTML=sortWithFavs(activities,'act').map(a=>`
-    <div class="picker-item">
-      <div class="pi-icon">${a.e}</div>
-      <div class="pi-name">${a.title}</div>
-      <div class="pi-dist">${a.dist} km</div>
-      <button class="pi-add" onclick="addActToDay(${a.id})">+ Toevoegen</button>
-    </div>`).join('');
-  document.getElementById('act-pick-modal').classList.add('open');
+  currentPickType='activity';
+  document.getElementById('uni-pick-tabs').innerHTML=PICK_TYPES.map((t,i)=>
+    `<div class="pick-tab ${i===0?'active':''}" onclick="switchPickTab('${t.type}',this)">${t.label}</div>`
+  ).join('');
+  document.getElementById('uni-pick-search').value='';
+  renderUniversalPickList('');
+  document.getElementById('universal-pick-modal').classList.add('open');
 }
-function closeActPicker(){document.getElementById('act-pick-modal').classList.remove('open');pickingForDay=null;}
-function filterActPicker(){
-  const q=document.getElementById('act-pick-search').value.toLowerCase();
-  document.querySelectorAll('#act-picker-list .picker-item').forEach(el=>{
-    el.style.display=el.textContent.toLowerCase().includes(q)?'':'none';
-  });
+function closeUniversalPicker(){document.getElementById('universal-pick-modal').classList.remove('open');pickingForDay=null;}
+function switchPickTab(type,el){
+  currentPickType=type;
+  document.querySelectorAll('#uni-pick-tabs .pick-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('uni-pick-search').value='';
+  renderUniversalPickList('');
 }
-function addActToDay(actId){
+function renderUniversalPickList(q){
+  let items=getPickData(currentPickType);
+  if(q) items=items.filter(x=>(getItemName(x)).toLowerCase().includes(q));
+  document.getElementById('uni-picker-list').innerHTML=items.map(item=>{
+    const name=getItemName(item);
+    const rawId=item.id||item.name;
+    const safeId=String(rawId).replace(/'/g,"\\'");
+    return `<div class="picker-item">
+      <div class="pi-icon">${item.e}</div>
+      <div class="pi-name">${name}</div>
+      ${item.dist?`<div class="pi-dist">${item.dist} km</div>`:''}
+      <button class="pi-add" onclick="addItemToDay('${currentPickType}','${safeId}')">+ Toevoegen</button>
+    </div>`;
+  }).join('') || '<div style="padding:.8rem;color:var(--muted);font-size:.82rem">Niets gevonden</div>';
+}
+function filterUniversalPicker(){renderUniversalPickList(document.getElementById('uni-pick-search').value.toLowerCase());}
+function addItemToDay(type,id){
   if(!pickingForDay||!dayPlans[pickingForDay]) return;
-  dayPlans[pickingForDay].activities.push({id:actId,start:'09:00',end:'17:00'});
-  renderWeekStrip();renderDayDetail(pickingForDay);closeActPicker();
+  const parsedId=(type==='activity')?parseInt(id):id;
+  dayPlans[pickingForDay].activities.push({type,id:parsedId,start:'09:00',end:'17:00'});
+  renderWeekStrip();renderDayDetail(pickingForDay);closeUniversalPicker();
 }
+// Backward compat for quick-add from activity modal
+function addActToDay(actId){addItemToDay('activity',actId);}
 function quickAddToPlan(actId){
   if(!selectedDay){const d=TRIP_DAYS[0];selectPlanDay(d);showSec('planning',document.getElementById('tab-planning'));}
-  if(selectedDay&&dayPlans[selectedDay]){dayPlans[selectedDay].activities.push({id:actId,start:'09:00',end:'17:00'});renderWeekStrip();renderDayDetail(selectedDay);}
+  if(selectedDay&&dayPlans[selectedDay]){dayPlans[selectedDay].activities.push({type:'activity',id:actId,start:'09:00',end:'17:00'});renderWeekStrip();renderDayDetail(selectedDay);}
 }
 
 function openRestPicker(date,field){
@@ -1334,7 +1386,7 @@ async function calcDayRoute(date){
   planDotMarkers=[];
   const info=document.getElementById('route-day-info');
   info.innerHTML='<span style="color:var(--muted);font-size:.8rem">🗺️ Route berekenen...</span>';
-  const stops=[CHALET,...plan.activities.map(s=>{const a=activities.find(x=>x.id===s.id);return a?{lat:a.lat,lng:a.lng,e:a.e,title:a.title}:null;}).filter(Boolean),CHALET];
+  const stops=[CHALET,...plan.activities.map(s=>{const{item}=getSlotItem(s);return item&&item.lat?{lat:item.lat,lng:item.lng,e:item.e,title:getItemName(item)}:null;}).filter(Boolean),CHALET];
   const coordStr=stops.map(s=>`${s.lng},${s.lat}`).join(';');
   const route=await calcRoute(coordStr,'driving');
   if(route){
@@ -1491,6 +1543,7 @@ function renderDiaryActCard(act,date){
       </div>
       <div class="diary-act-actions">
         <span class="expand-btn">${isExpanded?'▲ Inklappen':'▼ Uitklappen'}</span>
+        <button class="edit-act-btn" onclick="event.stopPropagation();openEditActModal(${JSON.stringify(act).replace(/"/g,'&quot;')},'${date}')">✏️</button>
         ${isMaster()?`<button class="del-act-btn" onclick="event.stopPropagation();deleteDiaryAct('${act.id}','${date}')">🗑️</button>`:''}
       </div>
     </div>
@@ -1560,18 +1613,39 @@ function toggleAct(actId,date){
   renderDiaryDay(date);
 }
 
-// ---- NEW ACTIVITY MODAL ----
+// ---- NEW / EDIT ACTIVITY MODAL ----
 function openNewActModal(date){
   currentDiaryDay=date;
+  document.getElementById('new-act-id').value='';
   document.getElementById('new-act-title').value='';
   document.getElementById('new-act-desc').value='';
   document.getElementById('new-act-people').value='';
   document.getElementById('new-act-group').value='';
   document.getElementById('new-act-author').value=getAuthorName();
   document.getElementById('new-act-emoji').value='🏔️';
-  // Emoji picker
+  document.querySelector('#diary-new-act-modal .modal-hdr h2').textContent='✏️ Nieuwe activiteit';
+  document.querySelector('#diary-new-act-modal .btn-rose').textContent='Toevoegen ✓';
+  const startEm='🏔️';
   document.getElementById('emoji-picker-row').innerHTML=DIARY_EMOJIS_LIST.map(em=>
-    `<button class="ep-btn ${em==='🏔️'?'selected':''}" onclick="selectEmoji('${em}',this)">${em}</button>`
+    `<button class="ep-btn ${em===startEm?'selected':''}" onclick="selectEmoji('${em}',this)">${em}</button>`
+  ).join('');
+  document.getElementById('diary-new-act-modal').classList.add('open');
+}
+function openEditActModal(act,date){
+  if(typeof act==='string') try{act=JSON.parse(act);}catch(e){return;}
+  currentDiaryDay=date;
+  document.getElementById('new-act-id').value=act.id;
+  document.getElementById('new-act-title').value=act.title||'';
+  document.getElementById('new-act-desc').value=act.description||'';
+  document.getElementById('new-act-people').value=act.participants||'';
+  document.getElementById('new-act-group').value=act.group_name||'';
+  document.getElementById('new-act-author').value=act.created_by||getAuthorName();
+  const startEm=act.emoji||'🏔️';
+  document.getElementById('new-act-emoji').value=startEm;
+  document.querySelector('#diary-new-act-modal .modal-hdr h2').textContent='✏️ Activiteit bewerken';
+  document.querySelector('#diary-new-act-modal .btn-rose').textContent='Opslaan ✓';
+  document.getElementById('emoji-picker-row').innerHTML=DIARY_EMOJIS_LIST.map(em=>
+    `<button class="ep-btn ${em===startEm?'selected':''}" onclick="selectEmoji('${em}',this)">${em}</button>`
   ).join('');
   document.getElementById('diary-new-act-modal').classList.add('open');
 }
@@ -1585,32 +1659,46 @@ function selectEmoji(em,btn){
 async function submitNewDiaryAct(){
   const title=document.getElementById('new-act-title').value.trim();
   const author=document.getElementById('new-act-author').value.trim();
+  const editId=document.getElementById('new-act-id').value;
   if(!title){alert('Titel is verplicht');return;}
   if(!author){alert('Jouw naam is verplicht');return;}
   if(!currentDiaryDay) return;
   setAuthorName(author);
   const btn=document.querySelector('#diary-new-act-modal .btn-rose');
+  const origText=btn.textContent;
   btn.disabled=true;btn.textContent='Opslaan...';
+  const payload={
+    title,
+    description:document.getElementById('new-act-desc').value.trim(),
+    participants:document.getElementById('new-act-people').value.trim(),
+    group_name:document.getElementById('new-act-group').value.trim(),
+    created_by:author,
+    emoji:document.getElementById('new-act-emoji').value
+  };
   try{
-    const res=await fetch(`${SUPA_URL}/rest/v1/diary_activities`,{
-      method:'POST',
-      headers:{...supaHeaders(),'Prefer':'return=representation'},
-      body:JSON.stringify({
-        day_date:currentDiaryDay,
-        title,
-        description:document.getElementById('new-act-desc').value.trim(),
-        participants:document.getElementById('new-act-people').value.trim(),
-        group_name:document.getElementById('new-act-group').value.trim(),
-        created_by:author,
-        emoji:document.getElementById('new-act-emoji').value,
-        sort_order:Date.now()
-      })
-    });
-    if(!res.ok) throw new Error('Save failed');
+    if(editId){
+      // EDIT existing
+      const res=await fetch(`${SUPA_URL}/rest/v1/diary_activities?id=eq.${editId}`,{
+        method:'PATCH',
+        headers:supaHeaders(),
+        body:JSON.stringify(payload)
+      });
+      if(!res.ok) throw new Error('Update failed');
+    } else {
+      // NEW
+      const res=await fetch(`${SUPA_URL}/rest/v1/diary_activities`,{
+        method:'POST',
+        headers:{...supaHeaders(),'Prefer':'return=representation'},
+        body:JSON.stringify({...payload,day_date:currentDiaryDay,sort_order:Date.now()})
+      });
+      if(!res.ok) throw new Error('Save failed');
+    }
+    const prevExpanded=expandedActId;
     closeModal('diary-new-act-modal');
     await selectDiaryDay(currentDiaryDay);
+    if(prevExpanded) expandedActId=prevExpanded;
   }catch(e){alert('Fout bij opslaan: '+e.message);}
-  finally{btn.disabled=false;btn.textContent='Toevoegen ✓';}
+  finally{btn.disabled=false;btn.textContent=origText;}
 }
 
 // ---- SUBMIT COMMENT ----
@@ -1868,12 +1956,13 @@ function initApp(){
   </div>
 </div>
 
-<!-- Activity picker for planning -->
-<div class="modal-overlay" id="act-pick-modal">
-  <div class="picker-modal">
-    <div class="picker-hdr"><h3>Activiteit toevoegen</h3><button class="modal-close" onclick="closeActPicker()">✕</button></div>
-    <input class="picker-search" id="act-pick-search" placeholder="Zoeken..." oninput="filterActPicker()"/>
-    <div class="picker-list" id="act-picker-list"></div>
+<!-- Universal item picker for planning -->
+<div class="modal-overlay" id="universal-pick-modal" onclick="closeUniversalPicker()">
+  <div class="picker-modal" onclick="event.stopPropagation()" style="-webkit-overflow-scrolling:touch;">
+    <div class="picker-hdr"><h3>Toevoegen aan dag</h3><button class="modal-close" onclick="closeUniversalPicker()">✕</button></div>
+    <div class="picker-tabs" id="uni-pick-tabs"></div>
+    <input class="picker-search" id="uni-pick-search" placeholder="Zoeken..." oninput="filterUniversalPicker()"/>
+    <div class="picker-list" id="uni-picker-list"></div>
   </div>
 </div>
 
@@ -1894,6 +1983,7 @@ function initApp(){
       <button class="modal-close" onclick="closeModal('diary-new-act-modal')">✕</button>
     </div>
     <div class="modal-body">
+      <input type="hidden" id="new-act-id" value=""/>
       <div class="form-field">
         <label>Emoji icoon</label>
         <div class="emoji-picker-row" id="emoji-picker-row"></div>
