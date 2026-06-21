@@ -674,7 +674,7 @@ function sortWithFavs(arr,type){const favs=getFavs(type);return [...arr.filter(x
 function getSlotItem(slot){
   const type=slot.type||'activity';const id=slot.id;
   if(type==='activity') return{item:activities.find(x=>x.id==id),type};
-  if(type==='cycling') return{item:cyclingRoutes.find(x=>x.id===id),type};
+  if(type==='cycling'){const r=cyclingRoutes.find(x=>x.id===id);return{item:r?{...r,e:'🚴'}:null,type};}
   if(type==='event') return{item:events.find(x=>(x.id||x.name)===id),type};
   if(type==='restaurant') return{item:restaurants.find(x=>x.id===id),type};
   if(type==='nightlife') return{item:nightlife.find(x=>x.id===id),type};
