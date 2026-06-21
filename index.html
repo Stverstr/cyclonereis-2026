@@ -1541,6 +1541,7 @@ function renderRouteCard(r){
       </div>
       <div class="crc-actions">
         <span style="color:var(--muted);font-size:.8rem">${isExp?'▲':'▼'}</span>
+        <button class="edit-act-btn" onclick="event.stopPropagation();openEditRouteModal(${JSON.stringify(r).replace(/"/g,'&quot;')})">✏️</button>
         ${isMaster()?`<button class="del-route-btn" onclick="event.stopPropagation();deleteCyclingRoute('${r.id}')">🗑️</button>`:''}
       </div>
     </div>
@@ -1555,10 +1556,16 @@ function renderRouteCard(r){
 }
 
 async function toggleRoute(id){
-  if(expandedRouteId===id){expandedRouteId=null;renderCyclingRoutes();return;}
+  if(expandedRouteId===id){
+    expandedRouteId=null;
+    if(cyclingMaps[id]){cyclingMaps[id].remove();delete cyclingMaps[id];}
+    renderCyclingRoutes();return;
+  }
+  // Verwijder vorige kaart als die er was
+  if(expandedRouteId&&cyclingMaps[expandedRouteId]){cyclingMaps[expandedRouteId].remove();delete cyclingMaps[expandedRouteId];}
   expandedRouteId=id;
   renderCyclingRoutes();
-  await new Promise(r=>setTimeout(r,80));
+  await new Promise(r=>setTimeout(r,150));
   const r=cyclingRoutes.find(x=>x.id===id);
   if(!r) return;
   const el=document.getElementById('crm-'+id);
@@ -1567,6 +1574,7 @@ async function toggleRoute(id){
   const map=L.map(el,{scrollWheelZoom:false,zoomControl:true}).setView(ctr,12);
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OSM',maxZoom:18}).addTo(map);
   cyclingMaps[id]=map;
+  setTimeout(()=>map.invalidateSize(),50);
   L.marker([CHALET.lat,CHALET.lng],{icon:chaletIco(),zIndexOffset:1000}).addTo(map).bindPopup('<b>🏠 Chalet Elomaz</b>');
   if(r.start_lat){
     L.marker([r.start_lat,r.start_lng],{icon:colorIco('🚴','#0369a1')}).addTo(map).bindPopup(`<b>🏁 Start: ${r.start_place||''}</b>`);
@@ -1591,6 +1599,7 @@ async function toggleRoute(id){
 
 function openNewRouteModal(){
   newRouteGpxFile=null;newRouteLat=null;newRouteLng=null;
+  document.getElementById('nr-edit-id').value='';
   document.getElementById('nr-title').value='';
   document.getElementById('nr-start').value='';
   document.getElementById('nr-km').value='';
@@ -1601,6 +1610,28 @@ function openNewRouteModal(){
   document.getElementById('nr-gpx-selected').innerHTML='';
   document.getElementById('nr-lat').value='';
   document.getElementById('nr-lng').value='';
+  document.querySelector('#new-route-modal h2').textContent='🚴 Nieuwe fietsroute';
+  document.getElementById('nr-submit-btn').textContent='Route toevoegen ✓';
+  document.getElementById('new-route-modal').classList.add('open');
+}
+function openEditRouteModal(r){
+  if(typeof r==='string') try{r=JSON.parse(r);}catch(e){return;}
+  newRouteGpxFile=null;
+  newRouteLat=r.start_lat||null;
+  newRouteLng=r.start_lng||null;
+  document.getElementById('nr-edit-id').value=r.id;
+  document.getElementById('nr-title').value=r.title||'';
+  document.getElementById('nr-start').value=r.start_place||'';
+  document.getElementById('nr-km').value=r.distance_km||'';
+  document.getElementById('nr-hm').value=r.elevation_hm||'';
+  document.getElementById('nr-desc').value=r.description||'';
+  document.getElementById('nr-author').value=r.created_by||getAuthorName();
+  document.getElementById('nr-lat').value=r.start_lat||'';
+  document.getElementById('nr-lng').value=r.start_lng||'';
+  document.getElementById('nr-geocode-result').innerHTML=r.start_place?`<div class="geocode-result ok">✓ ${r.start_place}</div>`:'';
+  document.getElementById('nr-gpx-selected').innerHTML=r.gpx_url?`<div class="gpx-selected">✓ Bestaand GPX bestand</div>`:'';
+  document.querySelector('#new-route-modal h2').textContent='✏️ Route bewerken';
+  document.getElementById('nr-submit-btn').textContent='Opslaan ✓';
   document.getElementById('new-route-modal').classList.add('open');
 }
 
@@ -1632,15 +1663,18 @@ function handleGpxSelect(input){
 }
 
 async function submitNewRoute(){
+  const editId=document.getElementById('nr-edit-id').value.trim();
   const title=document.getElementById('nr-title').value.trim();
   const author=document.getElementById('nr-author').value.trim();
   const start=document.getElementById('nr-start').value.trim();
   if(!title){alert('Titel is verplicht');return;}
   if(!author){alert('Jouw naam is verplicht');return;}
-  if(start&&!newRouteLat){alert('Klik op "📍 Zoek" om de startplaats op te zoeken');return;}
+  if(start&&!newRouteLat&&!document.getElementById('nr-lat').value){alert('Klik op "📍 Zoek" om de startplaats op te zoeken');return;}
   setAuthorName(author);
   const btn=document.getElementById('nr-submit-btn');
   btn.disabled=true;btn.textContent='Opslaan...';
+  const lat=newRouteLat||parseFloat(document.getElementById('nr-lat').value)||null;
+  const lng=newRouteLng||parseFloat(document.getElementById('nr-lng').value)||null;
   try{
     let gpxUrl=null,gpxPath=null;
     if(newRouteGpxFile){
@@ -1651,26 +1685,38 @@ async function submitNewRoute(){
       });
       if(upRes.ok){gpxPath=path;gpxUrl=`${SUPA_URL}/storage/v1/object/public/cyclonereis-gpx/${path}`;}
     }
-    const res=await fetch(`${SUPA_URL}/rest/v1/cycling_routes`,{
-      method:'POST',
-      headers:{...supaHeaders(),'Prefer':'return=representation'},
-      body:JSON.stringify({
-        title,
-        description:document.getElementById('nr-desc').value.trim()||null,
-        start_place:start||null,
-        start_lat:newRouteLat||null,
-        start_lng:newRouteLng||null,
-        distance_km:document.getElementById('nr-km').value?parseFloat(document.getElementById('nr-km').value):null,
-        elevation_hm:document.getElementById('nr-hm').value?parseInt(document.getElementById('nr-hm').value):null,
-        gpx_path:gpxPath,gpx_url:gpxUrl,
-        created_by:author
-      })
-    });
+    const payload={
+      title,
+      description:document.getElementById('nr-desc').value.trim()||null,
+      start_place:start||null,
+      start_lat:lat,start_lng:lng,
+      distance_km:document.getElementById('nr-km').value?parseFloat(document.getElementById('nr-km').value):null,
+      elevation_hm:document.getElementById('nr-hm').value?parseInt(document.getElementById('nr-hm').value):null,
+      created_by:author
+    };
+    if(gpxPath) payload.gpx_path=gpxPath;
+    if(gpxUrl) payload.gpx_url=gpxUrl;
+    let res;
+    if(editId){
+      res=await fetch(`${SUPA_URL}/rest/v1/cycling_routes?id=eq.${editId}`,{
+        method:'PATCH',
+        headers:{...supaHeaders(),'Prefer':'return=representation'},
+        body:JSON.stringify(payload)
+      });
+    } else {
+      res=await fetch(`${SUPA_URL}/rest/v1/cycling_routes`,{
+        method:'POST',
+        headers:{...supaHeaders(),'Prefer':'return=representation'},
+        body:JSON.stringify(payload)
+      });
+    }
     if(!res.ok) throw new Error('Opslaan mislukt');
     closeModal('new-route-modal');
+    if(editId&&cyclingMaps[editId]){cyclingMaps[editId].remove();delete cyclingMaps[editId];}
+    expandedRouteId=null;
     await loadCyclingRoutes();
   }catch(e){alert('Fout: '+e.message);}
-  finally{btn.disabled=false;btn.textContent='Route toevoegen ✓';}
+  finally{btn.disabled=false;btn.textContent=editId?'Opslaan ✓':'Route toevoegen ✓';}
 }
 
 async function deleteCyclingRoute(id){
@@ -2272,6 +2318,7 @@ function initApp(){
       <button class="modal-close" onclick="closeModal('new-route-modal')">✕</button>
     </div>
     <div class="modal-body">
+      <input type="hidden" id="nr-edit-id" value=""/>
       <div class="form-field"><label>Titel *</label><input type="text" id="nr-title" placeholder="bv. Col des Aravis klassiek"/></div>
       <div class="form-field">
         <label>Startplaats <span style="color:var(--muted);font-weight:400">(wordt op kaart opgezocht)</span></label>
