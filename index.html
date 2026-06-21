@@ -583,13 +583,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 // ---- AUTH ----
 const MH='750db0f147fb55c6755f5b3bb2606a35623b43d03c80056c48587dfa2df45c04';
 const CH='54b36f14b97c5570c9bd4c1ebde22dd62f005e085a4a66f7b0e5e5706ff80376';
+const AH='559aead08264d5795d3909718cdd05abd49572e84fe55590eef31a88a08fdffd';
 async function sha256(s){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('');}
 async function checkPw(){
   const inp=document.getElementById('pwInput'),err=document.getElementById('pwError');
   try{
     const h=await sha256(inp.value);
     if(h===MH){sessionStorage.setItem('auth','1');sessionStorage.setItem('isMaster','1');document.getElementById('gate').style.display='none';document.getElementById('app').style.display='block';initApp();}
-    else if(h===CH){sessionStorage.setItem('auth','1');sessionStorage.removeItem('isMaster');document.getElementById('gate').style.display='none';document.getElementById('app').style.display='block';initApp();}
+    else if(h===CH||h===AH){sessionStorage.setItem('auth','1');sessionStorage.removeItem('isMaster');document.getElementById('gate').style.display='none';document.getElementById('app').style.display='block';initApp();}
     else{inp.style.borderColor='#ef4444';err.style.display='block';inp.value='';setTimeout(()=>{inp.style.borderColor='#333';err.style.display='none';},2000);}
   }catch(e){err.textContent='Fout: '+e.message;err.style.display='block';}
 }
